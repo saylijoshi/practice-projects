@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Google Map - Store Locator Assignment </title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+
+      <div>
+          <label for="raddressInput">Select Radius :</label>
+          <select id="radiusSelect" label="Radius">
+            <option value="2000" selected>2000 kms</option>
+            <option value="1500">1500 kms</option>
+            <option value="1000">1000 kms</option>
+            <option value="500">500 kms</option>
+          </select> 
+         <input type="button" id="searchButton" value="Search"/>
+     </div>
+     <div>
+        <label for="storeInput">Select Store :</label>
+        <select id="storeSelect" label="Store">
+          <option value="1" selected>Location 1</option>
+          <option value="2">Location 2</option>
+          <option value="3">Location 3</option>
+          <option value="4">Location 4</option>
+          <option value="5">Location 5</option>
+          <option value="6">Location 6</option>
+          <option value="7">Location 7</option>
+          <option value="8">Location 8</option>
+          <option value="9">Location 9</option>
+          <option value="10">Location 10</option>
+        </select>
+       <input type="button" id="searchStoreButton" value="Locate Store"/>
+   </div>
+
+     <div><input type="button" id="showAllDirectionsButton" value="Show All Directions"/></div>
+
+    <div id="map"></div>
+    <script>
+
+      var map,storesJSON,request,geocoder,radius_circle;
+      var locationSelect;
+      var infoWindow,infowindow2,infoWindownRadius;
+	    var directionsDisplayCollection = [],infowindowsCollection = [];
+	    var directionsDisplay, directionsService;
+      var markers = [];
+
+      function initMap() {
+      storesJSON = [
+              {
+              "id" : "1",
+              "name" : "Store 1",
+              "address" : "Hinjewadi, Pune",
+              "latitude" : 29.7041,
+              "longitude" : 78.2025
+            },{
+              "id" : "2",
+              "name" : "Store 2",
+              "address" : "Nagpur",
+              "latitude" : 22.7041,
+              "longitude" : 77.2025
+            },{
+              "id" : "3",
+              "name" : "Store 3",
+              "address" : "Mumbai",
+              "latitude" : 31.7041,
+              "longitude" : 75.2025
+            },{
+              "id" : "4",
+              "name" : "Store 4",
+              "address" : "Chennai",
+              "latitude" : 24.7041,
+              "longitude" : 82.2525
+            },{
+              "id" : "5",
+              "name" : "Store 5",
+              "address" : "Gurgaon",
+              "latitude" : 10.2014,
+              "longitude" : 77.2356
+            },{
+              "id" : "6",
+              "name" : "Store 6",
+              "address" : "Kolkata",
+              "latitude" : 18.7041,
+              "longitude" : 76.1235
+            },{
+              "id" : "7",
+              "name" : "Store 7",
+              "address" : "Coimbatore",
+              "latitude" : 27.7041,
+              "longitude" : 76.2025
+            },{
+              "id" : "8",
+              "name" : "Store 8",
+              "address" : "",
+              "latitude" : 21.7041,
+              "longitude" : 69.6125
+            },{
+              "id" : "9",
+              "name" : "Store 9",
+              "address" : "Delhi",
+              "latitude" : 24.7041,
+              "longitude" : 72.5025
+            },{
+              "id" : "10",
+              "name" : "Store 10",
+              "address" : "Pune",
+              "latitude" : 15.7041,
+              "longitude" : 75.2025
+            },
+      ]
+
+      geocoder = new google.maps.Geocoder();
+
+      map = new google.maps.Map(document.getElementById("map"), {
+      center: new google.maps.LatLng(15.7041, 75.2025),
+      styles: [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+              featureType: 'administrative.locality',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'geometry',
+              stylers: [{color: '#263c3f'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#6b9a76'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{color: '#38414e'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#212a37'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#9ca5b3'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry',
+              stylers: [{color: '#746855'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#1f2835'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#f3d19c'}]
+            },
+            {
+              featureType: 'transit',
+              elementType: 'geometry',
+              stylers: [{color: '#2f3948'}]
+            },
+            {
+              featureType: 'transit.station',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{color: '#17263c'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#515c6d'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.stroke',
+              stylers: [{color: '#17263c'}]
+            }
+          ],
+      zoom: 4,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      for (var i = 0, length = storesJSON.length; i < length; i++) {
+
+          var storeData = storesJSON[i],
+          latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+
+          
+
+          // Creating a marker and putting it on the map
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: storeData.name,
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+          });
+
+          var infoWindow = new google.maps.InfoWindow();
+
+          (function(marker, storeData) {
+
+          // Attaching a click event to the current marker
+          google.maps.event.addListener(marker, "click", function(e) {
+            infoWindow.setContent(storeData.address);
+            infoWindow.open(map, marker);
+          });
+
+          markers.push(marker);
+
+          })(marker, storeData);
+
+          
+
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                myLatLng = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+				  markerUserLocation = new google.maps.Marker({
+					map: map,
+					position: myLatLng,
+					title: "Your Location",
+					icon : 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+				  });
+                map.setCenter(myLatLng);
+            }, function () {
+                map.setCenter(new google.maps.LatLng(28.7041, 77.1025));
+            });
+        }  
+        
+          //locationSelect = document.getElementById("locationSelect");
+          //locationSelect.onchange = function() {
+          //  var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
+          //  if (markerNum != "none"){
+          //    google.maps.event.trigger(markers[markerNum], 'click');
+          //  }
+          //};
+
+      }  
+
+      showAllDirections = document.getElementById("showAllDirectionsButton").onclick = showAllDirections;
+      selectedStore = document.getElementById("searchStoreButton").onclick = selectedStore; 
+      showCloseLocations = document.getElementById("searchButton").onclick = showCloseLocations;     
+};
+
+function showAllDirections(){
+
+  loadAllLocation();
+
+  for (var i = 0, length = storesJSON.length; i < length; i++) {
+    var storeObject = storesJSON[i];
+    console.log("storeObject: "+ storeObject.id);
+    console.log("storeObject.latitude: "+ storeObject.latitude);
+    console.log("storeObject.longitude :"+ storeObject.longitude );
+    dirLatLng= { lat:storeObject.latitude,lng:storeObject.longitude }
+    showDirections(myLatLng,dirLatLng);
+  }
+}
+
+function loadAllLocation(){
+  clearDirection();
+  clearInfoWindow();
+
+  for (var i = 0, length = storesJSON.length; i < length; i++) 
+  {
+    createMarker(storesJSON[i]);
+  }
+  
+}
+
+function clearAllMarker(){
+  console.log("Markers Length: "+ markers.length);
+  for (var key in markers) {
+        markers[key].setMap(null);
+      };
+}  
+
+function clearDirection(){
+		if (directionsDisplayCollection != null) {
+            for (var i = 0; i < directionsDisplayCollection.length; i++) {
+                directionsDisplayCollection[i].setMap(null);
+                directionsDisplayCollection[i] = null;
+            }
+            directionsDisplayCollection = [];
+			
+        }
+	}
+function clearInfoWindow(){
+	if(infowindowsCollection != null){
+		for(var j = 0; j < infowindowsCollection.length; j++){
+			console.log(j);
+			infowindowsCollection[j].close();
+		}
+		infowindowsCollection = [];
+	}
+}
+
+function showDirections(start, end) {
+
+    clearDirection();
+		clearInfoWindow();
+    clearRadius();
+
+    var directionsService = new google.maps.DirectionsService();
+    var directionsDisplay = new google.maps.DirectionsRenderer();
+        
+    request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.DirectionsTravelMode.DRIVING
+    };
+
+    directionsService.route(request, function (response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            var directionsDisplay = new google.maps.DirectionsRenderer(
+                {
+                    suppressMarkers: true
+                }
+            );
+            directionsDisplay.setMap(map);
+            directionsDisplay.setOptions({ preserveViewport: true });
+            directionsDisplay.setDirections(response);
+            directionsDisplayCollection.push(directionsDisplay);
+            directionsDisplay.setPanel(document.getElementById('directionsList'));
+
+            // $scope.directionsPanel.showList = true;
+            infowindow2 = new google.maps.InfoWindow();
+
+            infowindow2.setContent(response.routes[0].legs[0].distance.text + "<br>" + response.routes[0].legs[0].duration.text + " ");
+            if (response.routes) {
+                if (response.routes[0].overview_path) {
+                    var index = parseInt(response.routes[0].overview_path.length / 2);
+                    var infoposition = new google.maps.LatLng(response.routes[0].overview_path[index].lat(), response.routes[0].overview_path[index].lng());
+                }
+            }
+            infowindow2.setPosition(infoposition ? infoposition : end);
+            infowindow2.open(map);
+            infowindowsCollection.push(infowindow2);
+  
+        }
+        else{
+
+          console.log(" Direction Not found : " ) + start + " , " + end;
+        }
+    });
+  }
+
+  function createMarker(info)
+  {      
+      var marker = new google.maps.Marker({
+        map: map,
+        position: new google.maps.LatLng(info.latitude, info.longitude),
+        title: info.name
+      });
+      marker.content = '<div class="infoWindowContent">' + info.address + '</div>';
+      
+      google.maps.event.addListener(marker, 'click', function(){
+        infoWindow.setContent('<h2>' + marker.title + '</h2>' + marker.content);
+        infoWindow.open(map, marker);
+      });
+      markers.push(marker);
+	}
+
+
+  function selectedStore()
+  {
+    var selectedStoreLocation = document.getElementById("storeSelect");
+    var selectedLocation = selectedStoreLocation.options[selectedStoreLocation.selectedIndex].value;
+
+    console.log("selectedLocation: "+ selectedLocation );
+    var value = selectedLocation - 1;
+    console.log("Latitude: "+ storesJSON[value].latitude );
+    console.log("Longitude: "+ storesJSON[value].longitude );
+    clearDirection();
+		clearAllMarker();
+    clearInfoWindow();
+    clearRadius();
+		createMarker(storesJSON[value]);
+    dirLatLng = { lat : storesJSON[value].latitude , lng : storesJSON[value].longitude};
+		showDirections(myLatLng,dirLatLng);
+  }
+
+
+  function geocodeLatLng(geocoder, map, infowindow) {
+
+        var input = document.getElementById('latlng').value;
+        var latlngStr = input.split(',', 2);
+        var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              map.setZoom(11);
+              var marker = new google.maps.Marker({
+                position: latlng,
+                map: map
+              });
+              infowindow.setContent(results[0].formatted_address);
+              infowindow.open(map, marker);
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+      }
+
+  function clearRadius()
+  {
+    if (radius_circle) 
+    {
+  		radius_circle.setMap(null);
+  		radius_circle = null;
+  	}
+  }    
+
+  function showCloseLocations() {
+
+  	clearDirection();
+		clearAllMarker();
+    clearInfoWindow();
+    clearRadius();
+    
+    var radius = document.getElementById("radiusSelect");
+    var selectedRadius = radius.options[radius.selectedIndex].value;
+    
+
+  	if (geocoder) 
+    {
+  		geocoder.geocode({'location': myLatLng}, function (results, status) {
+  			if (status == google.maps.GeocoderStatus.OK) 
+        {
+  				if (status != google.maps.GeocoderStatus.ZERO_RESULTS) 
+          {
+            
+            var current_lat_lng = results[0].geometry.location;
+            radius_circle = new google.maps.Circle({
+            center: current_lat_lng,
+            radius: selectedRadius * 1000,
+            clickable: false,
+            map: map
+            });
+
+            if ( radius_circle )
+            {
+              map.fitBounds(radius_circle.getBounds());
+            } 
+      
+            for (var i = 0, length = storesJSON.length; i < length; i++) 
+            {
+    
+              var marker_lat_lng = new google.maps.LatLng(storesJSON[i].latitude, storesJSON[i].longitude);
+              //distance in meters between your location and the marker
+              var distance_from_location = google.maps.geometry.spherical.computeDistanceBetween(current_lat_lng, marker_lat_lng); 
+              if (distance_from_location <= selectedRadius * 1000) 
+              {
+                console.log("storesJSON[i].name: "+ storesJSON[i].name );
+                var new_marker = new google.maps.Marker({
+                position: marker_lat_lng,
+                map: map,
+                title: storesJSON[i].name
+                });      								
+                
+                google.maps.event.addListener(new_marker, 'click', function () {
+                if(infoWindownRadius){
+                  infoWindownRadius.setMap(null);
+                  infoWindownRadius = null;
+                }
+          
+                //var storeName = storesJSON[i].name;
+                infoWindownRadius = new google.maps.InfoWindow(
+                {
+                  content: '<div style="color:red">'+ "Store" +'</div>' + " is " + distance_from_location + " meters from my location",
+                  size: new google.maps.Size(150,50),
+                  pixelOffset: new google.maps.Size(0, -30),
+                  position: marker_lat_lng, map: map});
+                });
+                markers.push(new_marker);
+
+              }
+            }
+  				} else {
+  					alert("No results found while geocoding!");
+  			}
+      } else {
+        alert("Geocode was not successful: " + status);
+      }
+  		});
+  	}
+  }
+    
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGzkbwp49nEEB7V2VW-Sb9pjpJYp2YGpw&callback=initMap&libraries=geometry">
+    </script>
+
+  </body>
+</html>

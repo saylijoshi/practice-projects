@@ -1,0 +1,371 @@
+db.templates.insert([,///*  1 */
+{
+    "_id" : ObjectId("59413a67ea2316843d975d3a"),
+    "docType" : "Plants",
+    "fields" : [ 
+        {
+            "key" : "Plant",
+            "label" : "Plant"
+        }, 
+        {
+            "key" : "FY15-16MT",
+            "label" : "FY 15-16 MT"
+        }, 
+        {
+            "key" : "Type",
+            "label" : "Type"
+        }, 
+        {
+            "key" : "State",
+            "label" : "State"
+        }
+    ],
+    "showInFilter" : true
+}
+
+,///*  2 */
+{
+    "_id" : ObjectId("59413aa9ea2316843d975d3b"),
+    "docType" : "Registered Office",
+    "fields" : [ 
+        {
+            "key" : "AreaCode",
+            "label" : "Area Code"
+        }, 
+        {
+            "key" : "Employees",
+            "label" : "Employees"
+        }, 
+        {
+            "key" : "Type",
+            "label" : "Type"
+        }, 
+        {
+            "key" : "State",
+            "label" : "State"
+        }
+    ],
+    "showInFilter" : false
+}
+
+,///*  3 */
+{
+    "_id" : ObjectId("59413b62ea2316843d975d3f"),
+    "docType" : "Raw Material Zones",
+    "fields" : [ 
+        {
+            "key" : "ZoneCode",
+            "label" : "Zone Code"
+        }, 
+        {
+            "key" : "ZoneCode",
+            "label" : "Zone Code"
+        }, 
+        {
+            "key" : "State",
+            "label" : "State"
+        }, 
+        {
+            "key" : "Country",
+            "label" : "Country"
+        }
+    ],
+    "showInFilter" : false
+}
+
+,///*  4 */
+{
+    "_id" : ObjectId("59413bd8ea2316843d975d40"),
+    "docType" : "Transportation Vendors",
+    "fields" : [ 
+        {
+            "key" : "Code",
+            "label" : "Code"
+        }, 
+        {
+            "key" : "PhysicalAssetType",
+            "label" : "Physical Asset Type"
+        }, 
+        {
+            "key" : "Location",
+            "label" : "Location"
+        }, 
+        {
+            "key" : "City",
+            "label" : "City"
+        }, 
+        {
+            "key" : "State",
+            "label" : "State"
+        }, 
+        {
+            "key" : "Country",
+            "label" : "Country"
+        }
+    ],
+    "showInFilter" : false
+}
+
+,///*  5 */
+{
+    "_id" : ObjectId("59413d48ea2316843d975d42"),
+    "docType" : "Top Perforrming Sales Executives",
+    "fields" : [ 
+        {
+            "key" : "State",
+            "label" : "State"
+        }, 
+        {
+            "key" : "City",
+            "label" : "City"
+        }, 
+        {
+            "key" : "Monthly Targets ",
+            "label" : "Monthly Targets "
+        }, 
+        {
+            "key" : "Achieved %",
+            "label" : "Achieved %"
+        }, 
+        {
+            "key" : "Ranking",
+            "label" : "Ranking"
+        }
+    ],
+    "showInFilter" : true
+}
+
+,///*  6 */
+{
+    "_id" : ObjectId("59436be0ea2316843d975d82"),
+    "docType" : "Dealers",
+    "showInFilter" : false,
+    "fields" : [ 
+        {
+            "key" : "Code",
+            "label" : "Code"
+        }, 
+        {
+            "key" : "Average Monthly Billing",
+            "label" : "Average Monthly Billing"
+        }, 
+        {
+            "key" : "City",
+            "label" : "City"
+        }, 
+        {
+            "key" : "State",
+            "label" : "State"
+        }, 
+        {
+            "key" : "Country",
+            "label" : "Country"
+        }, 
+        {
+            "key" : "Latitude",
+            "label" : "Latitude"
+        }, 
+        {
+            "key" : "Longitude",
+            "label" : "Longitude"
+        }, 
+        {
+            "key" : "Manager Name",
+            "label" : "Manager Name"
+        }, 
+        {
+            "key" : "Dealer Name",
+            "label" : "Dealer Name"
+        }, 
+        {
+            "key" : "Image Source",
+            "label" : "Image Source"
+        }, 
+        {
+            "key" : "Sales Rep First Name",
+            "label" : "Sales Rep First Name"
+        }, 
+        {
+            "key" : "Sales Rep Last Name",
+            "label" : "Sales Rep Last Name"
+        }
+    ]
+}
+
+,///*  7 */
+{
+    "_id" : ObjectId("59436f59ea2316843d975d9f"),
+    "docType" : "Competitors",
+    "showInFilter" : false,
+    "fields" : [ 
+        {
+            "key" : "Name",
+            "label" : "Name"
+        }, 
+        {
+            "key" : "Share Price",
+            "label" : "Share Price"
+        }, 
+        {
+            "key" : "Head Office",
+            "label" : "Head Office"
+        }, 
+        {
+            "key" : "Area",
+            "label" : "Area"
+        }, 
+        {
+            "key" : "State",
+            "label" : "State"
+        }, 
+        {
+            "key" : "Latitude",
+            "label" : "Latitude"
+        }, 
+        {
+            "key" : "Longitude",
+            "label" : "Longitude"
+        }, 
+        {
+            "key" : "Market Cap",
+            "label" : "Market Cap"
+        }, 
+        {
+            "key" : "Sales Turnover",
+            "label" : "Sales Turnover"
+        }, 
+        {
+            "key" : "Net Profit",
+            "label" : "Net Profit"
+        }, 
+        {
+            "key" : "Total Assets",
+            "label" : "Total Assets"
+        }
+    ]
+}
+
+,///*  8 */
+{
+    "_id" : ObjectId("59437203ea2316843d975db4"),
+    "docType" : "WareHouses",
+    "showInFilter" : true,
+    "fields" : [ 
+        {
+            "key" : "Warehouse Code",
+            "label" : "Warehouse Code"
+        }, 
+        {
+            "key" : "Area",
+            "label" : "Area"
+        }, 
+        {
+            "key" : "Type",
+            "label" : "Type"
+        }, 
+        {
+            "key" : "City",
+            "label" : "City"
+        }, 
+        {
+            "key" : "State",
+            "label" : "State"
+        }, 
+        {
+            "key" : "Country",
+            "label" : "Country"
+        }, 
+        {
+            "key" : "Latitude",
+            "label" : "Latitude"
+        }, 
+        {
+            "key" : "Longitude",
+            "label" : "Longitude"
+        }, 
+        {
+            "key" : "Manager Name",
+            "label" : "Manager Name"
+        }
+    ]
+}
+
+,///*  9 */
+{
+    "_id" : ObjectId("5947c1bdea2316843d975e13"),
+    "docType" : "StoreLocations",
+    "showInFilter" : true,
+    "fields" : [ 
+        {
+            "key" : "AgencyName",
+            "label" : "Agency Name"
+        }, 
+        {
+            "key" : "City",
+            "label" : "City / Region"
+        }, 
+        {
+            "key" : "State",
+            "label" : "State"
+        }, 
+        {
+            "key" : "AverageMonthlyBilling",
+            "label" : "Average Monthly Billing (Rs. Crore)"
+        }, 
+        {
+            "key" : "Store",
+            "label" : "Store"
+        }, 
+        {
+            "key" : "IncomeBands",
+            "label" : "Income Bands"
+        }, 
+        {
+            "key" : "SalesRepFirstName",
+            "label" : "Sales Rep First Name"
+        }, 
+        {
+            "key" : "SalesRepLastName",
+            "label" : "Sales Rep Last Name "
+        }, 
+        {
+            "key" : "Population",
+            "label" : "Population"
+        }, 
+        {
+            "key" : "GenderRatio",
+            "label" : "Gender Ratio"
+        }
+    ]
+},///*  10 */
+{
+    "_id" : ObjectId("5a05557b9142407d5422f42a"),
+    "docType" : "MarketMapping",
+    "showInFilter" : false,
+    "fields" : [ 
+        {
+            "key" : "Category",
+            "label" : "Category"
+        }, 
+        {
+            "key" : "Brand",
+            "label" : "Brand"
+        }, 
+        {
+            "key" : "Weigtage",
+            "label" : "Weigtage"
+        }, 
+        {
+            "key" : "isActive",
+            "label" : "isActive"
+        }, 
+        {
+            "key" : "updatedBy",
+            "label" : "updatedBy"
+        }, 
+        {
+            "key" : "updatedOn",
+            "label" : "updatedOn"
+        }
+    ]
+}])

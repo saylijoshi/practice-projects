@@ -1,0 +1,771 @@
+<!--suppress HtmlUnknownTarget -->
+<html ng-app="angularjs_with_Nodejs">
+<head>
+    <title>Google Maps</title>
+
+    <link type="text/css" rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/css/iziModal.min.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css"/>
+    <link rel="stylesheet" href="/vendor/handsontable/dist/angular-ui-handsontable.full.css">
+    <link type="text/css" rel="stylesheet" href="/vendor/bootstrap-3.3.7-dist/css/bootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="/vendor/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="vendor/select2/select2.css">
+
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8"/>
+    <!--<script src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>-->
+    <!--<script src='http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js'></script>-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>-->
+    <!--<script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>-->
+    <!--<script async defer-->
+    <!--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVR5iaxk4V2f3OqyyhwUrZdWvE7L7n8Uo&amp;callback=initMap"></script>-->
+</head>
+<body ng-controller="mapController">
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVR5iaxk4V2f3OqyyhwUrZdWvE7L7n8Uo&libraries=places,geometry"></script>
+<script src="/vendor/jquery-1.9.1.js"></script>
+<script src="/vendor/angular.js"></script>
+<!--<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>-->
+<script type="text/javascript" src="vendor/select2/select2.js"></script>
+<!--<script type="text/javascript" src="bower_components/angular/angular.js"></script>-->
+<script type="text/javascript" src="vendor/angular-ui-select2/src/select2.js"></script>
+<script src="/vendor/handsontable/dist/angular-ui-handsontable.full.js"></script>
+<script src="javascripts/app.js" type="text/javascript"></script>
+<script src="javascripts/mapController.js" type="text/javascript"></script>
+<script src="javascripts/cocacolaController.js" type="text/javascript"></script>
+<script src="javascripts/biController.js" type="text/javascript"></script>
+<script src="/vendor/angular-cookies-1.0.0rc10.js"></script>
+<script src="/vendor/angular-ui.js"></script>
+<script src="/vendor/angular-ui-states.js"></script>
+<script src="/vendor/angular-strap.min.js"></script>
+<script src="/vendor/ui-bootstrap-tpls-0.6.0.js"></script>
+<script src="/vendor/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/js/iziModal.min.js" type="text/javascript"
+        charset="utf-8"></script>
+
+<div id="loaderdiv" ng-show="loading">
+    <img src="images/loader4.gif" class="ajax-loader"/>
+</div>
+
+<!--<div class="spinner" ng-show="loading"></div>-->
+
+<div id="modal1" style="width:50%; display:block;" ng-show="showDialog == true" class="modal fade in">
+    <div class="modal-dialog">
+        <div style="margin: 0 auto;width: 100%; margin-top: 100px;" class="modal-content">
+            <form name="form" novalidate="novalidate">
+                <div class="modal-header">
+                    <button aria-hidden="true" type="button" ng-click="showReport(false)"
+                            class="close">    &times;</button>
+                    <h4 class="modal-title">{{report_dialog_head}}</h4>
+                </div>
+                <div class="modal-body">
+                    <!--<div id="dialog" ng-click="" ng-show="showDialog"  class="modal fade in">-->
+                    <iframe id="frame"></iframe>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="left_menu" ng-show="IsVisible" ng-click="ShowHide()" ng-mouseleave="divHide()" alignment="left">
+    <div class="menu_header">
+        <h2>Searce</h2>
+    </div>
+    <ul>
+        <li><a ng-click="showFilters('filter1')"><img src="images/icon/bars-chart.png">Dashboard</a></li>
+        <li><a ng-click="showFilters('salesPerson');loadFilter('Top Perforrming Sales Executives')"><img
+                src="images/icon/coin.png">Sales Tracking</a></li>
+        <li><a ng-click="showFilters('reverseGeocode');"><img src="images/icon/Webp.net-resizeimage.png">Reverse Geocode</a></li>
+        <li><a ng-click="showFilters('navigation');"><img src="images/icon/Navigation3.jpg">Navigation</a></li>
+        <li><a ng-click="assetTracking();showFilters('assetTracking')"><img src="images/icon/route.png">Asset
+            Tracking</a></li>
+        <li><a ng-click="showFilters('reports')"><img src="images/icon/analytics.png"> Reports </a></li>
+        <li><a ng-click="showFilters('routeOptimization')"><img src="images/icon/routeOptimized_small2.png"> Route
+            Optimization </a></li>
+        <li><a ng-click="showFilters('wayPoints')"><img src="images/icon/route.png"> Way Points </a></li>
+        <li><a ng-click="showFilters('zipCodes');listDistrictNames();"><img src="images/icon/canyon-2.png">Business
+            Geography</a></li>
+        <li><a ng-click="showFilters('establishments');"><img src="images/icon/geocode1.png">Establishments</a></li>
+        <li><a ng-click="showFilters('POI');listAllCities();getPOIWeightages();"><img src="images/icon/route.png"> Points of Intrest</a></li>
+        <!--<li><a ng-click="showFilters('geolocations');"><img src="images/icon/geocode1.png">Geolocations</a></li>-->
+
+    </ul>
+</div>
+
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" ng-mouseover="ShowHide()"><span
+                    class="glyphicon glyphicon-menu-hamburger"></span></a>
+            <img id="logoImg" src="images/searce.png">
+        </div>
+        <p class="navbar-text navbar-center">Google Maps GIS - {{title}}</p>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!--<li><a href="/help" target="_blank"><span class=" fa fa-question-circle"></span>   </a></li>-->
+                <li><a href="#"><span class=" fa fa-power-off"></span> Logout</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+
+
+</nav>
+
+<div id="modal" style="width:50%; display:block;" ng-show="showPersonAnalysis == true" class="modal fade in">
+    <div class="modal-dialog">
+        <div style="margin: 0;width: 100%;" class="modal-content">
+            <form name="form" novalidate="novalidate">
+                <div class="modal-header">
+                    <button aria-hidden="true" type="button" ng-click="showModal(false)"
+                            class="close">    &times;</button>
+                    <h4 class="modal-title">Sales Person Analysis</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="content">
+                        <div id="sales_person_analysis">
+                            <div class="sp_tables">
+                                <h2>Sales Person Analysis</h2>
+                                <table id="sp_tables_basic" border="2">
+                                    <tr>
+                                        <td>Rep Code</td>
+                                        <td>NK06</td>
+                                        <td>Rep Name</td>
+                                        <td>Performance</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Area</td>
+                                        <td>PALGHAT</td>
+                                        <td>Reporting to</td>
+                                        <td>PRAVIN</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Photo</td>
+                                        <td><img src={{salePersonImage}}></td>
+                                        <td colspan="2">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td>Mobile No</td>
+                                                    <td align="right">9881453697</td>
+                                                </tr>
+                                                <tr></tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td align="right">VM@searce.com</td>
+                                                </tr>
+                                                <tr></tr>
+                                                <tr>
+                                                    <td colspan="100%"><a href="#">Growth/DeGrowth analysis</></a></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="target_actual_tbl" border="2">
+                                    <thead></thead>
+                                    <td colspan="2">Cur Month Target vs Actuals</td>
+                                    <tr>
+                                        <td>Target</td>
+                                        <td>78%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pro-Rata Target</td>
+                                        <td>65%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Achieved</td>
+                                        <td>285</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Achieved %</td>
+                                        <td>70.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Balance</td>
+                                        <td>0300</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><img src="images/star.png"/><img src="images/star.png"/><img
+                                                src="images/star.png"/><img src="images/star.png"/><img
+                                                src="images/star.png"/></td>
+                                    </tr>
+                                </table>
+                                <div class="mail_data_send">
+                                    <form>
+                                        <label>Message :</label>
+                                        <input placeholder="Enter Message" size="50"/><br/>
+                                        <label>Email :</label>
+                                        <input placeholder="Enter Email" size="30"/><br/>
+                                        <center>
+                                            <button>Send Mail</button>
+                                        </center>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear:both;height:5px"></div>
+                </div>
+                <div class="modal-footer">
+                    <button ng-click="showModal(false)" class="inz-btn btn-sm btn-default">Cancel</button>
+                    <button ng-click="save()" ng-focus="true" ng-disabled="form.$invalid"
+                            ng-class="{'disabled':form.$invalid}" type="submit" class="inz-btn btn-sm btn-success">
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div class="main">
+
+
+<div id="mymap"></div>
+
+<div class="filterBlock">
+    <!--<button id=findplace" ng-click="findPlaces()">Find places</button>-->
+    <!--<label>Place</label>-->
+    <!--<input type="text" ng-model="placeName" />-->
+    <!--<label>Type</label>-->
+    <!--<input type="text" ng-model="placeType1" />-->
+    <div id="filter1" ng-show="whichOverlayToShow == 'filter1'">
+        <div class="filter_group" flex>
+            <div>
+                <label>Category </label>
+                <select ui-select2 id="categori" ng-model="filter.selectedCategory"
+                        ng-change="loadFilter(filter.selectedCategory)">
+                    <option value="All">All</option>
+                    <option ng-selected="{{cat == filter.selectedCategory}}"
+                            ng-repeat="cat in filter.filterCategories" value="{{cat}}">{{cat}}
+                    </option>
+                </select>
+            </div>
+
+
+        </div>
+
+        <div id="filter">
+            <div class="filter_group" ng-repeat="filterObj in filter.filterFields">
+                <label>{{filterObj.label}}</label>
+                <select ui-select2 multiple id="{{filterObj.key}}" ng-model="selectedFilterValue"
+                        ng-change="filterMarkerData(filter.selectedCategory,filterObj.key,selectedFilterValue)">
+                    <!--<option value=""></option>-->
+                    <option ng-repeat="dataObj in filter.categoryData | unique: filterObj.key">
+                        {{dataObj[filterObj.key]}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="salesPerson" ng-show="whichOverlayToShow == 'salesPerson'">
+        <div class="filter_group">
+            <div id="filterSales">
+                <div class="filter_group" ng-repeat="filterObj in filter.filterFields">
+                    <label>{{filterObj.label}}</label>
+                    <select ui-select2 multiple id="{{filterObj.key}}" ng-model="selectedFilterValue"
+                            ng-change="filterMarkerData(filter.selectedCategory,filterObj.key,selectedFilterValue)">
+                        <!--<option value=""></option>-->
+                        <option ng-repeat="dataObj in filter.categoryData | unique: filterObj.key">
+                            {{dataObj[filterObj.key]}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="top20">
+                <label id="categorySalesPeople" style="font-weight:bold">Top 20% -</label>
+                <label id="cntSalesPeople">{{top20}}</label>
+            </div>
+            <div id="2080">
+                <label id="categorySalesPeople" style="font-weight:bold">20 - 80% -</label>
+                <label id="cntSalesPeople">{{middle2080}}</label>
+            </div>
+            <div id="Bottom20">
+                <label id="categorySalesPeople" style="font-weight:bold">Bottom 20% -</label>
+                <label id="cntSalesPeople">{{bottom20}}</label>
+            </div>
+        </div>
+    </div>
+
+    <div id="reports" ng-show="whichOverlayToShow == 'reports'">
+        <div class="filter_group_report" style="margin-left: 25px;margin-top: 50px;">
+            <div><a href="" ng-click="showReport(true,'Sales Report.pdf','Sales Report')">Sales Report</a><br></div>
+            <div style="height: 10px;margin-left: 10px;"></div>
+            <div><a href="" ng-click="showReport(true,'Monthly Summary.pdf','Monthly Sales Report' )">Monthly Sales
+                Report</a></div>
+            <div style="height: 10px;margin-left: 10px;"></div>
+            <div><a href="" ng-click="showReport(true,'Sale 3.pdf','Weekly Sales Activity')">Weekly Sales
+                Activity</a><br></div>
+            <div style="height: 10px;margin-left: 10px;"></div>
+            <!-- <div><a href="" ng-click="showReport(true,'Sale 4.pdf','Sales Activity Report')">Sales Activity Report</a><br></div>
+             <div style="height: 10px;margin-left: 10px;"></div>-->
+
+            <div><a href=""
+                    ng-click="showReport(true,'Report - Geo 1.pdf','Asset Tracking Report - Geofence/Status')">Asset
+                Tracking Report - Geofence/Status</a><br></div>
+            <div style="height: 10px;margin-left: 10px;"></div>
+
+            <div><a href=""
+                    ng-click="showReport(true,'Asset Tracking Report - Dail Report.pdf','Asset Tracking Report - Daily')">Asset
+                Tracking Report - Daily </a><br></div>
+            <div style="height: 10px;margin-left: 10px;"></div>
+
+            <div><a href="" ng-click="showReport(true,'Vehicle Tracking Report.pdf','Vehicle Tracking Report')">Vehicle
+                Tracking Report </a><br></div>
+            <div style="height: 10px;margin-left: 10px;"></div>
+
+        </div>
+    </div>
+</div>
+<!-- Filterblock -->
+
+<div id="salerPersonPics" class="client_img_list" ng-if="whichOverlayToShow == 'salesPerson'">
+    <div class="img_block" ng-repeat="salesP in salesPersonData">
+        <img class="trigger" ng-src="images/{{salesP.Images}}" ng-click="showModal(true,'images/' + salesP.Images)">
+
+        <p class="{{ salesP.Ranking >= '8' ? 'salesRed': salesP.Ranking >= '5' ? 'salesBlue':'salesGreen'}}">
+            {{salesP['Sales Rep Code']}}</p>
+    </div>
+</div>
+
+<div id="reverseGeocode" class="filterBlock" ng-if="whichOverlayToShow== 'reverseGeocode'" >
+    <div class="onlyMarginPadding" style="max-height: 250px;">
+        <label>Paste locations to reverse geocode</label>
+
+        <div ui-handsontable minSpareRows="1" stretchH="'all'" manualColumnMove="false" manualColumnResize="false"
+             selectedIndex="MySelectedIndex" columnSorting="true"
+             contextMenu="true" datarows="add in reverse_geocode_addresses" id="lineitems-grid" height="210" style="overflow: hidden;">
+            <datacolumn width="65" value="add.lat" title="'Latitude'" type="'text'">
+            </datacolumn>
+            <datacolumn width="65" value="add.lng" title="'Longitude'" type="'text'"></datacolumn>
+            <datacolumn width="85" value="add.state" title="'State'" type="'text'" readOnly></datacolumn>
+            <datacolumn width="80" value="add.district" title="'District'" type="'text'" readOnly></datacolumn>
+
+        </div>
+        <center>
+            <button ng-click="getUserLocation_reverseGeocode_State();" class="btn-default btn-success">Search</button>
+        </center>
+    </div>
+</div>
+
+<div id="wayPoints" class="filterBlock" ng-if="whichOverlayToShow == 'wayPoints'"
+     style="min-height: 500px; max-height: 680px;">
+    <label class="onlyMarginPadding" style="color: lawngreen;">Select route</label>
+
+    <div id="pac-container">
+        <input class="pac-input" id="src" googleplace autocomplete="off" ng-model="srcAddress" type="text"
+               placeholder="Source location" required>
+
+        <div style="height: 10px;"></div>
+        <input class="pac-input" id="dest" googleplace autocomplete="off" ng-model="destAddress" type="text"
+               placeholder="Destination location" required>
+
+    </div>
+
+    <div style="height: 10px;"></div>
+
+    <div class="onlyMarginPadding" style="max-height: 250px;">
+        <label>Paste way points to search</label>
+
+        <div ui-handsontable minSpareRows="1" stretchH="'all'" manualColumnMove="false" manualColumnResize="false"
+             selectedIndex="MySelectedIndex" columnSorting="true"
+             contextMenu="true" datarows="add in addresses" id="lineitems-grid" height="210" style="overflow: hidden;">
+            <datacolumn width="100" value="add.lat" title="'Latitude'" type="'text'">
+            </datacolumn>
+            <datacolumn width="100" value="add.lng" title="'Longitude'" type="'text'"></datacolumn>
+            <datacolumn width="100" value="add.status" title="'Status'" type="'text'" readOnly></datacolumn>
+
+        </div>
+    </div>
+    <div style="height: 10px;"></div>
+    <center>
+        <button ng-click="findWaypoints();" class="mail_data_send">Search way points</button>
+    </center>
+
+
+</div>
+
+<div id="POI" class="filterBlock" ng-if="whichOverlayToShow == 'POI'"
+     style="min-height: 500px; max-height: 680px;">
+
+    <label class="onlyMarginPadding" style="color: lawngreen;">Select location</label>
+    <div class="filter_group">
+        <label>Cities</label>
+        <select ui-select2 ng-model="statesData.selectedCity"
+                ng-change="calulateWeightageforPOI(statesData.selectedCity)">
+            <option value=""></option>
+            <option ng-repeat="state in statesData.allCities"> {{state}}</option>
+        </select>
+    </div>
+
+    <div ui-handsontable minSpareRows="0" stretchH="'all'" manualColumnMove="false" manualColumnResize="false"
+         selectedIndex="MySelectedIndex" columnSorting="true"
+         contextMenu="true" datarows="add in weightagePOI" id="lineitems-grid" height="300" style="overflow: hidden;">
+        <datacolumn width="80" value="add.Category" title="'Category'" type="'text'"></datacolumn>
+        <datacolumn width="80" value="add.Brand" title="'Brand'" type="'text'"></datacolumn>
+        <datacolumn width="40" value="add.Weigtage" title="'Weigtage'" type="'text'"></datacolumn>
+        <datacolumn width="30" value="add.count" title="'#'" type="'text'" readOnly></datacolumn>
+        <datacolumn width="40" value="add.TotalWeightage" title="'Total'" type="'text'" readOnly></datacolumn>
+
+    </div>
+    <div style="height: 10px;" ></div>
+
+    <div ng-repeat="(key,value) in categorizedWeightage">
+        <label style="color: white;">{{key}} - #{{value.count}} - score - {{value.score}}</label>
+    </div>
+    <div style="height: 10px;" ></div>
+    <label style="color: white;">Total - {{TotalWeightage}}</label>
+    <!--<label class="onlyMarginPadding" style="color: lawngreen;">Select location</label>-->
+
+    <!--<div id="pac-container">-->
+        <!--<input class="pac-input" id="srcPOI" googleplace autocomplete="off" ng-model="srcAddress" type="text"-->
+               <!--placeholder="Source location" required>-->
+
+    <!--</div>-->
+    <!--<label class="onlyMarginPadding" style="color: lawngreen;">Put point of interest to search</label>-->
+    <!--<textarea rows="4" cols="50" ng-model="wayPointsPOI.POI" style="width: 240px;  margin-left: 11px;"  class="onlyMarginPadding"></textarea>-->
+
+
+    <!--<div style="height: 10px;"></div>-->
+    <!--<center>-->
+        <!--<button ng-click="searchPOI();" class="mail_data_send">Search</button>-->
+    <!--</center>-->
+
+
+</div>
+
+<div id="establishments" class="filterBlock" ng-if="whichOverlayToShow == 'establishments'"
+     style="min-height: 500px; max-height: 680px;">
+
+    <label class="onlyMarginPadding" style="color: lawngreen;">Select city</label>
+    <div class="filter_group">
+        <label>Cities</label>
+        <select ui-select2 ng-model="establishmentsData.selectedCity"
+                ng-change="establishmentsCount(establishmentsData.selectedCity)">
+            <option value=""></option>
+            <option ng-repeat="establishment in establishmentsData.allCities"> {{establishment}}</option>
+            <!--<option value="Mumbai">Mumbai</option>-->
+            <!--<option value="Delhi">Delhi</option>-->
+            <!--<option value="Kolkata">Kolkata</option>-->
+            <!--<option value="Chennai">Chennai</option>-->
+            <!--<option value="Hyderabad">Hyderabad</option>-->
+            <!--<option value="Bangalore">Bangalore</option>-->
+        </select>
+    </div>
+
+    <div ui-handsontable minSpareRows="0" stretchH="'all'" manualColumnMove="false" manualColumnResize="false"
+         selectedIndex="MySelectedIndex" columnSorting="true"
+         contextMenu="true" datarows="add in establishmentsResult" id="lineitems-grid" height="300" style="overflow: hidden;">
+        <datacolumn width="80" value="add.name" title="'Name'" type="'text'"></datacolumn>
+        <datacolumn width="80" value="add.type" title="'Type'" type="'text'"></datacolumn>
+        <datacolumn width="80" value="add.vicinity" title="'Vicinity'" type="'text'"></datacolumn>
+        <datacolumn width="40" value="add.rating" title="'Rating'" type="'text'"></datacolumn>
+
+    </div>
+    <div style="height: 10px;" ></div>
+    <label style="color: white;">Api Calls - {{cntApiCalls}}</label>
+    <div></div>
+    <label style="color: white;">Result - {{cntApiresults}}</label>
+    <label style="color: white;">establishments # - {{cntresults}}</label>
+
+</div>
+
+
+<div id="routeOptimization" class="filterBlock" ng-if="whichOverlayToShow == 'routeOptimization'"
+     style="min-height: 500px; max-height: 680px;">
+    <div class="routeOptimization">
+        <div>
+            <label>Start:</label>
+            <select id="start" ng-model="startPoint">
+                <option value="Airport, Pune">Airport, Pune</option>
+                <option value="Nigdi, Pune">Nigdi, Pune</option>
+                <option value="Swargate, Pune">Swargate, Pune</option>
+                <option value="Camp, Pune">Camp, Pune</option>
+                <option value="Katraj, Pune">Katraj, Pune</option>
+            </select>
+
+            <div style="height: 10px;"></div>
+            <label>Waypoints:</label> <br>
+            <i>(Ctrl+Click or Cmd+Click for multiple selection)</i> <br>
+            <select multiple id="waypoints" ng-if="endPoint == 'Airport, Aurangabad'">
+                <option value="Ahmednagar, Maharashtra">Ahmednagar, Maharashtra</option>
+                <option value="Sangamner, Maharashtra">Sangamner, Maharashtra</option>
+                <option value="Shirdi, Maharashtra">Shirdi</option>
+                <option value="Kopargaon, Maharashtra">Kopargaon</option>
+                <option value="Paithan, Maharashtra">Paithan</option>
+                <option value="CIDCO, Aurangabad, Maharashtra">CIDCO, Aurangabad</option>
+                <option value="Mukundwadi, Aurangabad, Maharashtra">Mukundwadi, Aurangabad</option>
+            </select>
+            <select multiple id="waypoints" ng-if="endPoint == 'Bengaluru, Karnataka'">
+                <option value="Kolhapur, Maharashtra">Kolhapur, Maharashtra</option>
+                <option value="Solapur, Maharashtra">Solapur, Maharashtrar</option>
+                <option value="Vijaypura, Karnataka">Vijaypura, Karnataka</option>
+                <option value="Gadag, Karnataka">Gadag, Karnataka</option>
+                <option value="Ballari, Karnataka">Ballari, Karnataka</option>
+            </select>
+            <select multiple id="waypoints" ng-if="endPoint == 'Delhi'">
+                <option value="Kalyan, Maharashtra">Kalyan, Maharashtraa</option>
+                <option value="Nashik, Maharashtra">Nashik, Maharashtra</option>
+                <option value="Kota, Uttar Pradesh">Kota, Uttar Pradesh</option>
+                <option value="Jaipur, Rajsthan">Jaipur, Rajsthan</option>
+                <option value="Indore, Madhya Pradesh">Indore, Madhya Pradesh</option>
+                <option value="Agra, Uttar Pradesh">Agra, Uttar Pradesh</option>
+            </select>
+            <select multiple id="waypoints" ng-if="endPoint == 'Ranchi, Jharkhand'">
+                <option value="Aurangabad, Maharashtra">Aurangabad, Maharashtra</option>
+                <option value="Akola, Maharashtra">Akola, Maharashtra</option>
+                <option value="Nagpur, Maharashtra">Nagpur, Maharashtraa</option>
+                <option value="Patna, Bihar">Patna, Bihar</option>
+                <option value="Itarasi, Madhya Pradesh">Itarasi, Madhya Pradesh</option>
+                <option value="Raipur, Chattisgarh">Raipur, Chattisgarh</option>
+                <option value="Jamshedpur, Jharkhand">Jamshedpur, Jharkhand</option>
+            </select>
+            <select multiple id="waypoints" ng-if="endPoint == 'Magarpatta, Pune'">
+                <option value="Wakad">Wakad</option>
+                <option value="Pune Station">Pune Station</option>
+                <option value="Shivaji Nagar, Pune">Shivaji Nagar</option>
+                <option value="Baner">Baner</option>
+                <option value="Aundh, Pune">Aundh</option>
+                <option value="Yerwada, Pune">Yerwada</option>
+                <option value="Kalyani Nagar, Pune">Kalyani Nagar</option>
+            </select>
+            <select multiple id="waypoints" ng-if="endPoint == ''">
+
+            </select>
+
+            <div style="height: 10px;"></div>
+            <label>End:</label>
+            <select id="end" ng-model="endPoint" ng-change="resetRouting()">
+                <option value="Airport, Aurangabad" selected>Airport, Aurangabad</option>
+                <option value="Bengaluru, Karnataka">Bengaluru, Karnataka</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Ranchi, Jharkhand">Ranchi, Jharkhand</option>
+                <option value="Magarpatta, Pune">Magarpatta, Pune</option>
+            </select>
+
+            <div style="height: 30px;"></div>
+            <center>
+                <button ng-click="optimizeRoute();" class="btn-success">Get optimized route</button>
+            </center>
+        </div>
+
+        <div id="directions-panel" style="overflow: auto; max-height: 180px; width: 300px;"></div>
+    </div>
+</div>
+
+<div id="zipCodes" class="filterBlock" ng-if="whichOverlayToShow == 'zipCodes'" style="min-height: 500px;">
+    <div id="filter">
+        <div class="filter_group">
+            <label>State</label>
+            <select ui-select2 ng-model="statesData.selectedStates"
+                    ng-change="listStateData(statesData.selectedStates)">
+                <option value=""></option>
+                <option ng-repeat="state in statesData.states"> {{state}}</option>
+            </select>
+        </div>
+        <div class="filter_group">
+            <label>PinCode</label>
+
+            <select ui-select2 multiple ng-model="statesData.selectedZipcodes" ng-change="resetOtherData('zipcode');">
+                <option ng-repeat="zip in statesData.zipCodes"> {{zip}}</option>
+            </select>
+        </div>
+
+        <div class="filter_group">
+            <label>Taluka</label>
+            <select ui-select2 multiple ng-model="statesData.selectedTalukas" ng-change="resetOtherData('taluka');">
+                <option value=""></option>
+                <option ng-repeat="taluka in statesData.talukas"> {{taluka}}</option>
+            </select>
+        </div>
+        <div class="filter_group">
+            <label>District</label>
+
+            <select ui-select2 multiple ng-model="statesData.selectedDistricts" ng-change="resetOtherData('district');">
+                <option ng-repeat="dist in statesData.districts"> {{dist}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="height: 10px;"></div>
+    <center>
+        <button ng-click="placeZipcodesBoundries();" class="btn-default btn-warning">Place Zip Codes</button>
+    </center>
+
+    <div class="onlyMarginPadding" style="max-height: 250px;">
+        <label>Paste locations to search</label>
+
+        <div ui-handsontable minSpareRows="1" stretchH="'all'" manualColumnMove="false" manualColumnResize="false"
+             selectedIndex="MySelectedIndex" columnSorting="true"
+             contextMenu="true" datarows="add in addresses" id="lineitems-grid" height="210" style="overflow: hidden;">
+            <datacolumn width="100" value="add.lat" title="'Latitude'" type="'text'">
+            </datacolumn>
+            <datacolumn width="100" value="add.lng" title="'Longitude'" type="'text'"></datacolumn>
+            <datacolumn width="100" value="add.status" title="'Status'" type="'text'" readOnly></datacolumn>
+
+        </div>
+        <center>
+            <button ng-click="locatePointsInsideCityorOutside();" class="btn-default btn-success">Search</button>
+        </center>
+    </div>
+
+
+</div>
+
+<div id="modalNavigationSaveConfirmation" style="width:40%; display:block;"
+     ng-show="showNavigationSaveConfirmation == true && whichOverlayToShow == 'navigation'" class="modal fade in">
+    <div class="modal-dialog">
+        <div style="margin: 0 auto;width: 100%; margin-top: 100px;" class="modal-content">
+            <form name="formSaveRoute" novalidate="novalidate">
+                <div class="modal-header">
+                    <button aria-hidden="true" type="button" ng-click="showReport(false)"
+                            class="close">    &times;</button>
+                    <h4 class="modal-title">Save Route</h4>
+                </div>
+                <div class="modal-body">
+                    <!--<div id="dialog" ng-click="" ng-show="showDialog"  class="modal fade in">-->
+                    <div inner-html="inner-html" class="modal-msg"> Do you want to save the route taken?</div>
+                    <h6>Route title</h6>
+                    <input id="txtRouteTitle" ng-model="routeSearch.routeTitle">
+
+                    <h6>Rider Name</h6>
+                    <input id="txtRouteTitle" ng-model="routeSearch.riderName">
+
+                </div>
+                <div class="modal-footer">
+                    <button ng-click="showNavigationSaveConfirmation = false;" class="btn btn-sm btn-default">No
+                    </button>
+                    <button ng-click="saveRoute()" ng-focus="true" type="submit" class="btn btn-sm btn-success">Yes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="navigation" class="filterBlock" ng-if="whichOverlayToShow == 'navigation'"
+     style="min-height: 500px; max-height: 680px;">
+    <label class="onlyMarginPadding" style="color: lawngreen;">Select route to navigate</label>
+
+    <div id="pac-container" class="onlyMarginPadding">
+        <input class="pac-input" id="srcNav" googleplace autocomplete="off" ng-model="srcNavAddress" type="text"
+               placeholder="Source location" required>
+
+        <div style="height: 10px;"></div>
+        <input class="pac-input" id="destNav" googleplace autocomplete="off" ng-model="destNavAddress" type="text"
+               placeholder="Destination location" required>
+
+        <div style="height: 10px;"></div>
+        <center>
+            <button ng-click="showDirections();" class="btn btn-default"><span class=" fa fa-search"></span></button>
+            <button ng-click="startBikerNavigation();" class="btn btn-default"><span class=" fa fa-play"></span>
+            </button>
+        </center>
+
+
+    </div>
+
+    <div class="onlyMarginPadding overflow-auto" style="max-height: 250px;">
+        <label>Select the route</label>
+        <select ui-select2 ng-model="routeSearch.showRoute" ng-change="showSelectedRoute(routeSearch.showRoute);"
+                style="width: 230px; margin-left: 12px;">
+            <option value=""></option>
+            <option ng-repeat="r in routeSearch.routesSearched" value="{{r}}"> {{r.routeName}}</option>
+        </select>
+        <button ng-click="" class="btn btn-default" ng-if="routeSearch.showRoute != ''"><span
+                class=" fa fa-road"></span></button>
+
+        <div id="right-panel" class="panel panel-primary overflow-auto" ng-show="routeSearch.showDirectionPanel"></div>
+    </div>
+
+</div>
+
+<div class="marker_detail" ng-if="whichOverlayToShow == 'filter1' || whichOverlayToShow == 'zipCodes'">
+    <div class="row">
+        <div class="col-md-1">
+            <img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png">
+        </div>
+        <div class="col-md-10">
+            Registered Office
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1">
+            <img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png">
+        </div>
+        <div class="col-md-10">
+            Plants
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1">
+            <img src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png">
+        </div>
+        <div class="col-md-10">
+            WareHouses
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-10">
+            Competitors
+        </div>
+    </div>
+</div>
+<div id="geolocations" class="filterBlock" ng-if="whichOverlayToShow == 'geolocations'"
+     style="min-height: 500px; max-height: 680px;">
+    <label class="onlyMarginPadding" style="color: lawngreen;">Paste comma(,) seperated addresses</label>
+
+    <textarea rows="4" cols="50" ng-model="geo.addressesToGetGeolocations" style="width: 220px;  margin-left: 5px;" ></textarea>
+
+    <div style="height: 10px;"></div>
+
+    <div class="onlyMarginPadding" style="max-height: 250px;">
+
+        <div ui-handsontable minSpareRows="1" stretchH="'all'" manualColumnMove="false" manualColumnResize="false"
+             selectedIndex="MySelectedIndex" columnSorting="true"
+             contextMenu="true" datarows="geoadd in geo.geolocatedAddresses" id="lineitems-grid" height="210" style="overflow: hidden;">
+            <datacolumn width="100" value="geoadd.lat" title="'Latitude'" type="'text'" readOnly></datacolumn>
+            <datacolumn width="100" value="geoadd.lng" title="'Longitude'" type="'text'" readOnly></datacolumn>
+            <datacolumn width="100" value="geoadd.addr" title="'Address'" type="'text'" readOnly></datacolumn>
+
+        </div>
+    </div>
+    <div style="height: 10px;"></div>
+    <center>
+        <button ng-click="getGeolocationandAddresses();" class="mail_data_send">Get geolocations</button>
+    </center>
+
+
+</div>
+
+</div>
+
+</body>
+</html>

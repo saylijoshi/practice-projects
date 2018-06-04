@@ -1,0 +1,2707 @@
+/* 1 */
+{
+    "_id" : ObjectId("594143ffea2316843d975d43"),
+    "docType" : "Plants",
+    "Plant" : "Nimbahera",
+    "FY15-16MT" : "1735431",
+    "Type" : "Grey Cement Works",
+    "State" : "Rajasthan",
+    "Latitude" : 24.625659,
+    "Longitude" : 74.681027,
+    "markerColor" : "green"
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("594143ffea2316843d975d44"),
+    "docType" : "Plants",
+    "Plant" : "Mangrol",
+    "FY15-16MT" : "644880(Old), 1429591(New)",
+    "Type" : "Grey Cement Works",
+    "State" : "Gujarat",
+    "Latitude" : 21.11717,
+    "Longitude" : 70.115811,
+    "markerColor" : "green"
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("594143ffea2316843d975d45"),
+    "docType" : "Plants",
+    "Plant" : "Gotan (Grey)",
+    "FY15-16MT" : "282217",
+    "Type" : "Grey Cement Works",
+    "State" : "Rajasthan",
+    "Latitude" : 26.655401,
+    "Longitude" : 73.733075,
+    "markerColor" : "green"
+}
+
+/* 4 */
+{
+    "_id" : ObjectId("594143ffea2316843d975d46"),
+    "docType" : "Plants",
+    "Plant" : "Jharli",
+    "FY15-16MT" : "978386",
+    "Type" : "Grinding Unit (Grey Cement Works)",
+    "State" : "Haryana",
+    "Latitude" : 28.499598,
+    "Longitude" : 76.382539,
+    "markerColor" : "green"
+}
+
+/* 5 */
+{
+    "_id" : ObjectId("594143ffea2316843d975d47"),
+    "docType" : "Plants",
+    "Plant" : "Muddapur",
+    "FY15-16MT" : "1824385",
+    "Type" : "Grey Cement Works",
+    "State" : "Karnataka",
+    "Latitude" : 16.188885,
+    "Longitude" : 75.312064,
+    "markerColor" : "green"
+}
+
+/* 6 */
+{
+    "_id" : ObjectId("594143ffea2316843d975d48"),
+    "docType" : "Plants",
+    "Plant" : "Gotan (White)",
+    "FY15-16MT" : "501168",
+    "Type" : "White Cement Works",
+    "State" : "Rajasthan",
+    "Latitude" : 26.655401,
+    "Longitude" : 73.733075,
+    "markerColor" : "green"
+}
+
+/* 7 */
+{
+    "_id" : ObjectId("594143ffea2316843d975d49"),
+    "docType" : "Plants",
+    "Plant" : "Gotan (Wall Putty)",
+    "FY15-16MT" : "477628",
+    "Type" : "White Cement Works (Wall Putty)",
+    "State" : "Rajasthan",
+    "Latitude" : 26.655401,
+    "Longitude" : 73.733075,
+    "markerColor" : "green"
+}
+
+/* 8 */
+{
+    "_id" : ObjectId("59414459ea2316843d975d4a"),
+    "docType" : "Warehouses",
+    "WarehouseCode" : "JK 10012017",
+    "AreaSQFT" : 100000.0,
+    "Type" : "White",
+    "City " : "Manikchak",
+    "State" : "West Bengal",
+    "Country " : "India",
+    "Latitude" : 25.077787,
+    "Longitude" : 87.900375
+}
+
+/* 9 */
+{
+    "_id" : ObjectId("59414459ea2316843d975d4b"),
+    "docType" : "Warehouses",
+    "WarehouseCode" : "JK 10022017",
+    "AreaSQFT" : 240000.0,
+    "Type" : "Grey",
+    "City " : "Roorkee",
+    "State" : "Uttarakhand",
+    "Country " : "India",
+    "Latitude" : 29.854263,
+    "Longitude" : 77.888
+}
+
+/* 10 */
+{
+    "_id" : ObjectId("59414459ea2316843d975d4c"),
+    "docType" : "Warehouses",
+    "WarehouseCode" : "JK 10032017",
+    "AreaSQFT" : 170000.0,
+    "Type" : "Grey",
+    "City " : "Kavali",
+    "State" : "Andhra Pradesh",
+    "Country " : "India",
+    "Latitude" : 14.913181,
+    "Longitude" : 79.992981
+}
+
+/* 11 */
+{
+    "_id" : ObjectId("59414459ea2316843d975d4d"),
+    "docType" : "Warehouses",
+    "WarehouseCode" : "JK 10042017",
+    "AreaSQFT" : 150000.0,
+    "Type" : "White",
+    "City " : "Chalakudy",
+    "State" : "Kerala",
+    "Country " : "India",
+    "Latitude" : 10.311879,
+    "Longitude" : 76.331978
+}
+
+/* 12 */
+{
+    "_id" : ObjectId("59414459ea2316843d975d4e"),
+    "docType" : "Warehouses",
+    "WarehouseCode" : "JK 10052017",
+    "AreaSQFT" : 340000.0,
+    "Type" : "Grey",
+    "City " : "Gondal",
+    "State" : "Gujarat",
+    "Country " : "India",
+    "Latitude" : 21.961946,
+    "Longitude" : 70.792297
+}
+
+/* 13 */
+{
+    "_id" : ObjectId("59414459ea2316843d975d4f"),
+    "docType" : "Warehouses",
+    "WarehouseCode" : "JK 10062017",
+    "AreaSQFT" : 310000.0,
+    "Type" : "Grey",
+    "City " : "Mahidpur",
+    "State" : "Madhya Pradesh",
+    "Country " : "India",
+    "Latitude" : 23.486839,
+    "Longitude" : 75.659157
+}
+
+/* 14 */
+{
+    "_id" : ObjectId("59414459ea2316843d975d50"),
+    "docType" : "Warehouses",
+    "WarehouseCode" : "JK 10072017",
+    "AreaSQFT" : 220000.0,
+    "Type" : "Grey",
+    "City " : "Gurdaspur",
+    "State" : "Punjab",
+    "Country " : "India",
+    "Latitude" : 32.041943,
+    "Longitude" : 75.405334
+}
+
+/* 15 */
+{
+    "_id" : ObjectId("59414459ea2316843d975d51"),
+    "docType" : "Warehouses",
+    "WarehouseCode" : "JK 10082017",
+    "AreaSQFT" : 190000.0,
+    "Type" : "White",
+    "City " : "Domchanch",
+    "State" : "Jharkhand",
+    "Country " : "India",
+    "Latitude" : 24.47438,
+    "Longitude" : 85.688744
+}
+
+/* 16 */
+{
+    "_id" : ObjectId("59414520ea2316843d975d52"),
+    "docType" : "Registered Office",
+    "AreaCode" : "JK RO - 1001 - 2017",
+    "Employees" : 2000.0,
+    "Type" : "White & Grey",
+    "State" : "Delhi",
+    "Latitude" : 28.56028,
+    "Longitude" : 77.291332
+}
+
+/* 17 */
+{
+    "_id" : ObjectId("59414520ea2316843d975d53"),
+    "docType" : "Registered Office",
+    "AreaCode" : "JK RO - 1002 - 2017",
+    "Employees" : 1500.0,
+    "Type" : "Grey",
+    "State" : "Pune",
+    "Latitude" : 18.536208,
+    "Longitude" : 73.893975
+}
+
+/* 18 */
+{
+    "_id" : ObjectId("59414520ea2316843d975d54"),
+    "docType" : "Registered Office",
+    "AreaCode" : "JK RO - 1003- 2017",
+    "Employees" : 500.0,
+    "Type" : "Office",
+    "State" : "UP",
+    "Latitude" : 26.449923,
+    "Longitude" : 80.331874
+}
+
+/* 19 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d83"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1001",
+    "Average Monthly Billing" : "32",
+    "City" : "Munger",
+    "State" : "Bihar",
+    "Country" : "India",
+    "Latitude" : "25.37571",
+    "Longitude" : "86.474373",
+    "Manager Name" : "V S Nandakumar",
+    "Dealer Name" : "Ram Mohan Traders",
+    "Image Source" : "1.jpg",
+    "Sales Rep First Name" : "Abhsihek",
+    "markerColor" : "purple",
+    "Taluka" : "Munger",
+    "SUB_DISTRICT" : "Munger",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Munger"
+}
+
+/* 20 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d84"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1002",
+    "Average Monthly Billing" : "22",
+    "City" : "Yavatmal",
+    "State" : "Maharashtra",
+    "Country" : "India",
+    "Latitude" : "20.388794",
+    "Longitude" : "78.120407",
+    "Manager Name" : "George C P",
+    "Dealer Name" : "Jaagruk Cement",
+    "Image Source" : "2.jpg",
+    "Sales Rep First Name" : "Anil",
+    "markerColor" : "purple",
+    "Taluka" : "Yavatmal",
+    "SUB_DISTRICT" : "Yavatmal",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Yavatmal"
+}
+
+/* 21 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d85"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1003",
+    "Average Monthly Billing" : "36",
+    "City" : "Gohana",
+    "State" : "Haryana",
+    "Country" : "India",
+    "Latitude" : "29.138407",
+    "Longitude" : "76.693245",
+    "Manager Name" : "Satish K H",
+    "Dealer Name" : "Jai Builders",
+    "Image Source" : "3.jpg",
+    "Sales Rep First Name" : "Chitra",
+    "markerColor" : "purple",
+    "Taluka" : "Gohana",
+    "SUB_DISTRICT" : "Gohana",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Sonepat"
+}
+
+/* 22 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d86"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1004",
+    "Average Monthly Billing" : "12",
+    "City" : "Munger",
+    "State" : "Bihar",
+    "Country" : "India",
+    "Latitude" : "25.37571",
+    "Longitude" : "86.474373",
+    "Manager Name" : "Gopalakrishnan G",
+    "Dealer Name" : "Raghunath Traders",
+    "Image Source" : "4.jpg",
+    "Sales Rep First Name" : "Dinesh",
+    "markerColor" : "purple",
+    "Taluka" : "Munger",
+    "SUB_DISTRICT" : "Munger",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Munger"
+}
+
+/* 23 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d87"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1005",
+    "Average Monthly Billing" : "23",
+    "City" : "Yavatmal",
+    "State" : "Maharashtra",
+    "Country" : "India",
+    "Latitude" : "20.388794",
+    "Longitude" : "78.120407",
+    "Manager Name" : "Nataraj S",
+    "Dealer Name" : "J K Builders",
+    "Image Source" : "5.jpg",
+    "Sales Rep First Name" : "Ipshita",
+    "markerColor" : "purple",
+    "Taluka" : "Yavatmal",
+    "SUB_DISTRICT" : "Yavatmal",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Yavatmal"
+}
+
+/* 24 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d88"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1006",
+    "Average Monthly Billing" : "28",
+    "City" : "Bokaro Steel City",
+    "State" : "Jharkhand",
+    "Country" : "India",
+    "Latitude" : "23.669296",
+    "Longitude" : "86.151115",
+    "Manager Name" : "Jhinkoo Ram",
+    "Dealer Name" : "Ranjha Works",
+    "Image Source" : "6.jpg",
+    "Sales Rep First Name" : "Ranjeet",
+    "markerColor" : "purple",
+    "Taluka" : "Bokaro"
+}
+
+/* 25 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d89"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1007",
+    "Average Monthly Billing" : "11",
+    "City" : "Jetpur",
+    "State" : "Gujarat",
+    "Country" : "India",
+    "Latitude" : "21.761524",
+    "Longitude" : "70.627625",
+    "Manager Name" : "Dr. Ramesh Babu R",
+    "Dealer Name" : "Dhan Traders",
+    "Image Source" : "7.jpg",
+    "Sales Rep First Name" : "Varun",
+    "markerColor" : "purple",
+    "Taluka" : "Jetpur",
+    "SUB_DISTRICT" : "Jetpur",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Rajkot"
+}
+
+/* 26 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d8a"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1008",
+    "Average Monthly Billing" : "29",
+    "City" : "Basirhat",
+    "State" : "West Bengal",
+    "Country" : "India",
+    "Latitude" : "22.657402",
+    "Longitude" : "88.86718",
+    "Manager Name" : "Chandrika P G",
+    "Dealer Name" : "Dhiman Works",
+    "Image Source" : "8.jpg",
+    "Sales Rep First Name" : "Vikas",
+    "markerColor" : "purple",
+    "Taluka" : "Basirhat",
+    "SUB_DISTRICT" : "Basirhat",
+    "PINCODE" : undefined,
+    "DISTRICT" : "North 24 Parganas"
+}
+
+/* 27 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d8b"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1009",
+    "Average Monthly Billing" : "32",
+    "City" : "Tanot",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.82005",
+    "Longitude" : "70.404053",
+    "Manager Name" : "Muralikrishna C S",
+    "Dealer Name" : "Mehta Traders",
+    "Image Source" : "9.jpg",
+    "Sales Rep First Name" : "Abhsihek",
+    "markerColor" : "purple",
+    "Taluka" : "Jaisalmer",
+    "SUB_DISTRICT" : "Jaisalmer",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Jaisalmer"
+}
+
+/* 28 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d8c"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1010",
+    "Average Monthly Billing" : "22",
+    "City" : "Jaisalmer",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "26.942068",
+    "Longitude" : "70.887451",
+    "Manager Name" : "Viswanathan N",
+    "Dealer Name" : "KB Enterprises",
+    "Image Source" : "10.jpg",
+    "Sales Rep First Name" : "Anil",
+    "markerColor" : "purple",
+    "Taluka" : "Jaisalmer",
+    "SUB_DISTRICT" : "Jaisalmer",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Jaisalmer"
+}
+
+/* 29 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d8d"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1011",
+    "Average Monthly Billing" : "36",
+    "City" : "Bikaner",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "28.130531",
+    "Longitude" : "73.348389",
+    "Manager Name" : "B H Hanumantha",
+    "Dealer Name" : "Shree Nath Ji",
+    "Image Source" : "11.jpg",
+    "Sales Rep First Name" : "Chitra",
+    "markerColor" : "purple",
+    "Taluka" : "Bikaner",
+    "SUB_DISTRICT" : "Bikaner",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Bikaner"
+}
+
+/* 30 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d8e"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1012",
+    "Average Monthly Billing" : "12",
+    "City" : "Salaser",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.800615",
+    "Longitude" : "74.73266",
+    "Manager Name" : "Nalini B",
+    "Dealer Name" : "Swastik Cement",
+    "Image Source" : "1.jpg",
+    "Sales Rep First Name" : "Dinesh",
+    "markerColor" : "purple",
+    "Taluka" : "Churu",
+    "SUB_DISTRICT" : "Churu",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Churu"
+}
+
+/* 31 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d8f"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1013",
+    "Average Monthly Billing" : "23",
+    "City" : "Nagaur",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.274568",
+    "Longitude" : "73.765869",
+    "Manager Name" : "Karthik R",
+    "Dealer Name" : "Friends ",
+    "Image Source" : "2.jpg",
+    "Sales Rep First Name" : "Ipshita",
+    "markerColor" : "purple",
+    "Taluka" : "Nagaur",
+    "SUB_DISTRICT" : "Nagaur",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Nagaur"
+}
+
+/* 32 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d90"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1014",
+    "Average Monthly Billing" : "28",
+    "City" : "Sikar",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.586604",
+    "Longitude" : "75.150146",
+    "Manager Name" : "Leelavathi M R",
+    "Dealer Name" : "Shrub Suppliers",
+    "Image Source" : "3.jpg",
+    "Sales Rep First Name" : "Ranjeet",
+    "markerColor" : "purple",
+    "Taluka" : "Sikar",
+    "SUB_DISTRICT" : "Sikar",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Sikar"
+}
+
+/* 33 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d91"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1015",
+    "Average Monthly Billing" : "11",
+    "City" : "Ajmer",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "26.510314",
+    "Longitude" : "74.644775",
+    "Manager Name" : "Nagaraj",
+    "Dealer Name" : "Rajendra Cement",
+    "Image Source" : "4.jpg",
+    "Sales Rep First Name" : "Varun",
+    "markerColor" : "purple",
+    "Taluka" : "Ajmer",
+    "SUB_DISTRICT" : "Ajmer",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Ajmer"
+}
+
+/* 34 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d92"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1016",
+    "Average Monthly Billing" : "29",
+    "City" : "Beawar",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "26.155849",
+    "Longitude" : "74.31518",
+    "Manager Name" : "Priya",
+    "Dealer Name" : "Agrawal Cement",
+    "Image Source" : "5.jpg",
+    "Sales Rep First Name" : "Vikas",
+    "markerColor" : "purple",
+    "Taluka" : "Beawar",
+    "SUB_DISTRICT" : "Beawar",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Ajmer"
+}
+
+/* 35 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d93"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1017",
+    "Average Monthly Billing" : "32",
+    "City" : "Pali",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "25.820084",
+    "Longitude" : "73.32641",
+    "Manager Name" : "Nagaraja H",
+    "Dealer Name" : "Shakti",
+    "Image Source" : "6.jpg",
+    "Sales Rep First Name" : "Abhsihek",
+    "markerColor" : "purple",
+    "Taluka" : "Pali",
+    "SUB_DISTRICT" : "Pali",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Pali"
+}
+
+/* 36 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d94"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1018",
+    "Average Monthly Billing" : "22",
+    "City" : "Balotra",
+    "Taluka" : "Barmer",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "25.899174",
+    "Longitude" : "72.271729",
+    "Manager Name" : "Ch. Parvathisam S",
+    "Dealer Name" : "Prabhat Traders",
+    "Image Source" : "7.jpg",
+    "Sales Rep First Name" : "Anil",
+    "markerColor" : "purple",
+    "SUB_DISTRICT" : "Barmer",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Barmer"
+}
+
+/* 37 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d95"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1019",
+    "Average Monthly Billing" : "36",
+    "City" : "Barmer",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "25.839861",
+    "Longitude" : "71.436768",
+    "Manager Name" : "Chandramohan Doss S",
+    "Dealer Name" : "Kamal Builders",
+    "Image Source" : "8.jpg",
+    "Sales Rep First Name" : "Chitra",
+    "markerColor" : "purple",
+    "Taluka" : "Barmer",
+    "SUB_DISTRICT" : "Barmer",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Barmer"
+}
+
+/* 38 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d96"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1020",
+    "Average Monthly Billing" : "12",
+    "City" : "Jodhpur",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "26.313523",
+    "Longitude" : "73.084717",
+    "Manager Name" : "Chandrasekhar P",
+    "Dealer Name" : "Om Traders",
+    "Image Source" : "9.jpg",
+    "Sales Rep First Name" : "Dinesh",
+    "markerColor" : "purple",
+    "Taluka" : "Jodhpur",
+    "SUB_DISTRICT" : "Jodhpur",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Jodhpur"
+}
+
+/* 39 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d97"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1021",
+    "Average Monthly Billing" : "24",
+    "City" : "Napasar",
+    "Taluka" : "Bikaner",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.989753",
+    "Longitude" : "73.58276",
+    "Manager Name" : "Elzy George Kutty",
+    "Dealer Name" : "Nakoda Cement",
+    "Image Source" : "10.jpg",
+    "Sales Rep First Name" : "Ipshita",
+    "markerColor" : "purple",
+    "SUB_DISTRICT" : "Bikaner",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Bikaner"
+}
+
+/* 40 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d98"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1022",
+    "Average Monthly Billing" : "21",
+    "City" : "Benisar",
+    "Taluka" : "Bikaner",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "28.047945",
+    "Longitude" : "73.912354",
+    "Manager Name" : "Zaheer Begum M",
+    "Dealer Name" : "Adinda Cement",
+    "Image Source" : "11.jpg",
+    "Sales Rep First Name" : "Ranjeet",
+    "markerColor" : "purple",
+    "SUB_DISTRICT" : "Bikaner",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Bikaner"
+}
+
+/* 41 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d99"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1023",
+    "Average Monthly Billing" : "45",
+    "City" : "Udat",
+    "Taluka" : "Jodhpur",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.542574",
+    "Longitude" : "72.72583",
+    "Manager Name" : "Sreenath A N",
+    "Dealer Name" : "Siddhi Vinayak Industries",
+    "Image Source" : "1.jpg",
+    "Sales Rep First Name" : "Varun",
+    "markerColor" : "purple",
+    "SUB_DISTRICT" : "Jodhpur",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Jodhpur"
+}
+
+/* 42 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d9a"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1024",
+    "Average Monthly Billing" : "34",
+    "City" : "Didwana",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.425617",
+    "Longitude" : "74.57153",
+    "Manager Name" : "Sivaramakrishnan R",
+    "Dealer Name" : "Dhanlaxmi Cement",
+    "Image Source" : "2.jpg",
+    "Sales Rep First Name" : "Vikas",
+    "markerColor" : "purple",
+    "Taluka" : "Didwana",
+    "SUB_DISTRICT" : "Didwana",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Nagaur"
+}
+
+/* 43 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d9b"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1025",
+    "Average Monthly Billing" : "67",
+    "City" : "Khatu",
+    "Taluka" : "Nagaur",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.406112",
+    "Longitude" : "75.38452",
+    "Manager Name" : "Gita N Murthy",
+    "Dealer Name" : "Ansari Material Suppliers",
+    "Image Source" : "3.jpg",
+    "Sales Rep First Name" : "Abhsihek",
+    "markerColor" : "purple",
+    "SUB_DISTRICT" : "Nagaur",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Nagaur"
+}
+
+/* 44 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d9c"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1026",
+    "Average Monthly Billing" : "34",
+    "City" : "Phalodi",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "27.093567",
+    "Longitude" : "72.352295",
+    "Manager Name" : "Ananda G",
+    "Dealer Name" : "Bharath Iron",
+    "Image Source" : "4.jpg",
+    "Sales Rep First Name" : "Anil",
+    "markerColor" : "purple",
+    "Taluka" : "Phalodi",
+    "SUB_DISTRICT" : "Phalodi",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Jodhpur"
+}
+
+/* 45 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d9d"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1027",
+    "Average Monthly Billing" : "21",
+    "City" : "Pokhran",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "26.858584",
+    "Longitude" : "71.923828",
+    "Manager Name" : "Raja C",
+    "Dealer Name" : "Mogra Enterprises",
+    "Image Source" : "5.jpg",
+    "Sales Rep First Name" : "Chitra",
+    "markerColor" : "purple",
+    "Taluka" : "Songadh",
+    "SUB_DISTRICT" : "Songadh",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Surat"
+}
+
+/* 46 */
+{
+    "_id" : ObjectId("59436cb2ea2316843d975d9e"),
+    "docType" : "Dealers",
+    "Code" : "JK DI -2017-1028",
+    "Average Monthly Billing" : "44",
+    "City" : "Merta",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : "26.701657",
+    "Longitude" : "74.022217",
+    "Manager Name" : "Satheesh Babu P.S",
+    "Dealer Name" : "Bohra Traders",
+    "Image Source" : "6.jpg",
+    "Sales Rep First Name" : "Dinesh",
+    "markerColor" : "purple",
+    "Taluka" : "Merta",
+    "SUB_DISTRICT" : "Merta",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Nagaur"
+}
+
+/* 47 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da0"),
+    "docType" : "Competitors",
+    "Name" : "UltraTechCement",
+    "Share Price" : "4024",
+    "Head Office" : "Andheri East, Mumbai",
+    "Area" : "Andheri East",
+    "State" : " Mumbai",
+    "Latitude" : "19.115491",
+    "Longitude" : "72.872695",
+    "Market Cap" : "1,10,461.98",
+    "Sales Turnover" : "23891.43",
+    "Net Profit" : "2627.72",
+    "Total Assets" : "25566",
+    "markerColor" : "red"
+}
+
+/* 48 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da1"),
+    "docType" : "Competitors",
+    "Name" : "Shree Cements",
+    "Share Price" : "18006.45",
+    "Head Office" : "Ajmer, Rajasthan",
+    "Area" : "Ajmer",
+    "State" : " Rajasthan",
+    "Latitude" : "26.449895",
+    "Longitude" : "74.639916",
+    "Market Cap" : "62729.48",
+    "Sales Turnover" : "8429.16",
+    "Net Profit" : "1339.11",
+    "Total Assets" : "6896.89",
+    "markerColor" : "red"
+}
+
+/* 49 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da2"),
+    "docType" : "Competitors",
+    "Name" : "Ambuja Cements",
+    "Share Price" : "233.15",
+    "Head Office" : "Udyog Vihar, Gurgaon",
+    "Area" : "Udyog Vihar",
+    "State" : " Gurgaon",
+    "Latitude" : "28.498414",
+    "Longitude" : "77.084925",
+    "Market Cap" : "46295.32",
+    "Sales Turnover" : "9267.82",
+    "Net Profit" : "970.09",
+    "Total Assets" : "19097.14",
+    "markerColor" : "red"
+}
+
+/* 50 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da3"),
+    "docType" : "Competitors",
+    "Name" : "ACC",
+    "Share Price" : "1598.9",
+    "Head Office" : "Maharshi Karve Road, Mumbai",
+    "Area" : "Maharshi Karve Road",
+    "State" : " Mumbai",
+    "Latitude" : "18.940815",
+    "Longitude" : "72.826606",
+    "Market Cap" : "30025.31",
+    "Sales Turnover" : "10989.58",
+    "Net Profit" : "647.05",
+    "Total Assets" : "8711.46",
+    "markerColor" : "red"
+}
+
+/* 51 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da4"),
+    "docType" : "Competitors",
+    "Name" : "Dalmia Bharat",
+    "Share Price" : "2470",
+    "Head Office" : "Barakhamba Road, New Delhi",
+    "Area" : "Barakhamba Road",
+    "State" : " New Delhi",
+    "Latitude" : "28.629907",
+    "Longitude" : "77.224159",
+    "Market Cap" : "21974.55",
+    "Sales Turnover" : "222.51",
+    "Net Profit" : "63.37",
+    "Total Assets" : "1471.52",
+    "markerColor" : "red"
+}
+
+/* 52 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da5"),
+    "docType" : "Competitors",
+    "Name" : "Ramco Cements",
+    "Share Price" : "693.85",
+    "Head Office" : "Mylapore Chennai",
+    "Area" : "Mylapore Chennai",
+    "State" : "",
+    "Latitude" : "13.036791",
+    "Longitude" : "80.26763",
+    "Market Cap" : "16650.79",
+    "Sales Turnover" : "3949.54",
+    "Net Profit" : "649.29",
+    "Total Assets" : "4852.9",
+    "markerColor" : "red"
+}
+
+/* 53 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da6"),
+    "docType" : "Competitors",
+    "Name" : "Birla Corp",
+    "Share Price" : "917",
+    "Head Office" : "Shakespeare Sarani, Kolkata",
+    "Area" : "Shakespeare Sarani",
+    "State" : " Kolkata",
+    "Latitude" : "22.544622",
+    "Longitude" : "88.356525",
+    "Market Cap" : "7061.39",
+    "Sales Turnover" : "3345.12",
+    "Net Profit" : "214",
+    "Total Assets" : "3646.91",
+    "markerColor" : "red"
+}
+
+/* 54 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da7"),
+    "docType" : "Competitors",
+    "Name" : "OCL India",
+    "Share Price" : "1196",
+    "Head Office" : "Rajgangpur, Odisha",
+    "Area" : "Rajgangpur",
+    "State" : " Odisha",
+    "Latitude" : "22.190196",
+    "Longitude" : "84.579862",
+    "Market Cap" : "6805.27",
+    "Sales Turnover" : "2911.87",
+    "Net Profit" : "383.87",
+    "Total Assets" : "2525.58",
+    "markerColor" : "red"
+}
+
+/* 55 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da8"),
+    "docType" : "Competitors",
+    "Name" : "India Cements",
+    "Share Price" : "209.75",
+    "Head Office" : "Anna Salai, Chennai",
+    "Area" : "Anna Salai",
+    "State" : " Chennai",
+    "Latitude" : "13.042924",
+    "Longitude" : "80.247505",
+    "Market Cap" : "6443.07",
+    "Sales Turnover" : "5794.03",
+    "Net Profit" : "173.35",
+    "Total Assets" : "6053.54",
+    "markerColor" : "red"
+}
+
+/* 56 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975da9"),
+    "docType" : "Competitors",
+    "Name" : "Prism Cement",
+    "Share Price" : "118.15",
+    "Head Office" : "Ameerpet, Hyderabad",
+    "Area" : "Ameerpet",
+    "State" : " Hyderabad",
+    "Latitude" : "17.437461",
+    "Longitude" : "78.448288",
+    "Market Cap" : "5947.16",
+    "Sales Turnover" : "5019.57",
+    "Net Profit" : "17.51",
+    "Total Assets" : "2636.06",
+    "markerColor" : "red"
+}
+
+/* 57 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975daa"),
+    "docType" : "Competitors",
+    "Name" : "Rain Industries",
+    "Share Price" : "99.25",
+    "Head Office" : "Srinagar Colony, Hyderabad",
+    "Area" : "Srinagar Colony",
+    "State" : " Hyderabad",
+    "Latitude" : "17.432146",
+    "Longitude" : "78.438475",
+    "Market Cap" : "3338.23",
+    "Sales Turnover" : "44.85",
+    "Net Profit" : "31.34",
+    "Total Assets" : "1261.38",
+    "markerColor" : "red"
+}
+
+/* 58 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975dab"),
+    "docType" : "Competitors",
+    "Name" : "Orient Cement",
+    "Share Price" : "148.85",
+    "Head Office" : "Barakhamba Road, New Delhi",
+    "Area" : "Barakhamba Road",
+    "State" : " New Delhi",
+    "Latitude" : "28.629907",
+    "Longitude" : "77.221102",
+    "Market Cap" : "3049.47",
+    "Sales Turnover" : "1875.14",
+    "Net Profit" : "-32.1",
+    "Total Assets" : "2306.02",
+    "markerColor" : "red"
+}
+
+/* 59 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975dac"),
+    "docType" : "Competitors",
+    "Name" : "Heidelberg Cem",
+    "Share Price" : "130.9",
+    "Head Office" : "DLF Cyber City, Gurgaon",
+    "Area" : "DLF Cyber City",
+    "State" : " Gurgaon",
+    "Latitude" : "28.494976",
+    "Longitude" : "77.089542",
+    "Market Cap" : "2966.37",
+    "Sales Turnover" : "1717.46",
+    "Net Profit" : "76.21",
+    "Total Assets" : "1651.71",
+    "markerColor" : "red"
+}
+
+/* 60 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975dad"),
+    "docType" : "Competitors",
+    "Name" : "KCP",
+    "Share Price" : "105.6",
+    "Head Office" : "Egmore, Chennai",
+    "Area" : "Egmore",
+    "State" : " Chennai",
+    "Latitude" : "13.073226",
+    "Longitude" : "80.260921",
+    "Market Cap" : "1361.41",
+    "Sales Turnover" : "818.29",
+    "Net Profit" : "29.6",
+    "Total Assets" : "688.21",
+    "markerColor" : "red"
+}
+
+/* 61 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975dae"),
+    "docType" : "Competitors",
+    "Name" : "Mangalam Cement",
+    "Share Price" : "372.3",
+    "Head Office" : "R N Mukherjee Road, Kolkata",
+    "Area" : "R N Mukherjee Road",
+    "State" : " Kolkata",
+    "Latitude" : "22.571184",
+    "Longitude" : "88.351037",
+    "Market Cap" : "993.81",
+    "Sales Turnover" : "908.57",
+    "Net Profit" : "36.63",
+    "Total Assets" : "840.6",
+    "markerColor" : "red"
+}
+
+/* 62 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975daf"),
+    "docType" : "Competitors",
+    "Name" : "Andhra Cement",
+    "Share Price" : "8.85",
+    "Head Office" : "Guntur, Andhra",
+    "Area" : "Guntur",
+    "State" : " Andhra",
+    "Latitude" : "16.306652",
+    "Longitude" : "80.43654",
+    "Market Cap" : "259.77",
+    "Sales Turnover" : "349.29",
+    "Net Profit" : "-103.12",
+    "Total Assets" : "971.9",
+    "markerColor" : "red"
+}
+
+/* 63 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975db0"),
+    "docType" : "Competitors",
+    "Name" : "Guj Sidhee Cem",
+    "Share Price" : "26.6",
+    "Head Office" : "Junagadh, Gujarat",
+    "Area" : "Junagadh",
+    "State" : " Gujarat",
+    "Latitude" : "21.522184",
+    "Longitude" : "70.457877",
+    "Market Cap" : "229.17",
+    "Sales Turnover" : "437.36",
+    "Net Profit" : "-39.04",
+    "Total Assets" : "195.12",
+    "markerColor" : "red"
+}
+
+/* 64 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975db1"),
+    "docType" : "Competitors",
+    "Name" : "Burnpur Cement",
+    "Share Price" : "9.6",
+    "Head Office" : "Bentick Street, Kolkata",
+    "Area" : "Bentick Street",
+    "State" : " Kolkata",
+    "Latitude" : "22.570041",
+    "Longitude" : "88.353171",
+    "Market Cap" : "82.68",
+    "Sales Turnover" : "87.99",
+    "Net Profit" : "-12.71",
+    "Total Assets" : "338.94",
+    "markerColor" : "red"
+}
+
+/* 65 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975db2"),
+    "docType" : "Competitors",
+    "Name" : "Barak Vally Cem",
+    "Share Price" : "33.65",
+    "Head Office" : "Pitampura, Delhi",
+    "Area" : "Pitampura",
+    "State" : " Delhi",
+    "Latitude" : "28.698998",
+    "Longitude" : "77.138417",
+    "Market Cap" : "74.57",
+    "Sales Turnover" : "122.53",
+    "Net Profit" : "1.35",
+    "Total Assets" : "122.63",
+    "markerColor" : "red"
+}
+
+/* 66 */
+{
+    "_id" : ObjectId("59436fa8ea2316843d975db3"),
+    "docType" : "Competitors",
+    "Name" : "Barak Vally Cem",
+    "Share Price" : "33.65",
+    "Head Office" : "Pitampura, Delhi",
+    "Area" : "Pitampura",
+    "State" : " Delhi",
+    "Latitude" : "28.698998",
+    "Longitude" : "77.138417",
+    "Market Cap" : "74.57",
+    "Sales Turnover" : "122.53",
+    "Net Profit" : "1.35",
+    "Total Assets" : "122.63",
+    "markerColor" : "red"
+}
+
+/* 67 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975df7"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK 10012017",
+    "Area" : "100000",
+    "Type" : "White",
+    "City" : "Manikchak",
+    "State" : "West Bengal",
+    "Country" : "India",
+    "Latitude" : 25.077787,
+    "Longitude" : 87.900375,
+    "Manager Name" : "V S Nandakumar",
+    "markerColor" : "blue",
+    "Taluka" : "Manikchak"
+}
+
+/* 68 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975df8"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK 10022017",
+    "Area" : "240000",
+    "Type" : "Grey",
+    "City" : "Roorkee",
+    "State" : "Uttarakhand",
+    "Country" : "India",
+    "Latitude" : 29.854263,
+    "Longitude" : 77.888,
+    "Manager Name" : "George C P",
+    "markerColor" : "blue",
+    "Taluka" : "Roorkee",
+    "SUB_DISTRICT" : "Roorkee",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Haridwar"
+}
+
+/* 69 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975df9"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK 10032017",
+    "Area" : "170000",
+    "Type" : "Grey",
+    "City" : "Kavali",
+    "State" : "Andhra Pradesh",
+    "Country" : "India",
+    "Latitude" : 14.913181,
+    "Longitude" : 79.992981,
+    "Manager Name" : "Satish K H",
+    "markerColor" : "blue",
+    "Taluka" : "Kavali",
+    "SUB_DISTRICT" : "Kavali",
+    "PINCODE" : undefined,
+    "DISTRICT" : "Nellore"
+}
+
+/* 70 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975dfa"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK 10042017",
+    "Area" : "150000",
+    "Type" : "White",
+    "City" : "Chalakudy",
+    "State" : "Kerala",
+    "Country" : "India",
+    "Latitude" : 10.311879,
+    "Longitude" : 76.331978,
+    "Manager Name" : "Gopalakrishnan G",
+    "markerColor" : "blue",
+    "Taluka" : undefined
+}
+
+/* 71 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975dfb"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK 10052017",
+    "Area" : "340000",
+    "Type" : "Grey",
+    "City" : "Gondal",
+    "State" : "Gujarat",
+    "Country" : "India",
+    "Latitude" : 21.961946,
+    "Longitude" : 70.792297,
+    "Manager Name" : "Nataraj S",
+    "markerColor" : "blue",
+    "Taluka" : "Gondal"
+}
+
+/* 72 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975dfc"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK 10062017",
+    "Area" : "310000",
+    "Type" : "Grey",
+    "City" : "Mahidpur",
+    "State" : "Madhya Pradesh",
+    "Country" : "India",
+    "Latitude" : 23.486839,
+    "Longitude" : 75.659157,
+    "Manager Name" : "Jhinkoo Ram",
+    "markerColor" : "blue",
+    "Taluka" : "Ashoknagar"
+}
+
+/* 73 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975dfd"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK 10072017",
+    "Area" : "220000",
+    "Type" : "Grey",
+    "City" : "Gurdaspur",
+    "State" : "Punjab",
+    "Country" : "India",
+    "Latitude" : 32.041943,
+    "Longitude" : 75.405334,
+    "Manager Name" : "Dr. Ramesh Babu R",
+    "markerColor" : "blue",
+    "Taluka" : "Gurdaspur"
+}
+
+/* 74 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975dfe"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK 10082017",
+    "Area" : "190000",
+    "Type" : "White",
+    "City" : "Domchanch",
+    "Taluka" : "Kodarma",
+    "State" : "Jharkhand",
+    "Country" : "India",
+    "Latitude" : 24.47438,
+    "Longitude" : 85.688744,
+    "Manager Name" : "Chandrika P G",
+    "markerColor" : "blue"
+}
+
+/* 75 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975dff"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10009",
+    "Area" : "100000",
+    "Type" : "White",
+    "City" : "Sojat",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 25.973066,
+    "Longitude" : 73.64868,
+    "Manager Name" : "Muralikrishna C S",
+    "markerColor" : "blue",
+    "Taluka" : "Sojat"
+}
+
+/* 76 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e00"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10010",
+    "Area" : "240000",
+    "Type" : "Grey",
+    "City" : "Luni",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 26.061923,
+    "Longitude" : 73.022461,
+    "Manager Name" : "Viswanathan N",
+    "markerColor" : "blue",
+    "Taluka" : "Chhota Udaipur"
+}
+
+/* 77 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e01"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10011",
+    "Area" : "170000",
+    "Type" : "Grey",
+    "City" : "Jaitaran",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 26.249288,
+    "Longitude" : 73.92334,
+    "Manager Name" : "B H Hanumantha",
+    "markerColor" : "blue",
+    "Taluka" : "Jaitaran"
+}
+
+/* 78 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e02"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10012",
+    "Area" : "150000",
+    "Type" : "White",
+    "City" : "Deogarh",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 25.577337,
+    "Longitude" : 73.94531,
+    "Manager Name" : "Nalini B",
+    "markerColor" : "blue",
+    "Taluka" : "Deogarh"
+}
+
+/* 79 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e03"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10013",
+    "Area" : "340000",
+    "Type" : "Grey",
+    "City" : "Sindhari",
+    "Taluka" : "Barmer",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 25.626875,
+    "Longitude" : 71.95678,
+    "Manager Name" : "Karthik R",
+    "markerColor" : "blue"
+}
+
+/* 80 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e04"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10014",
+    "Area" : "310000",
+    "Type" : "Grey",
+    "City" : "Mahajan",
+    "Taluka" : "Bikaner",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 28.782304,
+    "Longitude" : 73.901367,
+    "Manager Name" : "Leelavathi M R",
+    "markerColor" : "blue"
+}
+
+/* 81 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e05"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10015",
+    "Area" : "220000",
+    "Type" : "Grey",
+    "City" : "Pugal",
+    "Taluka" : "Bikaner",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 28.512344,
+    "Longitude" : 72.81372,
+    "Manager Name" : "Nagaraj",
+    "markerColor" : "blue"
+}
+
+/* 82 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e06"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10016",
+    "Area" : "190000",
+    "Type" : "White",
+    "City" : "Sardarshahr",
+    "Taluka" : "Churu",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 28.473721,
+    "Longitude" : 74.549561,
+    "Manager Name" : "Priya",
+    "markerColor" : "blue"
+}
+
+/* 83 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e07"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10017",
+    "Area" : "100000",
+    "Type" : "White",
+    "City" : "Ramgarh",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 28.125485,
+    "Longitude" : 74.97802,
+    "Manager Name" : "Nagaraja H",
+    "markerColor" : "blue",
+    "Taluka" : "Ramgarh"
+}
+
+/* 84 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e08"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10018",
+    "Area" : "240000",
+    "Type" : "Grey",
+    "City" : "Jhunjhunu",
+    "Taluka" : "Jhunjhunu",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 28.125485,
+    "Longitude" : 75.40649,
+    "Manager Name" : "Ch. Parvathisam S",
+    "markerColor" : "blue"
+}
+
+/* 85 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e09"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10019",
+    "Area" : "170000",
+    "Type" : "Grey",
+    "City" : "Sujangarh",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 27.737225,
+    "Longitude" : 74.46167,
+    "Manager Name" : "Chandramohan Doss S",
+    "markerColor" : "blue",
+    "Taluka" : "Sujangarh"
+}
+
+/* 86 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e0a"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10020",
+    "Area" : "150000",
+    "Type" : "White",
+    "City" : "Kuchanam City",
+    "Taluka" : "Kuchanam",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 27.230414,
+    "Longitude" : 74.846191,
+    "Manager Name" : "Chandrasekhar P",
+    "markerColor" : "blue"
+}
+
+/* 87 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e0b"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10021",
+    "Area" : "340000",
+    "Type" : "Grey",
+    "City" : "Run",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 26.809568,
+    "Longitude" : 73.824463,
+    "Manager Name" : "Elzy George Kutty",
+    "markerColor" : "blue",
+    "Taluka" : "Sojitra"
+}
+
+/* 88 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e0c"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10022",
+    "Area" : "310000",
+    "Type" : "Grey",
+    "City" : "Osian",
+    "Taluka" : "Osian",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 26.780148,
+    "Longitude" : 72.901611,
+    "Manager Name" : "Zaheer Begum M",
+    "markerColor" : "blue"
+}
+
+/* 89 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e0d"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10023",
+    "Area" : "220000",
+    "Type" : "Grey",
+    "City" : "Lohawat",
+    "Taluka" : "Lohawat",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 27.015294,
+    "Longitude" : 72.572021,
+    "Manager Name" : "Sreenath A N",
+    "markerColor" : "blue"
+}
+
+/* 90 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e0e"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10024",
+    "Area" : "190000",
+    "Type" : "White",
+    "City" : "Malhar",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 27.259716,
+    "Longitude" : 72.39624,
+    "Manager Name" : "Sivaramakrishnan R",
+    "markerColor" : "blue",
+    "Taluka" : undefined
+}
+
+/* 91 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e0f"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10025",
+    "Area" : "100000",
+    "Type" : "White",
+    "City" : "Nohar",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 29.20511,
+    "Longitude" : 74.79126,
+    "Manager Name" : "Gita N Murthy",
+    "markerColor" : "blue",
+    "Taluka" : "Nohar"
+}
+
+/* 92 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e10"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10026",
+    "Area" : "240000",
+    "Type" : "Grey",
+    "City" : "Suratgarh",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 29.310551,
+    "Longitude" : 73.912354,
+    "Manager Name" : "Ananda G",
+    "markerColor" : "blue",
+    "Taluka" : "Suratgarh"
+}
+
+/* 93 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e11"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10027",
+    "Area" : "170000",
+    "Type" : "Grey",
+    "City" : "Gharsana",
+    "Taluka" : "Gharsana",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 29.022752,
+    "Longitude" : 73.09936,
+    "Manager Name" : "Raja C",
+    "markerColor" : "blue"
+}
+
+/* 94 */
+{
+    "_id" : ObjectId("594374e2ea2316843d975e12"),
+    "docType" : "WareHouses",
+    "Warehouse Code" : "JK-W-2017-10028",
+    "Area" : "150000",
+    "Type" : "White",
+    "City" : "Rawla Mandir",
+    "Taluka" : "Gharsana",
+    "State" : "Rajasthan",
+    "Country" : "India",
+    "Latitude" : 28.830438,
+    "Longitude" : 72.879639,
+    "Manager Name" : "Satheesh Babu P.S",
+    "markerColor" : "blue"
+}
+
+/* 95 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e14"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1001",
+    "AverageMonthlyBilling" : "32",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.586501,
+    "Longitude" : 77.044288,
+    "AgencyName" : "Wellness Centre",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "1",
+    "SalesRepFirstName" : "Abhsihek",
+    "SalesRepLastName" : "Majumdar",
+    "Population" : "2731929",
+    "GenderRatio" : "800",
+    "markerColor" : "red",
+    "Zone" : "South West Delhi",
+    "Taluka" : "Delhi"
+}
+
+/* 96 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e15"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1002",
+    "AverageMonthlyBilling" : "22",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.567772,
+    "Longitude" : 77.268821,
+    "AgencyName" : "Health and Beauty Shop",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "2",
+    "SalesRepFirstName" : "Anil",
+    "SalesRepLastName" : "Sharma",
+    "Population" : "2731929",
+    "GenderRatio" : "840",
+    "markerColor" : "red",
+    "Zone" : "East Delhi",
+    "Taluka" : "Delhi"
+}
+
+/* 97 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e16"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1003",
+    "AverageMonthlyBilling" : "36",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.683457,
+    "Longitude" : 77.160674,
+    "AgencyName" : "Wellness Centre",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "3",
+    "SalesRepFirstName" : "Chitra",
+    "SalesRepLastName" : "Singh",
+    "Population" : "2292958",
+    "GenderRatio" : "820",
+    "markerColor" : "red",
+    "Zone" : "East Delhi",
+    "Taluka" : "Delhi"
+}
+
+/* 98 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e17"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1004",
+    "AverageMonthlyBilling" : "12",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.564721,
+    "Longitude" : 77.196723,
+    "AgencyName" : "Designer Den",
+    "Store" : "VLCC  ",
+    "IncomeBands" : "4",
+    "SalesRepFirstName" : "Dinesh",
+    "SalesRepLastName" : "Verma",
+    "Population" : "2543243",
+    "GenderRatio" : "830",
+    "markerColor" : "red",
+    "Zone" : "South Delhi",
+    "Taluka" : "Delhi"
+}
+
+/* 99 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e18"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1005",
+    "AverageMonthlyBilling" : "23",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.557448,
+    "Longitude" : 77.16445,
+    "AgencyName" : "Day Spa",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "5",
+    "SalesRepFirstName" : "Ipshita",
+    "SalesRepLastName" : "Majumdar",
+    "Population" : "2731929",
+    "GenderRatio" : "870",
+    "markerColor" : "red",
+    "Zone" : "East Delhi",
+    "Taluka" : "Delhi"
+}
+
+/* 100 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e19"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1006",
+    "AverageMonthlyBilling" : "28",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.541766,
+    "Longitude" : 77.243415,
+    "AgencyName" : "Health and Beauty Shop",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "1",
+    "SalesRepFirstName" : "Ranjeet",
+    "SalesRepLastName" : "Singh",
+    "Population" : "2543243",
+    "GenderRatio" : "900",
+    "markerColor" : "red",
+    "Zone" : "South Delhi",
+    "Taluka" : "Delhi"
+}
+
+/* 101 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e1a"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1007",
+    "AverageMonthlyBilling" : "11",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.683687,
+    "Longitude" : 77.161704,
+    "AgencyName" : "Wellness Centre",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "2",
+    "SalesRepFirstName" : "Varun",
+    "SalesRepLastName" : "Sachdeva",
+    "Population" : "2543243",
+    "GenderRatio" : "870",
+    "markerColor" : "red",
+    "Zone" : "South Delhi  - 1",
+    "Taluka" : "Delhi"
+}
+
+/* 102 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e1b"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1008",
+    "AverageMonthlyBilling" : "29",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.563744,
+    "Longitude" : 77.196723,
+    "AgencyName" : "Spa",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "3",
+    "SalesRepFirstName" : "Vikas",
+    "SalesRepLastName" : "Waghmare",
+    "Population" : "3656539",
+    "GenderRatio" : "880",
+    "markerColor" : "red",
+    "Zone" : "South Delhi  - 2",
+    "Taluka" : "Delhi"
+}
+
+/* 103 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e1c"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1009",
+    "AverageMonthlyBilling" : "32",
+    "City" : "New Delhi",
+    "State" : "Delhi",
+    "Country" : "India",
+    "Latitude" : 28.642717,
+    "Longitude" : 77.183333,
+    "AgencyName" : "VLCC Healthcare Limited ",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "4",
+    "SalesRepFirstName" : "Abhishek",
+    "SalesRepLastName" : "Majumdar",
+    "Population" : "2543243",
+    "GenderRatio" : "830",
+    "markerColor" : "red",
+    "Zone" : "West Delhi",
+    "Taluka" : "Delhi"
+}
+
+/* 104 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e1d"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1010",
+    "AverageMonthlyBilling" : "22",
+    "City" : "Gurgaon",
+    "State" : "Haryana",
+    "Country" : "India",
+    "Latitude" : 28.406254,
+    "Longitude" : 77.045354,
+    "AgencyName" : "Health and Beauty Shop",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "3",
+    "SalesRepFirstName" : "Anil",
+    "SalesRepLastName" : "Sharma",
+    "Population" : "1514432",
+    "GenderRatio" : "790",
+    "markerColor" : "red",
+    "Zone" : "Central Delhi",
+    "Taluka" : "Gurgaon"
+}
+
+/* 105 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e1e"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1011",
+    "AverageMonthlyBilling" : "36",
+    "City" : "Gurgaon",
+    "State" : "Haryana",
+    "Country" : "India",
+    "Latitude" : 28.473425,
+    "Longitude" : 77.094621,
+    "AgencyName" : "Beauty Parlor, DT Mega Mall",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "4",
+    "SalesRepFirstName" : "Chitra",
+    "SalesRepLastName" : "Singh",
+    "Population" : "1514432",
+    "GenderRatio" : "880",
+    "markerColor" : "red",
+    "Zone" : "Gurgaon - N",
+    "Taluka" : "Gurgaon"
+}
+
+/* 106 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e1f"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1012",
+    "AverageMonthlyBilling" : "12",
+    "City" : "Gurgaon",
+    "State" : "Haryana",
+    "Country" : "India",
+    "Latitude" : 28.46754,
+    "Longitude" : 77.082777,
+    "AgencyName" : "Galleria Market",
+    "Store" : "VLCC ",
+    "IncomeBands" : "5",
+    "SalesRepFirstName" : "Dinesh",
+    "SalesRepLastName" : "Verma",
+    "Population" : "1273678",
+    "GenderRatio" : "880",
+    "markerColor" : "red",
+    "Zone" : "Gurgaon - S",
+    "Taluka" : "Gurgaon"
+}
+
+/* 107 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e20"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1013",
+    "AverageMonthlyBilling" : "23",
+    "City" : "Gurgaon",
+    "State" : "Haryana",
+    "Country" : "India",
+    "Latitude" : 28.45773,
+    "Longitude" : 77.034196,
+    "AgencyName" : "Health and Beauty Shop",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "3",
+    "SalesRepFirstName" : "Ipshita",
+    "SalesRepLastName" : "Majumdar",
+    "Population" : "1273678",
+    "GenderRatio" : "860",
+    "markerColor" : "red",
+    "Zone" : "Gurgaon - E",
+    "Taluka" : "Gurgaon"
+}
+
+/* 108 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e21"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1014",
+    "AverageMonthlyBilling" : "28",
+    "City" : "Gurgaon",
+    "State" : "Haryana",
+    "Country" : "India",
+    "Latitude" : 28.470105,
+    "Longitude" : 77.044496,
+    "AgencyName" : "VLCC Institute ",
+    "Store" : "VLCC",
+    "IncomeBands" : "4",
+    "SalesRepFirstName" : "Ranjeet",
+    "SalesRepLastName" : "Singh",
+    "Population" : "1514432",
+    "GenderRatio" : "810",
+    "markerColor" : "red",
+    "Zone" : "Gurgaon - NE",
+    "Taluka" : "Gurgaon"
+}
+
+/* 109 */
+{
+    "_id" : ObjectId("5947c255ea2316843d975e22"),
+    "docType" : "StoreLocations",
+    "Code" : "VLCCST -2017-1015",
+    "AverageMonthlyBilling" : "11",
+    "City" : "Gurgaon",
+    "State" : "Haryana",
+    "Country" : "India",
+    "Latitude" : 28.473123,
+    "Longitude" : 77.07694,
+    "AgencyName" : "Health and Beauty Shop",
+    "Store" : "VLCC Wellness Centre",
+    "IncomeBands" : "5",
+    "SalesRepFirstName" : "Varun",
+    "SalesRepLastName" : "Sachdeva",
+    "Population" : "1518902",
+    "GenderRatio" : "840",
+    "markerColor" : "red",
+    "Zone" : "Gurgaon - E",
+    "Taluka" : "Gurgaon"
+}
+
+/* 110 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd1"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "1",
+    "Sales Rep Code" : "JKC-S-P-AM",
+    "First Name" : "Abhsihek",
+    "Last Name" : "Majumdar",
+    "Contact Number" : "9810046621",
+    "City" : "Pune",
+    "Email Address" : "AbhsihekMajumdar@jkcement.com",
+    "Images" : "AM.jpg",
+    "Images1" : "AM1.jpg",
+    "Battery" : "45%",
+    "Lastlocation" : "Bhavani Peth, Kasba Peth, Pune",
+    "Monthly Targets " : "50000",
+    "Achieved %" : "0.25",
+    "State" : "Maharashtra",
+    "Ranking" : 5.0,
+    "markerColor" : "",
+    "Latitude" : 18.5204,
+    "Longitude" : 73.8567
+}
+
+/* 111 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd2"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "2",
+    "Sales Rep Code" : "JKC-S-M-AS",
+    "First Name" : "Anil",
+    "Last Name" : "Sharma",
+    "Contact Number" : "9818719695",
+    "City" : "Mumbai",
+    "Email Address" : "AnilSharma@jkcement.com",
+    "Images" : "AS.jpg",
+    "Images1" : "AS1.jpg",
+    "Battery" : "82%",
+    "Lastlocation" : "Hallow Pul, Kurla, Mumbai",
+    "Monthly Targets " : "100000",
+    "Achieved %" : "0.3",
+    "State" : "Maharashtra",
+    "Ranking" : 4.0,
+    "markerColor" : "",
+    "Latitude" : 19.076,
+    "Longitude" : 72.8777
+}
+
+/* 112 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd3"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "3",
+    "Sales Rep Code" : "JKC-S-D-CS",
+    "First Name" : "Chitra",
+    "Last Name" : "Singh",
+    "Contact Number" : "9873134625",
+    "City" : "Delhi",
+    "Email Address" : "ChitraSingh@jkcement.com",
+    "Images" : "CS.jpg",
+    "Images1" : "CS1.jpg",
+    "Battery" : "90%",
+    "Lastlocation" : "Sector 3G, Rohini, Delhi",
+    "Monthly Targets " : "100000",
+    "Achieved %" : "0.4",
+    "State" : "Delhi/NCR",
+    "Ranking" : 3.0,
+    "markerColor" : "",
+    "Latitude" : 28.7041,
+    "Longitude" : 77.1025
+}
+
+/* 113 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd4"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "4",
+    "Sales Rep Code" : "JKC-S-G-DV",
+    "First Name" : "Vaibhav",
+    "Last Name" : "Lambey",
+    "Contact Number" : "9867611098",
+    "City" : "Gurgaon",
+    "Email Address" : "vaibhavlambey@jkcement.com",
+    "Images" : "VL.jpg",
+    "Images1" : "VL1.jpg",
+    "Battery" : "5%",
+    "Lastlocation" : "Sector 12, Gurugram, Haryana",
+    "Monthly Targets " : "150000",
+    "Achieved %" : "0.18",
+    "State" : "Delhi/NCR",
+    "Ranking" : 8.0,
+    "markerColor" : "",
+    "Latitude" : 28.4595,
+    "Longitude" : 77.0266
+}
+
+/* 114 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd5"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "5",
+    "Sales Rep Code" : "JKC-S-K-IM",
+    "First Name" : "Ipshita",
+    "Last Name" : "Majumdar",
+    "Contact Number" : "9900881234",
+    "City" : "Kolkata",
+    "Email Address" : "IpshitaMajumdar@jkcement.com",
+    "Images" : "AM.jpg",
+    "Images1" : "AM1.jpg",
+    "Battery" : "70%",
+    "Lastlocation" : "Newland, College Square, Kolkata",
+    "Monthly Targets " : "50000",
+    "Achieved %" : "0.5",
+    "State" : "West Bengal",
+    "Ranking" : 2.0,
+    "markerColor" : "",
+    "Latitude" : 22.5726,
+    "Longitude" : 88.3639
+}
+
+/* 115 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd6"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "6",
+    "Sales Rep Code" : "JKC-S-L-RS",
+    "First Name" : "Ranjeet",
+    "Last Name" : "Singh",
+    "Contact Number" : "9560302192",
+    "City" : "Ludhiana",
+    "Email Address" : "RanjeetSingh@jkcement.com",
+    "Images" : "RS.jpg",
+    "Images1" : "RS1.jpg",
+    "Battery" : "74%",
+    "Lastlocation" : "Sant Pura, Miller Ganj, Ludhiana",
+    "Monthly Targets " : "60000",
+    "Achieved %" : "0.65",
+    "State" : "Punjab",
+    "Ranking" : 1.0,
+    "markerColor" : "",
+    "Latitude" : 30.901,
+    "Longitude" : 75.8573
+}
+
+/* 116 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd7"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "7",
+    "Sales Rep Code" : "JKC-S-H-VS",
+    "First Name" : "Varun",
+    "Last Name" : "Sachdeva",
+    "Contact Number" : "9899860442",
+    "City" : "Hyderabad",
+    "Email Address" : "vaibhavvishnu@jkcement.com",
+    "Images" : "VV.jpg",
+    "Images1" : "VV1.jpg",
+    "Battery" : "44%",
+    "Lastlocation" : "Goutam Nagar, Badi Chowdi, Kachiguda, Hyderabad",
+    "Monthly Targets " : "75000",
+    "Achieved %" : "0.2",
+    "State" : "Telangana",
+    "Ranking" : 7.0,
+    "markerColor" : "",
+    "Latitude" : 17.385,
+    "Longitude" : 78.4867
+}
+
+/* 117 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd8"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "8",
+    "Sales Rep Code" : "JKC-S-B-VW",
+    "First Name" : "Vikas",
+    "Last Name" : "Waghmare",
+    "Contact Number" : "8197881097",
+    "City" : "Bengaluru",
+    "Email Address" : "VikasWaghmare@jkcement.com",
+    "Images" : "VW.jpg",
+    "Images1" : "VW1.jpg",
+    "Battery" : "32%",
+    "Lastlocation" : "D' Souza Layout, Ashok Nagar, Bengaluru",
+    "Monthly Targets " : "100000",
+    "Achieved %" : "0.22",
+    "State" : "Karnataka",
+    "Ranking" : 6.0,
+    "markerColor" : "",
+    "Latitude" : 12.9716,
+    "Longitude" : 77.5946
+}
+
+/* 118 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dd9"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "9",
+    "Sales Rep Code" : "JKC-S-J-DM",
+    "First Name" : "Deepankar ",
+    "Last Name" : "Mathur",
+    "Contact Number" : "8877662233",
+    "City" : "Jaipur",
+    "Email Address" : "deepankarmathur@jkcement.com",
+    "Images" : "DM.jpg",
+    "Images1" : "DM1.jpg",
+    "Battery" : "0%",
+    "Lastlocation" : "Ajmer Rd, Ganpati Nagar, Jaipur",
+    "Monthly Targets " : "200000",
+    "Achieved %" : "0.15",
+    "State" : "Rajasthan",
+    "Ranking" : 9.0,
+    "markerColor" : "",
+    "Latitude" : 26.9124,
+    "Longitude" : 75.7873
+}
+
+/* 119 */
+{
+    "_id" : ObjectId("594373c0ea2316843d975dda"),
+    "docType" : "Top Perforrming Sales Executives",
+    "Code" : "10",
+    "Sales Rep Code" : "JKC-S-A-PM",
+    "First Name" : "Pushpal ",
+    "Last Name" : "Maheshwari",
+    "Contact Number" : "9717652689",
+    "City" : "Ajmer",
+    "Email Address" : "pushpalmaheshwari@jkcement.com",
+    "Images" : "PM.jpg",
+    "Images1" : "PM1.jpg",
+    "Battery" : "0%",
+    "Lastlocation" : "Nalasopra, Subhash Nagar, Ajmer",
+    "Monthly Targets " : "150000",
+    "Achieved %" : "0.14",
+    "State" : "Rajasthan",
+    "Ranking" : 10.0,
+    "markerColor" : "",
+    "Latitude" : 26.4499,
+    "Longitude" : 74.6399
+}
+
+/* 120 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f42c"),
+    "Category" : "Food Retail Brands",
+    "Brand" : "KFC",
+    "Weigtage" : "0.25",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 121 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f42d"),
+    "Category" : "Food Retail Brands",
+    "Brand" : "Dominos",
+    "Weigtage" : "0.25",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 122 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f42e"),
+    "Category" : "Food Retail Brands",
+    "Brand" : "Pizza Hut",
+    "Weigtage" : "0.25",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 123 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f42f"),
+    "Category" : "Food Retail Brands",
+    "Brand" : "Mcdonald's",
+    "Weigtage" : "0.25",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 124 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f430"),
+    "Category" : "Food Retail Brands",
+    "Brand" : "Subway",
+    "Weigtage" : "0.25",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 125 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f431"),
+    "Category" : "Food Retail Brands",
+    "Brand" : "Paradise",
+    "Weigtage" : "1",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 126 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f432"),
+    "Category" : "Food Retail Brands",
+    "Brand" : "Moti Mahal",
+    "Weigtage" : "0.5",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 127 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f433"),
+    "Category" : "Food Retail Brands",
+    "Brand" : "Main Land china",
+    "Weigtage" : "1",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 128 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f434"),
+    "Category" : "Retail Brand",
+    "Brand" : "Titan Industries",
+    "Weigtage" : "0.5",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 129 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f435"),
+    "Category" : "Retail Brand",
+    "Brand" : "Aditya Birla Retail",
+    "Weigtage" : "0.5",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 130 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f436"),
+    "Category" : "Retail Brand",
+    "Brand" : "Westside",
+    "Weigtage" : "0.5",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 131 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f437"),
+    "Category" : "Retail Brand",
+    "Brand" : "Shoppers Stop",
+    "Weigtage" : "2",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 132 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f438"),
+    "Category" : "Retail Brand",
+    "Brand" : "Central",
+    "Weigtage" : "1",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 133 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f439"),
+    "Category" : "Retail Brand",
+    "Brand" : "Pantaloons Retail Limited",
+    "Weigtage" : "2",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 134 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f43a"),
+    "Category" : "Retail Brand",
+    "Brand" : "Reliance Retail Limited",
+    "Weigtage" : "1",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 135 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f43b"),
+    "Category" : "Retail Brand",
+    "Brand" : "More Mega Stores",
+    "Weigtage" : "0.5",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 136 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f43c"),
+    "Category" : "Retail Brand",
+    "Brand" : "D-Mart",
+    "Weigtage" : "0.25",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 137 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f43d"),
+    "Category" : "Hospitals",
+    "Brand" : "Fortis ",
+    "Weigtage" : "0.5",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 138 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f43e"),
+    "Category" : "Hospitals",
+    "Brand" : "Appollo",
+    "Weigtage" : "0.5",
+    "isActive" : "true",
+    "updatedBy" : "Pallavi",
+    "updatedOn" : ISODate("2017-11-10T00:00:00.000Z")
+}
+
+/* 139 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f43f"),
+    "ok" : undefined,
+    "nInserted" : 19.0,
+    "nUpserted" : 0.0,
+    "nMatched" : 0.0,
+    "nModified" : 0.0,
+    "nRemoved" : 0.0,
+    "getUpsertedIds" : function () {
+      return bulkResult.upserted;
+    },
+    "getUpsertedIdAt" : function (index) {
+      return bulkResult.upserted[index];
+    },
+    "getRawResponse" : function () {
+      return bulkResult;
+    },
+    "hasWriteErrors" : function () {
+      return bulkResult.writeErrors.length > 0;
+    },
+    "getWriteErrorCount" : function () {
+      return bulkResult.writeErrors.length;
+    },
+    "getWriteErrorAt" : function (index) {
+      if(index < bulkResult.writeErrors.length) {
+        return bulkResult.writeErrors[index];
+      }
+      return null;
+    },
+    "getWriteErrors" : function () {
+      return bulkResult.writeErrors;
+    },
+    "hasWriteConcernError" : function () {
+      return bulkResult.writeConcernErrors.length > 0;
+    },
+    "getWriteConcernError" : function () {
+      if(bulkResult.writeConcernErrors.length == 0) {
+        return null;
+      } else if(bulkResult.writeConcernErrors.length == 1) {
+        // Return the error
+        return bulkResult.writeConcernErrors[0];
+      } else {
+
+        // Combine the errors
+        var errmsg = "";
+        for(var i = 0; i < bulkResult.writeConcernErrors.length; i++) {
+          var err = bulkResult.writeConcernErrors[i];
+          errmsg = errmsg + err.errmsg;
+          // TODO: Something better
+          if (i != bulkResult.writeConcernErrors.length - 1) {
+            errmsg = errmsg + " and ";
+          }
+        }
+
+        return new WriteConcernError({ errmsg : errmsg, code : WRITE_CONCERN_FAILED });
+      }
+    },
+    "tojson" : function (indent, nolint) {
+      return tojson(bulkResult, indent, nolint);
+    },
+    "toString" : function () {
+      // Suppress all output for the write concern w:0, since the client doesn't care.
+      if(writeConcern && writeConcern.w == 0) {
+        return "BulkWriteResult(" + tojson({}) + ")";;
+      }
+      return "BulkWriteResult(" + this.tojson() + ")";
+    },
+    "shellPrint" : function () {
+      return this.toString();
+    },
+    "hasErrors" : function () {
+      return this.hasWriteErrors() || this.hasWriteConcernError();
+    },
+    "toError" : function () {
+      if (this.hasErrors()) {
+
+        // Create a combined error message
+        var message = "";
+        var numWriteErrors = this.getWriteErrorCount();
+        if (numWriteErrors == 1) {
+          message += "write error at item " + this.getWriteErrors()[0].index;
+        }
+        else if (numWriteErrors > 1) {
+          message += numWriteErrors + " write errors";
+        }
+
+        var hasWCError = this.hasWriteConcernError();
+        if (numWriteErrors > 0 && hasWCError) {
+          message += " and ";
+        }
+
+        if (hasWCError) {
+          message += "problem enforcing write concern";
+        }
+        message += " in bulk operation";
+
+        return new BulkWriteError(bulkResult, singleBatchType, writeConcern, message);
+      }
+      else {
+        throw Error("batch was successful, cannot create BulkWriteError");
+      }
+    },
+    "toSingleResult" : function () {
+      if(singleBatchType == null) throw Error(
+          "Cannot output single WriteResult from multiple batch result");
+      return new WriteResult(bulkResult, singleBatchType, writeConcern);
+    }
+}
+
+/* 140 */
+{
+    "_id" : ObjectId("5a055b0c9142407d5422f440"),
+    "ok" : undefined,
+    "nInserted" : 1.0,
+    "nUpserted" : 0.0,
+    "nMatched" : 0.0,
+    "nModified" : 0.0,
+    "nRemoved" : 0.0,
+    "getUpsertedIds" : function () {
+      return bulkResult.upserted;
+    },
+    "getUpsertedIdAt" : function (index) {
+      return bulkResult.upserted[index];
+    },
+    "getRawResponse" : function () {
+      return bulkResult;
+    },
+    "hasWriteErrors" : function () {
+      return bulkResult.writeErrors.length > 0;
+    },
+    "getWriteErrorCount" : function () {
+      return bulkResult.writeErrors.length;
+    },
+    "getWriteErrorAt" : function (index) {
+      if(index < bulkResult.writeErrors.length) {
+        return bulkResult.writeErrors[index];
+      }
+      return null;
+    },
+    "getWriteErrors" : function () {
+      return bulkResult.writeErrors;
+    },
+    "hasWriteConcernError" : function () {
+      return bulkResult.writeConcernErrors.length > 0;
+    },
+    "getWriteConcernError" : function () {
+      if(bulkResult.writeConcernErrors.length == 0) {
+        return null;
+      } else if(bulkResult.writeConcernErrors.length == 1) {
+        // Return the error
+        return bulkResult.writeConcernErrors[0];
+      } else {
+
+        // Combine the errors
+        var errmsg = "";
+        for(var i = 0; i < bulkResult.writeConcernErrors.length; i++) {
+          var err = bulkResult.writeConcernErrors[i];
+          errmsg = errmsg + err.errmsg;
+          // TODO: Something better
+          if (i != bulkResult.writeConcernErrors.length - 1) {
+            errmsg = errmsg + " and ";
+          }
+        }
+
+        return new WriteConcernError({ errmsg : errmsg, code : WRITE_CONCERN_FAILED });
+      }
+    },
+    "tojson" : function (indent, nolint) {
+      return tojson(bulkResult, indent, nolint);
+    },
+    "toString" : function () {
+      // Suppress all output for the write concern w:0, since the client doesn't care.
+      if(writeConcern && writeConcern.w == 0) {
+        return "BulkWriteResult(" + tojson({}) + ")";;
+      }
+      return "BulkWriteResult(" + this.tojson() + ")";
+    },
+    "shellPrint" : function () {
+      return this.toString();
+    },
+    "hasErrors" : function () {
+      return this.hasWriteErrors() || this.hasWriteConcernError();
+    },
+    "toError" : function () {
+      if (this.hasErrors()) {
+
+        // Create a combined error message
+        var message = "";
+        var numWriteErrors = this.getWriteErrorCount();
+        if (numWriteErrors == 1) {
+          message += "write error at item " + this.getWriteErrors()[0].index;
+        }
+        else if (numWriteErrors > 1) {
+          message += numWriteErrors + " write errors";
+        }
+
+        var hasWCError = this.hasWriteConcernError();
+        if (numWriteErrors > 0 && hasWCError) {
+          message += " and ";
+        }
+
+        if (hasWCError) {
+          message += "problem enforcing write concern";
+        }
+        message += " in bulk operation";
+
+        return new BulkWriteError(bulkResult, singleBatchType, writeConcern, message);
+      }
+      else {
+        throw Error("batch was successful, cannot create BulkWriteError");
+      }
+    },
+    "toSingleResult" : function () {
+      if(singleBatchType == null) throw Error(
+          "Cannot output single WriteResult from multiple batch result");
+      return new WriteResult(bulkResult, singleBatchType, writeConcern);
+    }
+}

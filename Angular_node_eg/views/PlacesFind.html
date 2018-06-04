@@ -1,0 +1,100 @@
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Place searches</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script>
+        // This example requires the Places library. Include the libraries=places
+        // parameter when you first load the API. For example:
+        // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+        var map;
+        var infowindow;
+
+        function initMap() {
+//            https://maps.googleapis.com/maps/api/geocode/json?address=Jalgaon
+//            var geocoder = new google.maps.Geocoder();
+//            // Get LatLng information by name
+//            geocoder.geocode({
+//                address: item.properties.PINCODE,
+////                                    location: item.properties.PINCODE
+//            }, function (results, status) {
+//                if (status === 'OK') {
+//                    map.setCenter(results[0].geometry.location);
+//                }
+//            });
+//            var pyrmont = {lat: 14.4673541, lng: 78.82413389999999}; //kadappa
+//            var pyrmont = {lat: 23.1354921, lng: 83.1817856}; //Ambikapur
+//            var pyrmont = {lat: 22.031971	, lng: 82.653746}; //Champa
+            var pyrmont = {lat: 21.0076578, lng: 75.5626039}; //Jalgaon
+//            var pyrmont = {lat: 25.9496379, lng: 83.5586445}; //Maunath%20Bhanjan
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: pyrmont,
+                zoom: 15
+            });
+
+            infowindow = new google.maps.InfoWindow();
+            var service = new google.maps.places.PlacesService(map);
+            service.textSearch({
+                location: map.getCenter(),
+                radius: 22000,
+                type: ['bus','railway'],
+//                query:' jalgaon'
+
+            }, callback);
+        }
+
+        function callback(results, status, next_page_token) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                for (var i = 0; i < results.length; i++) {
+
+
+//                    for (var i = 0; i <= 10; i++) {
+                        (function (ind) {
+                            setTimeout(function () {
+                                var place = results[ind];
+                                console.log(place.name + " : " + place.vicinity + " : " + place.geometry.location.lat()+ " : " + place.geometry.location.lng());
+                                console.log(place.name + " : " + place.formatted_address + " : " + place.geometry.location.lat+ " : " + place.geometry.location.lng);
+//                                var placeLoc = place.geometry.location;
+//                                var marker = new google.maps.Marker({
+//                                    map: map,
+//                                    position: place.geometry.location
+////                icon: place.icon
+//                                });
+//
+//                                google.maps.event.addListener(marker, 'click', function () {
+//                                    infowindow.setContent(place.name);
+//                                    infowindow.open(map, this);
+//                                });
+                            }, 1000);
+                        })(i);
+                    }
+//                }
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVR5iaxk4V2f3OqyyhwUrZdWvE7L7n8Uo&libraries=places&callback=initMap"
+        async defer></script>
+</body>
+</html>

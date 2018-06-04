@@ -1,0 +1,60 @@
+def mapZipcodeMapping():
+    # config = json.loads(open('/home/pallavidandane/workspace/Invoize/automationScript/gj.geojson.json').read())
+    conn = pymongo.Connection('130.211.159.225', 27017)
+    # conn[configDetails.get('MONGO_DB')].authenticate(configDetails.get('MONGO_UNAME'),
+    #                                                  configDetails.get('MONGO_PASSWD'))
+    db = conn['googleMapData']
+
+    with open('/home/pallavidandane/workspace/Invoize/automationScript/br.geojson.json') as data_file:
+        data = json.load(data_file)
+    for eachVillage in data.get('features', []):
+        db.censusData.insert(eachVillage)
+    with open('/home/pallavidandane/workspace/Invoize/automationScript/ga.geojson.json') as data_file:
+        data = json.load(data_file)
+    for eachVillage in data.get('features', []):
+        db.censusData.insert(eachVillage)
+    with open('/home/pallavidandane/workspace/Invoize/automationScript/gj.geojson.json') as data_file:
+        data = json.load(data_file)
+    for eachVillage in data.get('features', []):
+        db.censusData.insert(eachVillage)
+
+    with open('/home/pallavidandane/workspace/Invoize/automationScript/ka.geojson.json') as data_file:
+        data = json.load(data_file)
+    for eachVillage in data.get('features', []):
+        db.censusData.insert(eachVillage)
+
+    # Read village json and put in db
+    with open('/home/pallavidandane/workspace/Invoize/automationScript/kl.geojson.json') as data_file:
+        data = json.load(data_file)
+    for eachVillage in data.get('features', []):
+        db.censusData.insert(eachVillage)
+    # pprint(config)
+    with open('/home/pallavidandane/workspace/Invoize/automationScript/india_taluka.geojson.json') as data_file:
+        data = json.load(data_file)
+    for eachVillage in data.get('features', []):
+        db.censusData.insert(eachVillage)
+
+    outfile = xlrd.open_workbook('/home/pallavidandane/workspace/Invoize/automationScript/India_Pincodes-data_lat_lng.xlsx')
+    A = outfile.sheet_by_index(0)
+    headerFile = A.row_values(0, 0, A.ncols)
+    cnt = 1
+    for row in range(1, A.nrows):
+        # pprint(A.row_values(row))
+        # pincodestate = str(A.row_values(row)[3]).upper().strip()
+        # pincodename = str(A.row_values(row)[0]).upper().strip()
+        # pincodedistrict = str(A.row_values(row)[4]).upper().strip()
+
+        pincodestate = str(A.row_values(row)[3]).strip()
+        pincodename = str(A.row_values(row)[0]).strip()
+        pincodedistrict = str(A.row_values(row)[4]).strip()
+
+
+        print (cnt)
+
+        villageData = db.censusData.find_one({'$or':[{'properties.NAME': {'$regex': "^" + pincodename + "$", "$options": "-i"}},
+                                                     {'properties.SUB_DISTRICT': {'$regex': "^" + pincodename + "$", "$options": "-i"}}],
+                                                     'properties.DISTRICT': {'$regex': "^" + pincodedistrict + "$", "$options": "-i"}})
+        if villageData:
+            print 'zipCode found ', cnt
+            db.censusData.update({"_id": villageData.get("_id")}, {"$set": {"properties.PINCODE": A.row_values(row)[5]}})
+        cnt += 1

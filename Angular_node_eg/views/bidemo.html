@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html ng-app="angularjs_with_Nodejs">
+<head>
+    <title>Google Maps Demo</title>
+
+    <link type="text/css" rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/css/iziModal.min.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css"/>
+    <link rel="stylesheet" href="/vendor/handsontable/dist/angular-ui-handsontable.full.css">
+    <link type="text/css" rel="stylesheet" href="/vendor/bootstrap-3.3.7-dist/css/bootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="/vendor/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="vendor/select2/select2.css">
+
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8"/>
+
+    <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVR5iaxk4V2f3OqyyhwUrZdWvE7L7n8Uo&libraries=places,geometry,visualization"></script>
+  <script src="/vendor/jquery-1.9.1.js"></script>
+  <script src="/vendor/angular.js"></script>
+  <!--<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>-->
+  <script type="text/javascript" src="vendor/select2/select2.js"></script>
+  <!--<script type="text/javascript" src="bower_components/angular/angular.js"></script>-->
+  <script type="text/javascript" src="vendor/angular-ui-select2/src/select2.js"></script>
+  <script src="/vendor/handsontable/dist/angular-ui-handsontable.full.js"></script>
+  <script src="javascripts/app.js" type="text/javascript"></script>
+  <script src="javascripts/biController.js" type="text/javascript"></script>
+  
+  <script src="/vendor/angular-cookies-1.0.0rc10.js"></script>
+  <script src="/vendor/angular-ui.js"></script>
+  <script src="/vendor/angular-ui-states.js"></script>
+  <script src="/vendor/angular-strap.min.js"></script>
+  <script src="/vendor/ui-bootstrap-tpls-0.6.0.js"></script>
+  <script src="/vendor/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+  
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/js/iziModal.min.js" type="text/javascript"
+          charset="utf-8"></script>
+
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+
+    
+    <!--<script src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>-->
+    <!--<script src='http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js'></script>-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>-->
+    <!--<script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>-->
+    <!--<script async defer-->
+    <!--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVR5iaxk4V2f3OqyyhwUrZdWvE7L7n8Uo&amp;callback=initMap"></script>-->
+</head>
+
+<body ng-controller="biController">
+<div class="header">
+    <img src="../images/google-logo.png" style="margin: 15px 15px 15px 150px;width: 15%;" >
+    <div class="header-right">
+      <img src="../images/searce-logo.png" style="margin: 7px 100px 20px 50px;width: 65%;">
+    </div>
+</div>       
+    
+<div class="main">
+
+  
+<div id="mymap"></div> 
+
+
+<div class="form-block1">
+
+        <div class="bs-example">
+            <div class="panel-group" id="accordion1">
+                <div class="panel panel-default">
+                    <div  data-toggle="collapse" data-parent="#accordion1" href="#collapse1" class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Business Tangibles</a>
+                        </h4>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            Select Country
+                            <select ng-model="SelectedCountry" ng-init="SelectedCountry='India'" ng-change = "RadioChange();" >
+                                    <option ng-repeat="country in countries" value="{{country.name}}" >{{ country.name }}</option>
+                            </select>
+                            </br>Select Category
+                            <div ng-repeat="opt in categories">
+                                <label class="container">
+                                  <input type="checkbox" ng-click="showCatergorisedLocations($event, $index);" ng-model="opt.checked">
+                                  <span class="checkmark"></span>{{opt.name}}
+                                </label>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div data-toggle="collapse" data-parent="#accordion1" href="#collapse2" class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Product Classification</a>
+                        </h4>
+                    </div>
+                    <div id="collapse2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div ng-repeat="opt in subCategories">
+                                <label class="container">
+                                    <input type="checkbox" ng-click="showSubCatergorisedLocations($event, $index);" ng-model="opt.checked">
+                                    <span class="checkmark"></span>{{opt.name}}
+                                </label>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div data-toggle="collapse" data-parent="#accordion1" href="#collapse3" class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Customers</a>
+                        </h4>
+                    </div>
+                    <div id="collapse3" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            Select Region : 
+                            <select ng-model="selectedRegion" ng-change = "regionChange();" >
+                                    <option ng-repeat="region in regions" value="{{region.name}}" >{{ region.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div data-toggle="collapse" data-parent="#accordion1" href="#collapse4"  class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Sales</a>
+                        </h4>
+                    </div>
+                    <div id="collapse4" class="panel-collapse collapse">
+                        <div class="panel-body">
+                                Select City : 
+                                <select ng-model="selectedCityForSales" ng-change = "cityChange(1);" >
+                                        <option ng-repeat="city in cities" value="{{city.name}}" >{{ city.name }}</option>
+                                </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          
+</div>
+<div class="form-block2">
+    <button class="custom-button"  ng-click="toggleTrafficLayer()">Traffic Layer</button>
+    <div class="bs-example">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a >Google Places Data</a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        Select Store :
+                        <select ng-model="selectedStore" ng-change = "getData(null, -1);" >
+                                <option ng-repeat="store in storeNames" value="{{store}}" >{{ store.name }}</option>
+                        </select>
+                        <span ng-if="showStorePlaceTypes">
+                        <div ng-repeat="opt in placetypes">
+                            <label class="container">
+                                <input type="checkbox" ng-click="getData($event, $index);" ng-model="opt.checked">
+                                <span class="checkmark"></span>{{opt.name}}
+                              </label>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a >Demographics</a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Select City : 
+                        <select ng-model="selectedCity" ng-change = "cityChange(0);" >
+                                <option ng-repeat="city in cities" value="{{city.name}}" >{{ city.name }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+     
+</div>
+
+</div>
+
+</body>
+
+

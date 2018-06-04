@@ -1,0 +1,29 @@
+<<<<<<< HEAD
+ language: node_js
+ node_js:
+   - "0.8"
+   - "0.10"
+
+ before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - npm install -g karma bower grunt-cli
+  - bower install
+  - npm install
+
+ script: "grunt"
+=======
+ language: node_js
+ node_js:
+   - "0.8"
+   - "0.10"
+
+ before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - npm install -g karma bower grunt-cli
+  - bower install
+  - npm install
+
+ script: "grunt"
+>>>>>>> b101157dae22134acc883c174eec2fd6b18d9f0e

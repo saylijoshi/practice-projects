@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Distance Matrix service</title>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=en"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script src="scripts/mapstechnical.js"></script>
+
+<script src="scripts/validate_dm.js"></script>
+
+<style>
+
+    html, body {
+
+        height: 100%;
+
+        margin: 0;
+
+        padding: 0;
+
+    }
+
+
+
+    #map-canvas {
+
+        height: 100%;
+
+        width: 50%;
+
+    }
+
+    #content-pane {
+
+        float:right;
+
+        width:48%;
+
+        padding-left: 2%;
+
+    }
+
+    #outputDiv {
+
+        font-size: 11px;
+
+    }
+
+</style>
+
+<script>
+
+    var map;
+
+    var geocoder;
+
+    var bounds = new google.maps.LatLngBounds();
+
+    var markersArray = [];
+
+    var service;
+
+    var ex_status;
+
+
+
+    var destinationIcon = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=D|FF0000|000000';
+
+    var originIcon = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=O|FFFF00|000000';
+
+
+
+    function initialize() {
+
+        var opts = {
+
+            center: new google.maps.LatLng(55.53, 9.4),
+
+            zoom: 10
+
+        };
+
+        map = new google.maps.Map(document.getElementById('map-canvas'), opts);
+
+        geocoder = new google.maps.Geocoder();
+
+        //create Distance Matrix object here
+        service = new google.maps.DistanceMatrixService();
+
+    }
+
+
+
+    // insert distance calculator function here
+
+    function calculateDistances(callback) {
+        var origin1 = document.getElementById('origin1').value;
+        var origin2 = document.getElementById('origin2').value;
+        var destinationA = document.getElementById('destinationA').value;
+        var destinationB = document.getElementById('destinationB').value;
+        var unitSys = document.getElementById('units').value;
+
+        if(unitSys == "mi") {
+            unitSys = google.maps.UnitSystem.IMPERIAL;
+        } else if(unitSys == "km") {
+            unitSys = google.maps.UnitSystem.METRIC;
+        }
+
+
+        service.getDistanceMatrix(
+                {
+                    origins: [origin1, origin2],
+                    destinations: [destinationA, destinationB],
+                    travelMode: google.maps.TravelMode.DRIVING,
+                    unitSystem: google.maps.UnitSystem.METRIC,
+                    avoidHighways: false,
+                    avoidTolls: false
+                }, callback);
+
+    }
+    function callback(response, status) {
+        if (status != google.maps.DistanceMatrixStatus.OK) {
+            alert('Error was: ' + status);
+        } else {
+
+            // for each origin,destination pair, print A to B : X miles in Y hours
+            // use outputDiv for printing this result
+            var originList = response.originAddresses;
+            var destinationList = response.destinationAddresses;
+            var outputDiv = document.getElementById('outputDiv');
+            outputDiv.innerHTML = '';
+            deleteOverlays();
+
+
+
+            for (var i = 0; i < originList.length; i++) {
+                var results = response.rows[i].elements;
+                addMarker(originList[i], false);
+                addMarker(destinationList[i], true);
+
+                outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
+                        ': ' + results[j].distance.text + ' miles in ' +
+                        results[j].duration.text + ' hours<br>';
+            }
+        }
+
+
+    }
+
+    function addMarker(location, isDestination) {
+
+        var icon;
+
+        if (isDestination) {
+
+            icon = destinationIcon;
+
+        } else {
+
+            icon = originIcon;
+
+        }
+
+        geocoder.geocode({'address': location}, function(results, status) {
+
+            if (status == google.maps.GeocoderStatus.OK) {
+
+                bounds.extend(results[0].geometry.location);
+
+                map.fitBounds(bounds);
+
+                var marker = new google.maps.Marker({
+
+                    map: map,
+
+                    position: results[0].geometry.location,
+
+                    icon: icon
+
+                });
+
+                markersArray.push(marker);
+
+            } else {
+
+                alert('Geocode was not successful for the following reason: '
+
+                        + status);
+
+            }
+
+        });
+
+    }
+
+
+
+    function deleteOverlays() {
+
+        for (var i = 0; i < markersArray.length; i++) {
+
+            markersArray[i].setMap(null);
+
+        }
+
+        markersArray = [];
+
+    }
+
+
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+</script>
+
+</head>
+
+<body>
+
+<div id="content-pane">
+
+    <div id="inputs">
+
+        <pre>
+
+     Origin1: <input id="origin1" type="text" />
+
+     Origin2: <input id="origin2" type="text" />
+
+DestinationA: <input id="destinationA" type="text" />
+
+DestinationB: <input id="destinationB" type="text" />
+
+
+
+Distance in:  <select id="units">
+
+            <option value="km">Kilometers</option>
+
+            <option value="mi">Miles</option>
+
+        </select>
+
+        </pre>
+
+        <p><button id="calculate_distances" type="button" onclick="calculateDistances(callback);">Calculate distances</button></p>
+
+    </div>
+
+    <div id="outputDiv"></div>
+
+</div>
+
+<div id="map-canvas"></div>
+
+</body>
+
+</html>
+
