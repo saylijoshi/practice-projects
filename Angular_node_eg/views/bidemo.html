@@ -56,12 +56,12 @@
 </head>
 
 <body ng-controller="biController">
-<div class="header">
-    <img src="../images/google-logo.png" style="margin: 15px 15px 15px 150px;width: 15%;" >
+
+    <img src="../images/google-logo.png" style="margin: 15px 15px 15px 150px;width: 15%;position: absolute; z-index: 120" >
     <div class="header-right">
       <img src="../images/searce-logo.png" style="margin: 7px 100px 20px 50px;width: 65%;">
     </div>
-</div>       
+     
     
 <div class="main">
 
@@ -82,7 +82,7 @@
                     <div id="collapse1" class="panel-collapse collapse in">
                         <div class="panel-body">
                             Select Country
-                            <select ng-model="SelectedCountry" ng-init="SelectedCountry='India'" ng-change = "RadioChange();" >
+                            <select ng-model="SelectedCountry" ng-change = "countryChange();" >
                                     <option ng-repeat="country in countries" value="{{country.name}}" >{{ country.name }}</option>
                             </select>
                             </br>Select Category
@@ -153,14 +153,14 @@
             <div class="panel panel-default">
                 <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="panel-heading">
                     <h4 class="panel-title">
-                        <a >Google Places Data</a>
+                        <a >Points of Interest</a>
                     </h4>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in">
                     <div class="panel-body">
                         Select Store :
                         <select ng-model="selectedStore" ng-change = "getData(null, -1);" >
-                                <option ng-repeat="store in storeNames" value="{{store}}" >{{ store.name }}</option>
+                                <option ng-repeat="store in storeNames" value="{{store}}" >{{store.city +"-"+store.name}}</option>
                         </select>
                         <span ng-if="showStorePlaceTypes">
                         <div ng-repeat="opt in placetypes">

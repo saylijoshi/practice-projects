@@ -32,7 +32,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     var directionsDisplayCollection = [],infowindowsCollection = [];
     var directionsDisplay, directionsService;
     $scope.selectedStore = {};
-    var restaurantMarkerCluster;
+    var countryMarkerCluster;
     var airportMarkersCluster,barMarkersCluster,busstationMarkersCluster,cafeMarkersCluster,casinoMarkersCluster,liquorStoreMarkersCluster,nightClubsMarkersCluster,parkMarkersCluster,superMarketMarkersCluster,subwayMarkersCluster,shoppingMallMarkersCluster,MealTakeAwayMarkersCluster,movietheatermarkersCluster;
     var allOption = {"name": "All Stores","latitude":0,"longitude":0};
     $scope.storeNames = [];
@@ -52,6 +52,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         {"name":"Delhi", "selected":false},
         {"name":"Mumbai", "selected":false},
         {"name":"Bengaluru", "selected":false},
+        {"name":"Kolkata", "selected":false},
         {"name":"Chennai", "selected":false},
         {"name":"Indore", "selected":false},
         {"name":"Ahmedabad", "selected":false},
@@ -156,20 +157,19 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         {"name":"Distribution Centre 2", "checked":false},
     ]
 
-    //$scope.Country = "Singapore";
     $scope.SelectedCountry = "Singapore";
 
     setTimeout(function ()
     {
         $scope.initMap();
-        $scope.showAllLocations();
+       // $scope.showAllLocations();
     }, 100);
 
     $scope.initMap = function ()
     {
         map = new google.maps.Map(document.getElementById("mymap"), {
-            //center: new google.maps.LatLng(1.328178, 103.845055),
-            zoom: 12,
+            center: new google.maps.LatLng(23.492690, 78.680398),
+            zoom: 5,
             mapTypeId: google.maps.MapTypeId.ROADMAP
             });
 
@@ -234,26 +234,19 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                 selectedCategoryName = $scope.categories[j].name;
 
                 if($scope.categories[j].checked)
-                {
-                    //var selectedCategoryName = $scope.categories[j].name;
-                
+                {        
                     if( selectedCategoryName == "POS" && typeName == "pos" )
                     {
                         userSelectedCategoryName = "POS";
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        //map.setCenter({lat:1.328178,lng: 103.845055});
-                        //map.setZoom(11);
-                        //map.setMapTypeId('roadmap');
-
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-yellow.png',
+                        icon: 'images/purple.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -262,12 +255,12 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
-
                         });
 
                         categoryPOSmarkers.push(marker);
@@ -279,17 +272,12 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        // map.setCenter({lat:1.328178,lng: 103.845055});
-                        // map.setZoom(11);
-                        // map.setMapTypeId('roadmap');
-                
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-blue.png',
+                        icon: 'images/pink.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -298,34 +286,29 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
-
                         });
 
                         categoryProductionCentresMarker.push(marker);
                         })(marker, cocacolaStoreData);
                     }
-                    else if(selectedCategoryName == "Warehaouses" && typeName == "warehouses")
+                    else if(selectedCategoryName == "Warehouses" && typeName == "warehouses")
                     {
-                        userSelectedCategoryName = "Warehaouses";
+                        userSelectedCategoryName = "Warehouses";
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        // map.setCenter({lat:1.328178,lng: 103.845055});
-                        // map.setZoom(11);
-                        // map.setMapTypeId('roadmap');
-                
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-red.png',
+                        icon: 'images/green.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -334,12 +317,12 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
-
                         });
 
                         categoryWarehouseMarker.push(marker);
@@ -351,17 +334,12 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        // map.setCenter({lat:1.328178,lng: 103.845055});
-                        // map.setZoom(11);
-                        // map.setMapTypeId('roadmap');
-                
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-green.png',
+                        icon: 'images/blue.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -370,7 +348,11 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                            infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
                         //$scope.clearDirection();
                         dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -384,7 +366,6 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                 }
                 else
                 {
-                    //var selectedCategoryName = $scope.categories[j].name;
                     if( selectedCategoryName == "POS" && typeName == "pos" )
                     {
                         $scope.clearCategoryPOSMarkers();
@@ -393,7 +374,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                     {
                         $scope.clearCategoryProductionCentresMarkers();
                     }
-                    else if(selectedCategoryName == "Warehaouses" && typeName == "warhouses")
+                    else if(selectedCategoryName == "Warehouses" && typeName == "warehouses")
                     {
                         $scope.clearCategoryWarehouseMarkers();
                     }
@@ -401,10 +382,10 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                     {
                         $scope.clearDistributionCentreMarkers();
                     }
-                    
                 }
             }  
-        }   
+        }  
+        
         $scope.$apply();
     });
 };
@@ -412,12 +393,16 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 $scope.showSubCatergorisedLocations = function (event,index) 
 {
     $.getJSON('/getBIData', {}, function (data) {
-
-    //$scope.clearIndiaMarkers();
-    //$scope.clearIndonesiaMarker();  
+  
     $scope.storeNames.length = 0;  
 
-    //console.log("---userSelectedCategoryName---:",userSelectedCategoryName);
+    //If user selects subcategory directly, for now, we are checking POS as a default category. 
+    if(!$scope.categories[0].checked)
+    {
+        $scope.categories[0].checked = true;
+        userSelectedCategoryName = "POS";
+    }
+
     //checking and assiging values got from callback( index and event )
     if(index!= -1)
     $scope.subCategories[index].checked = event.target.checked;
@@ -426,7 +411,6 @@ $scope.showSubCatergorisedLocations = function (event,index)
     {
         var cocacolaStoreData = data[i];
         var typeName = cocacolaStoreData.productclassification;
-        //console.log("---SubCategory---:",typeName);
 
         for (var j = 0, categoryArraylength = $scope.subCategories.length; j < categoryArraylength; j++) 
         {
@@ -434,10 +418,8 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
             if($scope.subCategories[j].checked)
             {
-               // var selectedCategoryName = $scope.subCategories[j].name;
                 if( userSelectedCategoryName == "POS" )
                 {            
-                    //console.log("---selectedSubCategoryName---:",selectedSubCategoryName);
                     $scope.clearCategoryPOSMarkers();
                     if( selectedSubCategoryName == "Beauty & Hygiene" && typeName == "Beauty and Hygiene")
                     {
@@ -446,17 +428,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        //map.setCenter({lat:1.328178,lng: 103.845055});
-                        //map.setZoom(11);
-                        //map.setMapTypeId('roadmap');
 
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-yellow.png',
+                        icon: 'images/purple.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -465,7 +443,11 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                            infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
                         //$scope.clearDirection();
                         dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -481,18 +463,14 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
                         $scope.storeNames.push(cocacolaStoreData);
 
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        // map.setCenter({lat:1.328178,lng: 103.845055});
-                        // map.setZoom(11);
-                        // map.setMapTypeId('roadmap');
+                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude);
                 
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-blue.png',
+                        icon: 'images/purple.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -501,7 +479,11 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
                         //$scope.clearDirection();
                         dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -518,17 +500,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        // map.setCenter({lat:1.328178,lng: 103.845055});
-                        // map.setZoom(11);
-                        // map.setMapTypeId('roadmap');
                 
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-red.png',
+                        icon: 'images/purple.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -537,7 +515,11 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
                         //$scope.clearDirection();
                         dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -553,17 +535,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        // map.setCenter({lat:1.328178,lng: 103.845055});
-                        // map.setZoom(11);
-                        // map.setMapTypeId('roadmap');
                 
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-green.png',
+                        icon: 'images/purple.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -572,11 +550,12 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
 
                         });
 
@@ -588,17 +567,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        // map.setCenter({lat:1.328178,lng: 103.845055});
-                        // map.setZoom(11);
-                        // map.setMapTypeId('roadmap');
                 
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-blue.png',
+                        icon: 'images/purple.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -607,11 +582,12 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                            infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
 
                         });
 
@@ -623,17 +599,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         $scope.storeNames.push(cocacolaStoreData);
 
                         latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                    
-                        // map.setCenter({lat:1.328178,lng: 103.845055});
-                        // map.setZoom(11);
-                        // map.setMapTypeId('roadmap');
                 
                         // Creating a marker and putting it on the map
                         var marker = new google.maps.Marker({
                         position: latLng,
                         map: map,
                         title: cocacolaStoreData.name,
-                        icon: 'images/cocacola-map-marker-blue.png',
+                        icon: 'images/purple.png',
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
@@ -642,7 +614,11 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'+ "<br/>" + cocacolaStoreData.address + "<br/>" + cocacolaStoreData.contact);
+                            infoWindow.setContent('<h3>' +cocacolaStoreData.name + '</h3>'
+                            + "<br/>" + "Address: " + cocacolaStoreData.address 
+                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
                         infoWindow.open(map, marker);
                         //$scope.clearDirection();
                         dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -715,15 +691,21 @@ $scope.showSubCatergorisedLocations = function (event,index)
 });
 };
 
+$scope.countryChange = function()
+{
+    if( $scope.SelectedCountry == "India" )
+    {
+        $scope.clearIndiaMarkers();
+        $scope.showAllLocations();
+    }
+}
+
     $scope.showAllLocations = function () 
     {
         $.getJSON('/getBIData', {}, function (data) {
                                 
             //$scope.storeNames.length = 0;  commented to display , POS related data.
             //$scope.storeNames.push(allOption);
-            
-
-
             //$scope.clearAllCategoryMarkers();add this later.
 
             for (var i = 0, length = data.length; i < length; i++) 
@@ -766,6 +748,8 @@ $scope.showSubCatergorisedLocations = function (event,index)
                     })(marker, storeData);
                 }  
             }
+            countryMarkerCluster = new MarkerClusterer(map, markers,
+           {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}); 
             $scope.$apply();
         });
     };
@@ -3221,6 +3205,13 @@ new google.maps.LatLng(28.632743,77.219597)
         {
             markers[key].setMap(null);
         };
+
+        if( countryMarkerCluster != null )
+        {
+            countryMarkerCluster.length = 0;
+            countryMarkerCluster.clearMarkers();
+        }
+        
     };
 
     $scope.clearAllPlacesMarkers = function()
@@ -3249,8 +3240,8 @@ new google.maps.LatLng(28.632743,77.219597)
         };
         //restaurantsMarkers.length = 0;
 
-        //if (restaurantMarkerCluster!=null)
-        //restaurantMarkerCluster.clearMarkers();
+        //if (countryMarkerCluster!=null)
+        //countryMarkerCluster.clearMarkers();
     };
 
     $scope.clearAirportMarkers = function()
@@ -3597,7 +3588,7 @@ new google.maps.LatLng(28.632743,77.219597)
         }
         }
        
-        // restaurantMarkerCluster = new MarkerClusterer(map, restaurantsMarkers,
+        // countryMarkerCluster = new MarkerClusterer(map, restaurantsMarkers,
         // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
     };
 
@@ -4272,20 +4263,11 @@ new google.maps.LatLng(28.632743,77.219597)
 
     $scope.regionChange = function () {
  
-        console.log("---Sales Region---:",$scope.selectedRegion);
-        // var latlng = new google.maps.LatLng(1.322532, 103.808953);
-        // map = new google.maps.Map(document.getElementById('mymap'), {
-        // center: latlng,
-        // zoom: 11,
-        // //mapTypeId: 'satellite'
-        // });
+        $scope.clearIndiaMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
 
-        //   heatmap.setMap(heatmap.getMap() ? null : map);
-        //heatmap.set('radius', heatmap.get('radius') ? null : 20);
-
-
-
-        
         if( $scope.selectedRegion == "East" )
         {
             map.setCenter({lat:22.551296,lng: 88.385557});
@@ -4336,8 +4318,10 @@ new google.maps.LatLng(28.632743,77.219597)
 
     $scope.cityChange = function (value) {
 
+        $scope.clearIndiaMarkers();
         $scope.clearAllCategoryMarkers();
         $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
 
         if ( value == 0 )
         {
@@ -4354,7 +4338,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4362,12 +4346,10 @@ new google.maps.LatLng(28.632743,77.219597)
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent('<h3>' + "Delhi" + '</h3>'
-                                        + "<br/>" + "Delhi" 
-                                        + "<br/>" + "Delhi");
+                infoWindow.setContent("<div><img src='images/1.png'></div>");
                 infoWindow.open(map, marker);
-                
                 });
+                markers.push(marker);
                 })(marker);
             }
             else if( $scope.selectedCity == "Bengaluru" )
@@ -4384,7 +4366,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4392,12 +4374,11 @@ new google.maps.LatLng(28.632743,77.219597)
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent('<h3>' + "Delhi" + '</h3>'
-                                        + "<br/>" + "Delhi" 
-                                        + "<br/>" + "Delhi");
+                infoWindow.setContent("<div class='info-window1'><img src='images/2.png'></div>");
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Mumbai" )
@@ -4414,7 +4395,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4422,12 +4403,11 @@ new google.maps.LatLng(28.632743,77.219597)
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent('<h3>' + "Delhi" + '</h3>'
-                                        + "<br/>" + "Delhi" 
-                                        + "<br/>" + "Delhi");
+                infoWindow.setContent("<div><img src='images/3.png'></div>");
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Chennai" )
@@ -4444,7 +4424,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4452,12 +4432,11 @@ new google.maps.LatLng(28.632743,77.219597)
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent('<h3>' + "Delhi" + '</h3>'
-                                        + "<br/>" + "Delhi" 
-                                        + "<br/>" + "Delhi");
+                infoWindow.setContent("<div><img src='images/4.png'></div>");
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Pune" )
@@ -4474,7 +4453,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4482,12 +4461,11 @@ new google.maps.LatLng(28.632743,77.219597)
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent('<h3>' + "Delhi" + '</h3>'
-                                        + "<br/>" + "Delhi" 
-                                        + "<br/>" + "Delhi");
+                infoWindow.setContent("<div><img src='images/5.png'></div>");
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Indore" )
@@ -4504,7 +4482,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4512,12 +4490,11 @@ new google.maps.LatLng(28.632743,77.219597)
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent('<h3>' + "Indore" + '</h3>'
-                                        + "<br/>" + "Indore" 
-                                        + "<br/>" + "Indore");
+                infoWindow.setContent("<div><img src='images/6.png'></div>");
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Ahmedabad" )
@@ -4533,7 +4510,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4541,12 +4518,39 @@ new google.maps.LatLng(28.632743,77.219597)
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent('<h3>' + "Ahmedabad" + '</h3>'
-                                        + "<br/>" + "Ahmedabad" 
-                                        + "<br/>" + "Ahmedabad");
+                infoWindow.setContent("<div><img src='images/7.png'></div>");
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Kolkata" )
+            {	
+                latLng = new google.maps.LatLng(22.657698, 88.348537); 	
+                	  
+                map.setCenter({lat:22.657698,lng: 88.348537});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Kolkata",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/7.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
                 })(marker);
             } 
         }
@@ -4565,7 +4569,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4577,11 +4581,11 @@ new google.maps.LatLng(28.632743,77.219597)
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             }
             else if( $scope.selectedCityForSales == "Bengaluru" )
             {
-                //12.973054	77.584958
                 latLng = new google.maps.LatLng(12.973054, 77.584958); 
                 	  
                 map.setCenter({lat:12.973054,lng: 77.584958});
@@ -4593,7 +4597,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4606,6 +4610,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Mumbai" )
@@ -4622,7 +4627,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4635,6 +4640,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Chennai" )
@@ -4651,7 +4657,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4665,6 +4671,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Pune" )
@@ -4681,7 +4688,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4695,6 +4702,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Indore" )
@@ -4711,7 +4719,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4725,6 +4733,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Ahmedabad" )
@@ -4740,7 +4749,7 @@ new google.maps.LatLng(28.632743,77.219597)
                 position: latLng,
                 map: map,
                 title: "Delhi",
-                icon: 'images/cocacola-map-marker-red.png',
+                icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
 
@@ -4754,8 +4763,40 @@ new google.maps.LatLng(28.632743,77.219597)
                 infoWindow.open(map, marker);
                 
                 });
+                markers.push(marker);
                 })(marker);
             } 
+            else if( $scope.selectedCityForSales == "Kolkata" )
+            {	
+                latLng = new google.maps.LatLng(22.657698, 88.348537); 	
+                	  
+                map.setCenter({lat:22.657698,lng: 88.348537});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Kolkata",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                    
+                infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            
         }
     };
 
@@ -4828,7 +4869,7 @@ new google.maps.LatLng(28.632743,77.219597)
             position: latLng,
             map: map,
             title: jsonObject.name,
-            icon: 'images/cocacola-map-marker-yellow.png',
+            icon: 'images/purple.png',
             mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
             });
 
@@ -4879,7 +4920,7 @@ new google.maps.LatLng(28.632743,77.219597)
             position: latLng,
             map: map,
             title: jsonObject.name,
-            icon: 'images/cocacola-map-marker-blue.png',
+            icon: 'images/pink.png',
             mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
             });
 
@@ -4930,7 +4971,7 @@ new google.maps.LatLng(28.632743,77.219597)
             position: latLng,
             map: map,
             title: jsonObject.name,
-            icon: 'images/cocacola-map-marker-red.png',
+            icon: 'images/green.png',
             mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
             });
 
@@ -4981,7 +5022,7 @@ new google.maps.LatLng(28.632743,77.219597)
             position: latLng,
             map: map,
             title: jsonObject.name,
-            icon: 'images/cocacola-map-marker-green.png',
+            icon: 'images/blue.png',
             mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
             });
 
@@ -5020,114 +5061,6 @@ new google.maps.LatLng(28.632743,77.219597)
             })(marker, jsonObject);
         }
 
-
-        // if( jsonObject.name == "All Stores" )
-        // {
-        //     $scope.showStorePlaceTypes = true;
-        //     $scope.clearAllPlacesMarkers();
-        //     $scope.showAllLocations();
-        // }
-        // else if ($scope.SelectedCountry == "Singapore" && jsonObject.country == "Singapore")
-        // {
-
-        //     $scope.showStorePlaceTypes = true;
-        //     $scope.clearIndiaMarkers();
-        //     latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
-        //     bounds  = new google.maps.LatLngBounds();
-        //     bounds.extend(latLng);
-    
-        //     // Creating a marker and putting it on the map
-        //     var marker = new google.maps.Marker({
-        //     position: latLng,
-        //     map: map,
-        //     title: jsonObject.name,
-        //     icon: 'images/cocacola-map-marker.png',
-        //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-        //     });
-
-        //     /*var GLOBE_WIDTH = 256; // a constant in Google's map projection
-        //     var west = sw.lng();
-        //     var east = ne.lng();
-        //     var angle = east - west;
-        //     if (angle < 0) {
-        //     angle += 360;
-        //     }
-        //     var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);*/
-
-        //     map.fitBounds(bounds);      
-        //     map.panToBounds(bounds); 
-
-        //     if(map.getZoom()> 14)
-        //     {
-        //         map.setZoom(14);
-        //     }
-
-        //     var trafficLayer = new google.maps.TrafficLayer();
-        //     trafficLayer.setMap(map);
-
-        //     infoWindow = new google.maps.InfoWindow();
-        //     (function(marker, storeData) {
-
-        //     // Attaching a click event to the current marker
-        //     google.maps.event.addListener(marker, "click", function(e) {
-        //     infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
-        //     infoWindow.open(map, marker);
-
-        //     });
-
-        //     markers.push(marker);
-
-        //     })(marker, jsonObject);
-            
-        // }
-        // else if ($scope.SelectedCountry == "Indonesia" && jsonObject.country == "Indonesia")
-        // {
-        //     $scope.showStorePlaceTypes = true;
-        //     $scope.clearIndonesiaMarker();
-        //     latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
-            
-        //     //map.setCenter({lat:2.989762,lng: 107.758269});
-        //     //map.setZoom(5);
-
-        //     bounds  = new google.maps.LatLngBounds();
-        //     //loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-        //     bounds.extend(latLng);
-    
-        //     // Creating a marker and putting it on the map
-        //     var marker = new google.maps.Marker({
-        //     position: latLng,
-        //     map: map,
-        //     title: jsonObject.name,
-        //     icon: 'images/cocacola-map-marker.png',
-        //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-        //     });
-
-        //     map.fitBounds(bounds);      
-        //     map.panToBounds(bounds); 
-
-        //     if(map.getZoom()> 14)
-        //     {
-        //         map.setZoom(14);
-        //     }
-
-        //     var trafficLayer = new google.maps.TrafficLayer();
-        //     trafficLayer.setMap(map);
-
-        //     infoWindow = new google.maps.InfoWindow();
-        //     (function(marker, storeData) {
-
-        //     // Attaching a click event to the current marker
-        //     google.maps.event.addListener(marker, "click", function(e) {
-        //     infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
-        //     infoWindow.open(map, marker);
-
-        //     });
-
-        //     indonesiaMarkers.push(marker);
-
-        //     })(marker, jsonObject);
-
-        // }
 
 
         var storeLatLng = { lat : jsonObject.latitude , lng : jsonObject.longitude};

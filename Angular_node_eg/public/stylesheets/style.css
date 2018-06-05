@@ -572,7 +572,7 @@ pre{
 
 .form-block2 {
     position: absolute;
-    top: 25%;
+    top: 30%;
     width: 250px;
     height: 490px;
     right: 20px;
@@ -581,7 +581,7 @@ pre{
 
 .form-block1 {
     position: absolute;
-    top: 25%;
+    top: 30%;
     width: 250px;
     height: 490px;
     left: 20px;
@@ -629,17 +629,25 @@ pre{
   /* Float the link section to the right */
   .header-right {
     float: right;
+    position: absolute;
+    z-index: 120;
+    right: 0px;
   }
 
   .custom-button{
     width: 100%;
-    margin: 10px 0;
+    margin: 5px 0;
     padding: 10px;
     font-size: 18px;
     font-weight: 900;
     color: #fff;
-    background: rgb(141, 100, 202);
+    background: rgb(67, 181, 230);
    
+  }
+
+  .info-window1 {
+    position: relative;
+    z-index: 110;
   }
   
   /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */ 
