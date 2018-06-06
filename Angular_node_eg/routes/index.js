@@ -39,7 +39,7 @@ router.get('/searceBIplatform', function (req, res, next) {
 });
 
 //BIdemo page
-router.get('/bidemo', function (req, res, next) {
+router.get('/biplatformdemo', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../', 'views', 'bidemo.html'));
 });
 
