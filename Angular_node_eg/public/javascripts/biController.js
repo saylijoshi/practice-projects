@@ -27,6 +27,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     var subcategoryFruitsAndVegetablesmarkers = [];
     var subcategoryBabyCaremarkers = [];
     var subcategoryCerealsmarkers = [];
+    var cityAndRegionMarkers = [];
     var jsonObject;
     var infoWindow,infowindow2,infoWindownRadius,infowindowplacesmarker;
     var directionsDisplayCollection = [],infowindowsCollection = [];
@@ -44,7 +45,8 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
     $scope.countries =
     [
-        {"name":"India", "selected":false}
+        {"name":"India", "selected":false},
+        {"name":"", "selected":false}
     ]
 
     $scope.cities =
@@ -211,13 +213,17 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     {
         $.getJSON('/getBIData', {}, function (data) {
 
+            console.log("---showCatergorisedLocations---:");
+
         $scope.clearIndiaMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
         $scope.storeNames.length = 0;  
 
         //checking and assiging values got from callback( index and event )
         if(index!= -1)
         $scope.categories[index].checked = event.target.checked;
-
 
         //Set Center - When user returns from store details, need to set this.
         map.setCenter({lat:23.492690,lng: 78.680398});
@@ -232,11 +238,12 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
             for (var j = 0, categoryArraylength = $scope.categories.length; j < categoryArraylength; j++) 
             {
                 selectedCategoryName = $scope.categories[j].name;
-
+                console.log("---selectedCategoryName---:",selectedCategoryName);
                 if($scope.categories[j].checked)
                 {        
                     if( selectedCategoryName == "POS" && typeName == "pos" )
                     {
+                        console.log("---inPOS---:");
                         userSelectedCategoryName = "POS";
                         $scope.storeNames.push(cocacolaStoreData);
 
@@ -250,16 +257,20 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        //infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                        infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
                                             + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+
                         infoWindow.open(map, marker);
                         });
 
@@ -281,12 +292,13 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -312,12 +324,13 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -343,12 +356,13 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -438,12 +452,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -474,12 +489,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -510,12 +526,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -545,12 +562,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -577,12 +595,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent('<h3>' + cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -609,12 +628,13 @@ $scope.showSubCatergorisedLocations = function (event,index)
                         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                         });
 
-                        infoWindow = new google.maps.InfoWindow();
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                         (function(marker, cocacolaStoreData) {
 
                         // Attaching a click event to the current marker
                         google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent('<h3>' +cocacolaStoreData.name + '</h3>'
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                            + '<h3>' + cocacolaStoreData.name + '</h3>'
                             + "<br/>" + "Address: " + cocacolaStoreData.address 
                             + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
                             + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
@@ -693,10 +713,27 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
 $scope.countryChange = function()
 {
+    
+    $scope.clearAllCategoryMarkers();
+    $scope.clearAllSubcategoryMarkers();
+    $scope.clearAllPlacesMarkers();
+    $scope.clearCityAndRegionMarker();
+    $scope.storeNames.length = 0; 
+    $scope.showStorePlaceTypes = false;
+    for (var i = 0, length = $scope.categories.length; i < length; i++) 
+    {
+        $scope.categories[i].checked = false;
+    }
+
     if( $scope.SelectedCountry == "India" )
     {
         $scope.clearIndiaMarkers();
         $scope.showAllLocations();
+    }
+    else
+    {
+        map.setCenter({lat:23.492690,lng: 78.680398});
+        map.setZoom(5);
     }
 }
 
@@ -730,16 +767,18 @@ $scope.countryChange = function()
                     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                     });
 
-                    infoWindow = new google.maps.InfoWindow();
+                    infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
                     (function(marker, storeData) {
 
                     // Attaching a click event to the current marker
                     google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + storeData.name + '</h3>'+ "<br/>" + storeData.address + "<br/>" + storeData.contact);
+                        infoWindow.setContent("<div style='float:left'><img src='images/"+ storeData.imagename + "'>" 
+                        + '<h3>' + storeData.name + '</h3>'
+                        + "<br/>" + "Address: " + storeData.address 
+                        + "<br/>" + "Contact No: " + storeData.contact 
+                        + "<br/>" + "Operating Hours: " +storeData.timing
+                        + "<br/>" + "Available Products: " +storeData.productclassification);
                     infoWindow.open(map, marker);
-                    //$scope.clearDirection();
-                    dirLatLng = { lat : storeData.latitude , lng : storeData.longitude};
-                    //$scope.showDirections(myLatLng,dirLatLng,storeData );
 
                     });
 
@@ -771,11 +810,15 @@ $scope.countryChange = function()
 
     $scope.clearIndiaMarkers = function()
     {
-        for (var key in markers) 
+        if( markers != null )
         {
-            markers[key].setMap(null);
-        };
-
+            for (var key in markers) 
+            {
+                //markers[key].setMap(null);
+                markers =[];
+            };
+        }
+        
         if( countryMarkerCluster != null )
         {
             countryMarkerCluster.length = 0;
@@ -800,6 +843,14 @@ $scope.countryChange = function()
         $scope.clearMovieTheatersMarkers();
         $scope.clearMealTakewayMarkers();
         $scope.clearSuperMarketsMarker();
+    };
+
+    $scope.clearCityAndRegionMarker = function()
+    {
+        for (var key in cityAndRegionMarkers) 
+        {
+            cityAndRegionMarkers[key].setMap(null);
+        };
     };
 
     $scope.clearRestaurantsMarker = function()
@@ -1919,7 +1970,7 @@ $scope.countryChange = function()
                 infoWindow.setContent("<div><img src='images/1.png'></div>");
                 infoWindow.open(map, marker);
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             }
             else if( $scope.selectedCity == "Bengaluru" )
@@ -1948,7 +1999,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Mumbai" )
@@ -1977,7 +2028,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Chennai" )
@@ -2006,7 +2057,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Pune" )
@@ -2035,7 +2086,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Indore" )
@@ -2064,7 +2115,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Ahmedabad" )
@@ -2092,7 +2143,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCity == "Kolkata" )
@@ -2120,7 +2171,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
         }
@@ -2151,7 +2202,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             }
             else if( $scope.selectedCityForSales == "Bengaluru" )
@@ -2180,7 +2231,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Mumbai" )
@@ -2210,7 +2261,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Chennai" )
@@ -2241,7 +2292,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Pune" )
@@ -2272,7 +2323,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Indore" )
@@ -2303,7 +2354,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Ahmedabad" )
@@ -2333,7 +2384,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             else if( $scope.selectedCityForSales == "Kolkata" )
@@ -2363,7 +2414,7 @@ $scope.countryChange = function()
                 infoWindow.open(map, marker);
                 
                 });
-                markers.push(marker);
+                cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
             
@@ -2381,9 +2432,6 @@ $scope.countryChange = function()
         {
             $scope.categories[i].checked = false;
         }
-
-        //trafficLayer.setMap(null);
-
 
         if(map.getZoom()> 12)
             {
@@ -2460,17 +2508,22 @@ $scope.countryChange = function()
                 map.setZoom(14);
             }
 
-            infoWindow = new google.maps.InfoWindow();
+            infoWindow = new google.maps.InfoWindow({maxWidth:290});
             (function(marker, storeData) {
 
             // Attaching a click event to the current marker
             google.maps.event.addListener(marker, "click", function(e) {
-            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
+                infoWindow.setContent("<div style='float:left'><img src='images/"+ jsonObject.imagename + "'>" 
+                + '<h3>' + jsonObject.name + '</h3>'
+                + "<br/>" + "Address: " + jsonObject.address 
+                + "<br/>" + "Contact No: " + jsonObject.contact 
+                + "<br/>" + "Operating Hours: " +jsonObject.timing
+                + "<br/>" + "Available Products: " +jsonObject.productclassification);
             infoWindow.open(map, marker);
 
             });
 
-            markers.push(marker);
+            cityAndRegionMarkers.push(marker);
 
             })(marker, jsonObject);
         }
@@ -2499,17 +2552,22 @@ $scope.countryChange = function()
                 map.setZoom(14);
             }
 
-            infoWindow = new google.maps.InfoWindow();
+            infoWindow = new google.maps.InfoWindow({maxWidth:290});
             (function(marker, storeData) {
 
             // Attaching a click event to the current marker
             google.maps.event.addListener(marker, "click", function(e) {
-            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
+                infoWindow.setContent("<div style='float:left'><img src='images/"+ jsonObject.imagename + "'>" 
+                + '<h3>' + jsonObject.name + '</h3>'
+                + "<br/>" + "Address: " + jsonObject.address 
+                + "<br/>" + "Contact No: " + jsonObject.contact 
+                + "<br/>" + "Operating Hours: " +jsonObject.timing
+                + "<br/>" + "Available Products: " +jsonObject.productclassification);
             infoWindow.open(map, marker);
 
             });
 
-            markers.push(marker);
+            cityAndRegionMarkers.push(marker);
 
             })(marker, jsonObject);
         }
@@ -2538,17 +2596,22 @@ $scope.countryChange = function()
                 map.setZoom(14);
             }
 
-            infoWindow = new google.maps.InfoWindow();
+            infoWindow = new google.maps.InfoWindow({maxWidth:290});
             (function(marker, storeData) {
 
             // Attaching a click event to the current marker
             google.maps.event.addListener(marker, "click", function(e) {
-            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
+                infoWindow.setContent("<div style='float:left'><img src='images/"+ jsonObject.imagename + "'>" 
+                + '<h3>' + jsonObject.name + '</h3>'
+                + "<br/>" + "Address: " + jsonObject.address 
+                + "<br/>" + "Contact No: " + jsonObject.contact 
+                + "<br/>" + "Operating Hours: " +jsonObject.timing
+                + "<br/>" + "Available Products: " +jsonObject.productclassification);
             infoWindow.open(map, marker);
 
             });
 
-            markers.push(marker);
+            cityAndRegionMarkers.push(marker);
 
             })(marker, jsonObject);
         }
@@ -2577,17 +2640,22 @@ $scope.countryChange = function()
                 map.setZoom(14);
             }
 
-            infoWindow = new google.maps.InfoWindow();
+            infoWindow = new google.maps.InfoWindow({maxWidth:290});
             (function(marker, storeData) {
 
             // Attaching a click event to the current marker
             google.maps.event.addListener(marker, "click", function(e) {
-            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
-            infoWindow.open(map, marker);
+                infoWindow.setContent("<div style='float:left'><img src='images/"+ jsonObject.imagename + "'>" 
+                + '<h3>' + jsonObject.name + '</h3>'
+                + "<br/>" + "Address: " + jsonObject.address 
+                + "<br/>" + "Contact No: " + jsonObject.contact 
+                + "<br/>" + "Operating Hours: " +jsonObject.timing
+                + "<br/>" + "Available Products: " +jsonObject.productclassification);
+                infoWindow.open(map, marker);
 
             });
 
-            markers.push(marker);
+            cityAndRegionMarkers.push(marker);
 
             })(marker, jsonObject);
         }
