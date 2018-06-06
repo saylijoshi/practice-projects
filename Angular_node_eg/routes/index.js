@@ -29,9 +29,9 @@ router.get('/places', function (req, res, next) {
 });
 
 //cocacola page
-router.get('/demo', function (req, res, next) {
-    res.sendFile(path.join(__dirname, '../', 'views', 'cocacola.html'));
-});
+// router.get('/demo', function (req, res, next) {
+//     res.sendFile(path.join(__dirname, '../', 'views', 'cocacola.html'));
+// });
 
 //BIdemo home page
 router.get('/searceBIplatform', function (req, res, next) {
@@ -39,7 +39,7 @@ router.get('/searceBIplatform', function (req, res, next) {
 });
 
 //BIdemo page
-router.get('/biplatformdemo', function (req, res, next) {
+router.get('/demo', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../', 'views', 'bidemo.html'));
 });
 
