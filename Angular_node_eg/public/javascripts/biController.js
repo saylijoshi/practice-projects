@@ -754,6 +754,2063 @@ $scope.countryChange = function()
         });
     };
 
+    $scope.showHeatMap = function()
+    {
+        var latlng = new google.maps.LatLng(1.322532, 103.808953);
+        map = new google.maps.Map(document.getElementById('mymap'), {
+        center: latlng,
+        zoom: 11,
+        //mapTypeId: 'satellite'
+        });
+
+        heatmap = new google.maps.visualization.HeatmapLayer({
+        data: $scope.getPoints(),
+        map: map
+        });
+    }
+
+    $scope.clearIndiaMarkers = function()
+    {
+        for (var key in markers) 
+        {
+            markers[key].setMap(null);
+        };
+
+        if( countryMarkerCluster != null )
+        {
+            countryMarkerCluster.length = 0;
+            countryMarkerCluster.clearMarkers();
+        }
+        
+    };
+
+    $scope.clearAllPlacesMarkers = function()
+    {
+        $scope.clearRestaurantsMarker();
+        $scope.clearAirportMarkers();
+        $scope.clearBarMarkers();
+        $scope.clearBusstationMarkers();
+        $scope.clearCafeMarkers();
+        $scope.clearCasinoMarkers();
+        $scope.clearParkMarkers();
+        $scope.clearSubwayMarker();
+        $scope.clearShoppingMallMarker();
+        $scope.clearNightClubsMarker();
+        $scope.clearLiquorStoreMarkers();
+        $scope.clearMovieTheatersMarkers();
+        $scope.clearMealTakewayMarkers();
+        $scope.clearSuperMarketsMarker();
+    };
+
+    $scope.clearRestaurantsMarker = function()
+    {
+        for (var key in restaurantsMarkers) 
+        {
+            restaurantsMarkers[key].setMap(null);
+        };
+        //restaurantsMarkers.length = 0;
+
+        //if (countryMarkerCluster!=null)
+        //countryMarkerCluster.clearMarkers();
+    };
+
+    $scope.clearAirportMarkers = function()
+    {
+        for (var key in airportMarkers) 
+        {
+            airportMarkers[key].setMap(null);
+        };
+        //airportMarkers.length = 0;
+       // airportMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearBarMarkers = function()
+    {
+        for (var key in barMarkers) 
+        {
+            barMarkers[key].setMap(null);
+        };
+        //barMarkers.length = 0;
+       // barMarkersCluster.clearMarkers();
+
+    };
+
+    $scope.clearBusstationMarkers = function()
+    {
+        for (var key in busstationMarkers) 
+        {
+            busstationMarkers[key].setMap(null);
+        };
+        //busstationMarkers.length = 0;
+        //busstationMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearCafeMarkers = function()
+    {
+        for (var key in cafeMarkers) 
+        {
+            cafeMarkers[key].setMap(null);
+        };
+        //cafeMarkers.length = 0;
+        //cafeMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearCasinoMarkers = function()
+    {
+        for (var key in casinoMarkers) 
+        {
+            casinoMarkers[key].setMap(null);
+        };
+        //casinoMarkers.length = 0;
+        //casinoMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearParkMarkers = function()
+    {
+        for (var key in parkMarkers) 
+        {
+            parkMarkers[key].setMap(null);
+        };
+        //parkMarkers.length = 0;
+        //parkMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearSubwayMarker = function()
+    {
+        
+        for (var key in subwayMarkers) 
+        {
+            subwayMarkers[key].setMap(null);
+        };
+        //subwayMarkers.length = 0;
+        //subwayMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearShoppingMallMarker = function()
+    {
+        
+        for (var key in shoppingMallMarkers) 
+        {
+            shoppingMallMarkers[key].setMap(null);
+        };
+        //shoppingMallMarkers.length = 0;
+        //shoppingMallMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearNightClubsMarker = function()
+    {
+
+        for (var key in nightClubsMarkers) 
+        {
+            nightClubsMarkers[key].setMap(null);
+        };
+       // nightClubsMarkers.length = 0;
+       // nightClubsMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearSuperMarketsMarker = function()
+    {
+        for (var key in superMarketMarkers) 
+        {
+            superMarketMarkers[key].setMap(null);
+        };
+        //superMarketMarkers.length = 0;
+        //superMarketMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearLiquorStoreMarkers = function()
+    {
+        for (var key in liquorStoreMarkers) 
+        {
+            liquorStoreMarkers[key].setMap(null);
+        };
+        //liquorStoreMarkers.length = 0;
+        //liquorStoreMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearMovieTheatersMarkers = function()
+    {
+        for (var key in movietheatermarkers) 
+        {
+            movietheatermarkers[key].setMap(null);
+        };
+        //movietheatermarkers.length = 0;
+       // movietheatermarkersCluster.clearMarkers();
+    };
+
+    $scope.clearMealTakewayMarkers = function()
+    {
+        for (var key in MealTakeAwayMarkers) 
+        {
+            MealTakeAwayMarkers[key].setMap(null);
+        };
+       // MealTakeAwayMarkers.length = 0;
+        //MealTakeAwayMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearAllCategoryMarkers = function()
+    {
+        $scope.clearCategoryPOSMarkers();
+        $scope.clearCategoryProductionCentresMarkers();
+        $scope.clearCategoryWarehouseMarkers();
+        $scope.clearDistributionCentreMarkers();
+    }
+
+    $scope.clearCategoryPOSMarkers = function()
+    {
+        for (var key in categoryPOSmarkers) 
+        {
+            categoryPOSmarkers[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryProductionCentresMarkers = function()
+    {
+        for (var key in categoryProductionCentresMarker) 
+        {
+            categoryProductionCentresMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryWarehouseMarkers = function()
+    {
+        for (var key in categoryWarehouseMarker) 
+        {
+            categoryWarehouseMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearDistributionCentreMarkers = function()
+    {
+        for (var key in categoryDistributionCentreMarker) 
+        {
+            categoryDistributionCentreMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearAllCategoryMarkers = function()
+    {
+        $scope.clearCategoryPOSMarkers();
+        $scope.clearCategoryProductionCentresMarkers();
+        $scope.clearCategoryWarehouseMarkers();
+        $scope.clearDistributionCentreMarkers();
+    }
+
+    $scope.clearSubcategoryBeautyAndHygienemarkers = function()
+    {
+        for (var key in subcategoryBeautyAndHygienemarkers) 
+        {
+            subcategoryBeautyAndHygienemarkers[key].setMap(null);
+        };
+    };
+
+    $scope.clearSubcategoryBakeryAndCakesmarkers = function()
+    {
+        for (var key in subcategoryBakeryAndCakesmarkers) 
+        {
+            subcategoryBakeryAndCakesmarkers[key].setMap(null);
+        };
+    };
+
+    $scope.clearSubcategoryCleaningAndHouseholdmarkers = function()
+    {
+        for (var key in subcategoryCleaningAndHouseholdmarkers) 
+        {
+            subcategoryCleaningAndHouseholdmarkers[key].setMap(null);
+        };
+    };
+
+    $scope.clearSubcategoryFruitsAndVegetablesmarkers = function()
+    {
+        for (var key in subcategoryFruitsAndVegetablesmarkers) 
+        {
+            subcategoryFruitsAndVegetablesmarkers[key].setMap(null);
+        };
+    };
+
+    $scope.clearSubcategoryCerealsmarkers = function()
+    {
+        for (var key in subcategoryCerealsmarkers) 
+        {
+            subcategoryCerealsmarkers[key].setMap(null);
+        };
+    };
+
+    $scope.clearSubcategoryBabyCaremarkers = function()
+    {
+        for (var key in subcategoryBabyCaremarkers) 
+        {
+            subcategoryBabyCaremarkers[key].setMap(null);
+        };
+    };
+
+    $scope.clearAllSubcategoryMarkers = function()
+    {
+        $scope.clearSubcategoryBeautyAndHygienemarkers();
+        $scope.clearSubcategoryBakeryAndCakesmarkers();
+        $scope.clearSubcategoryCleaningAndHouseholdmarkers();
+        $scope.clearSubcategoryFruitsAndVegetablesmarkers();
+        $scope.clearSubcategoryCerealsmarkers();
+        $scope.clearSubcategoryBabyCaremarkers();
+    };
+
+
+    $scope.clearRadius = function()
+    {
+        if (radius_circle) 
+        {
+            radius_circle.setMap(null);
+            radius_circle = null;
+        }
+    };
+
+    $scope.clearDirection = function()
+    {
+        if (directionsDisplayCollection != null) 
+        {
+            for (var i = 0; i < directionsDisplayCollection.length; i++) 
+            {
+                directionsDisplayCollection[i].setMap(null);
+                directionsDisplayCollection[i] = null;
+            }
+            directionsDisplayCollection = [];
+        }
+    };
+
+    $scope.clearInfoWindow = function()
+    {
+        if(infowindowsCollection != null)
+        {
+            for(var j = 0; j < infowindowsCollection.length; j++)
+            {
+                console.log(j);
+                infowindowsCollection[j].close();
+            }
+            infowindowsCollection = [];
+        }
+    };
+
+    $scope.showDirections = function(start, end, locationObject)
+    {
+        $scope.clearDirection();
+        $scope.clearInfoWindow();
+        $scope.clearRadius();
+
+        var directionsService = new google.maps.DirectionsService();
+        var directionsDisplay = new google.maps.DirectionsRenderer();
+            
+        request = {
+            origin: start,
+            destination: end,
+            travelMode: google.maps.DirectionsTravelMode.DRIVING
+        };
+
+        directionsService.route(request, function (response, status) 
+        {
+            if (status == google.maps.DirectionsStatus.OK) 
+            {
+            var directionsDisplay = new google.maps.DirectionsRenderer(
+                {
+                    suppressMarkers: true
+                }
+            );
+            directionsDisplay.setMap(map);
+            directionsDisplay.setOptions({ preserveViewport: true });
+            directionsDisplay.setDirections(response);
+            directionsDisplayCollection.push(directionsDisplay);
+            directionsDisplay.setPanel(document.getElementById('directionsList'));
+
+            
+            infowindow2 = new google.maps.InfoWindow();
+
+            infowindow2.setContent(locationObject.name + "<br>" 
+            +locationObject.address + "<br>" 
+            +response.routes[0].legs[0].distance.text + "<br>" 
+            +response.routes[0].legs[0].duration.text + " ");
+            if (response.routes) 
+            {
+                if (response.routes[0].overview_path) {
+                    var index = parseInt(response.routes[0].overview_path.length / 2);
+                    //var infoposition = new google.maps.LatLng(response.routes[0].overview_path[index].lat(), response.routes[0].overview_path[index].lng());
+                }
+            }
+            //infowindow2.setPosition(infoposition ? infoposition : end);
+            infowindow2.open(map);
+            infowindowsCollection.push(infowindow2);
+            }
+            else
+            {
+
+            console.log(" Direction Not found : " ) + start + " , " + end;
+            }
+            });
+    };
+
+    $scope.restaurantCallback = function(results, status)
+    {
+       // var restaurantsCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForRestaurant(results[i]);
+        }
+        }
+       
+        // countryMarkerCluster = new MarkerClusterer(map, restaurantsMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.airportCallback = function(results, status)
+    {
+        //var airportCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForAirport(results[i]);
+        }
+        }
+        // airportMarkersCluster = new MarkerClusterer(map, airportMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.barCallback = function(results, status)
+    {
+        //var barCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForBar(results[i]);
+        }
+        }
+        // barMarkersCluster = new MarkerClusterer(map, barMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.busStationCallback = function(results, status)
+    {
+       // var busCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForBusStop(results[i]);
+        }
+        }
+        // busstationMarkersCluster = new MarkerClusterer(map, busstationMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.cafeCallback = function(results, status)
+    {
+        //var cafeCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForCafe(results[i]);
+        }
+        }
+        // cafeMarkersCluster = new MarkerClusterer(map, cafeMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.casinoCallback = function(results, status)
+    {
+        //var casinoCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForCasino(results[i]);
+        }
+        }
+        // casinoMarkersCluster = new MarkerClusterer(map, casinoMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.liquorStoreCallback = function(results, status)
+    {
+        //var liquorStoreCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForLiquor(results[i]);
+        }
+        }
+        // liquorStoreMarkersCluster = new MarkerClusterer(map, liquorStoreMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.mealTakeawayCallback = function(results, status)
+    {
+        //var mealTakeAwayCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForMealTakeAway(results[i]);
+        }
+        }
+        // MealTakeAwayMarkersCluster = new MarkerClusterer(map, MealTakeAwayMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.movieTheaterCallback = function(results, status)
+    {
+        //var movieTheaterCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForMovieTheater(results[i]);
+        }
+        }
+        
+        // movietheatermarkersCluster = new MarkerClusterer(map, movietheatermarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.nightClubCallback = function(results, status)
+    {
+        //var nightClubCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForNightClubs(results[i]);
+        }
+        }
+        // nightClubsMarkersCluster = new MarkerClusterer(map, nightClubsMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.parkCallback = function(results, status)
+    {
+        //var parkCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForPark(results[i]);
+        }
+        }
+        // parkMarkersCluster = new MarkerClusterer(map, parkMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.supermarketCallback = function(results, status)
+    {
+        //var superMarketCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForSuperMarket(results[i]);
+        }
+        }
+        // superMarketMarkersCluster = new MarkerClusterer(map, superMarketMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.subwayCallback = function(results, status)
+    {
+        //var subwayCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForSubway(results[i]);
+        }
+        }
+        // subwayMarkersCluster = new MarkerClusterer(map, subwayMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.shoppingmallCallback = function(results, status)
+    {
+        //var shoppingMallCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+        google.maps.places.type
+        for (var i = 0; i < results.length; i++) 
+        {
+            $scope.createPlacesMarkerForShoppingMall(results[i]);
+        }
+        }
+        // shoppingMallMarkersCluster = new MarkerClusterer(map, shoppingMallMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.createPlacesMarkerForRestaurant = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/restaurant.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+    
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+        infowindowplacesmarker.setContent( "Name     : " + place.name
+                                        + "<br>" + "Ratings     : " + place.rating
+                                        + "<br>" + "Address     : " + place.formatted_address
+                                        + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                        + "<br>" + "Vicinity    : " + place.vicinity
+                                        + "<br>" + "Website     : " + place.website
+                                        + "<br>" + "International Number: " + place.international_phone_number
+                                        + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                        + "<br>" + "Place Id    : " + place.place_id
+                                        //+ "<br>" + "Reviews    : " + place.reviews[0].text
+                                    );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        restaurantsMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForPark = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/restaurant.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        parkMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForNightClubs = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/restaurant.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        nightClubsMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForCasino = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/casino-2.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        casinoMarkers.push(restaurantMarker); 
+    };
+
+
+    $scope.createPlacesMarkerForLiquor = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/liquor.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        liquorStoreMarkers.push(restaurantMarker); 
+    };
+
+
+    $scope.createPlacesMarkerForAirport = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/airport.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+        infowindowplacesmarker.setContent( "Name     : " + place.name
+                                        + "<br>" + "Ratings     : " + place.rating);
+                                        //+ "<br>" + "Address     : " + place.formatted_address
+                                        //+ "<br>" + "Phone Number: " + place.formatted_phone_number);
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        airportMarkers.push(restaurantMarker); 
+    };
+
+
+    $scope.createPlacesMarkerForBusStop = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/busstop.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        busstationMarkers.push(restaurantMarker); 
+    };
+
+
+    $scope.createPlacesMarkerForBar = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/bar_coktail.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            + "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        barMarkers.push(restaurantMarker); 
+    };
+
+
+    $scope.createPlacesMarkerForSuperMarket = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/supermarket.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            + "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        superMarketMarkers.push(restaurantMarker); 
+    };
+
+    
+
+    $scope.createPlacesMarkerForShoppingMall = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/supermarket.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            + "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        shoppingMallMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForMovieTheater = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/supermarket.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            + "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        movietheatermarkers.push(restaurantMarker); 
+    };
+
+
+    $scope.createPlacesMarkerForCafe = function(place) {
+        $scope.clearInfoWindow();
+        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
+        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
+        var image = 'images/fastfood.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+    
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            + "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        cafeMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForSubway = function(place) {
+        $scope.clearInfoWindow();
+        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
+        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
+        var image = 'images/fastfood.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+    
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            + "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        subwayMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForMealTakeAway = function(place) {
+        $scope.clearInfoWindow();
+        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
+        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
+        var image = 'images/fastfood.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+    
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            + "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        MealTakeAwayMarkers.push(restaurantMarker); 
+    };
+
+
+    $scope.toggleTrafficLayer = function () 
+    {
+        if(trafficLayer.getMap() == null)
+        {
+            //traffic layer is disabled.. enable it
+            trafficLayer.setMap(map);
+        } else 
+        {
+            //traffic layer is enabled.. disable it
+            trafficLayer.setMap(null);             
+        }
+    };
+
+    $scope.regionChange = function () {
+ 
+        $scope.clearIndiaMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
+
+        if( $scope.selectedRegion == "East" )
+        {
+            map.setCenter({lat:22.551296,lng: 88.385557});
+            map.setZoom(10);
+            
+            heatmapEast = new google.maps.visualization.HeatmapLayer({
+            data: $scope.getEastPoints(),
+            map: map
+            });
+
+            heatmapEast.set('radius', heatmapEast.get('radius') ? null : 20);
+        }
+        else if( $scope.selectedRegion == "West" )
+        {   	
+            map.setCenter({lat:18.517116,lng: 73.859531});
+            map.setZoom(10);
+            
+            heatmapWest = new google.maps.visualization.HeatmapLayer({
+            data: $scope.getWestPoints(),
+            map: map
+            });
+            heatmapWest.set('radius', heatmapWest.get('radius') ? null : 20);
+        } 
+        else if( $scope.selectedRegion == "South" )
+        {
+            map.setCenter({lat:12.973054,lng: 77.584958});
+            map.setZoom(10);
+            
+            heatmapSouth = new google.maps.visualization.HeatmapLayer({
+            data: $scope.getSouthPoints(),
+            map: map
+            });
+            heatmapSouth.set('radius', heatmapSouth.get('radius') ? null : 20);
+        } 
+        else if( $scope.selectedRegion == "North" )
+        {
+            map.setCenter({lat:28.624982,lng: 77.185231});
+            map.setZoom(8);
+            
+            heatmapNorth = new google.maps.visualization.HeatmapLayer({
+            data: $scope.getNorthPoints(),
+            map: map
+            });
+            heatmapNorth.set('radius', heatmapNorth.get('radius') ? null : 20);
+        } 
+        
+    };
+
+    $scope.cityChange = function (value) {
+
+        $scope.clearIndiaMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
+
+        if ( value == 0 )
+        {
+            if( $scope.selectedCity == "Delhi" )
+            {
+                latLng = new google.maps.LatLng(28.624982, 77.185231); 
+                	  
+                map.setCenter({lat:28.624982,lng: 77.185231});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/1.png'></div>");
+                infoWindow.open(map, marker);
+                });
+                markers.push(marker);
+                })(marker);
+            }
+            else if( $scope.selectedCity == "Bengaluru" )
+            {
+                //12.973054	77.584958
+                latLng = new google.maps.LatLng(12.973054, 77.584958); 
+                	  
+                map.setCenter({lat:12.973054,lng: 77.584958});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div class='info-window1'><img src='images/2.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Mumbai" )
+            {
+                //19.070517	72.877055
+                latLng = new google.maps.LatLng(19.070517, 72.877055); 
+                	  
+                map.setCenter({lat:19.070517,lng: 72.877055});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/3.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Chennai" )
+            {
+                //13.066886	80.19252
+                latLng = new google.maps.LatLng(13.066886, 80.19252); 
+                	  
+                map.setCenter({lat:13.066886,lng: 80.19252});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/4.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Pune" )
+            {
+                //18.517116	73.859531
+                latLng = new google.maps.LatLng(18.517116, 73.859531); 
+                	  
+                map.setCenter({lat:18.517116,lng: 73.859531});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/5.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Indore" )
+            {
+                //	
+                latLng = new google.maps.LatLng(22.716753, 75.856801); 
+                	  
+                map.setCenter({lat:22.716753,lng: 75.856801});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/6.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Ahmedabad" )
+            {	
+                latLng = new google.maps.LatLng(23.049881, 72.605137); 
+                	  
+                map.setCenter({lat:23.049881,lng: 72.605137});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/8.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Kolkata" )
+            {	
+                latLng = new google.maps.LatLng(22.657698, 88.348537); 	
+                	  
+                map.setCenter({lat:22.657698,lng: 88.348537});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Kolkata",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/7.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+        }
+        else if( value == 1 )
+        {
+            if( $scope.selectedCityForSales == "Delhi" )
+            {
+                latLng = new google.maps.LatLng(28.624982, 77.185231); 
+                	  
+                map.setCenter({lat:28.624982,lng: 77.185231});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/sales-delhi.png'></div><div style='float:right;'><img src='images/total-sales-delhi.png'></div>");
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            }
+            else if( $scope.selectedCityForSales == "Bengaluru" )
+            {
+                latLng = new google.maps.LatLng(12.973054, 77.584958); 
+                	  
+                map.setCenter({lat:12.973054,lng: 77.584958});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent("<div><img src='images/sales-bengaluru.png'></div><div style='float:right;'><img src='images/total-sales-bengaluru.png'></div>");
+
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Mumbai" )
+            {
+                //19.070517	72.877055
+                latLng = new google.maps.LatLng(19.070517, 72.877055); 
+                	  
+                map.setCenter({lat:19.070517,lng: 72.877055});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent("<div><img src='images/sales-mumbai.png'></div><div style='float:right;'><img src='images/total-sales-mumbai.png'></div>");
+
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Chennai" )
+            {
+                //13.066886	80.19252
+                latLng = new google.maps.LatLng(13.066886, 80.19252); 
+                	  
+                map.setCenter({lat:13.066886,lng: 80.19252});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                
+                    infoWindow.setContent("<div><img src='images/sales-chennai.png'></div><div style='float:right;'><img src='images/total-sales-chennai.png'></div>");
+
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Pune" )
+            {
+                //18.517116	73.859531
+                latLng = new google.maps.LatLng(18.517116, 73.859531); 
+                	  
+                map.setCenter({lat:18.517116,lng: 73.859531});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                
+                infoWindow.setContent("<div><img src='images/sales-pune.png'></div><div style='float:right;'><img src='images/total-sales-pune.png'></div>");
+
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Indore" )
+            {
+                //	
+                latLng = new google.maps.LatLng(22.716753, 75.856801); 
+                	  
+                map.setCenter({lat:22.716753,lng: 75.856801});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                
+                infoWindow.setContent("<div><img src='images/sales-indore.png'></div><div style='float:right;'><img src='images/total-sales-indore.png'></div>");
+
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Ahmedabad" )
+            {	
+                latLng = new google.maps.LatLng(23.049881, 72.605137); 
+                	  
+                map.setCenter({lat:23.049881,lng: 72.605137});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Delhi",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                    
+                infoWindow.setContent("<div><img src='images/sales-ahmedabad.png'></div><div style='float:right;'><img src='images/total-sales-ahmedabad.png'></div>");
+
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Kolkata" )
+            {	
+                latLng = new google.maps.LatLng(22.657698, 88.348537); 	
+                	  
+                map.setCenter({lat:22.657698,lng: 88.348537});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Kolkata",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                    
+                infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+
+                infoWindow.open(map, marker);
+                
+                });
+                markers.push(marker);
+                })(marker);
+            } 
+            
+        }
+    };
+
+    $scope.getMarketingData = function(event,index){
+        
+        //clear all the markers and checked categories
+        $scope.clearAllPlacesMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearIndiaMarkers();
+       
+        for (var i = 0, length = $scope.categories.length; i < length; i++) 
+        {
+            $scope.categories[i].checked = false;
+        }
+
+        //trafficLayer.setMap(null);
+
+
+        if(map.getZoom()> 12)
+            {
+                map.setZoom(12);
+            }
+        
+
+        if(index!= -1)
+            $scope.marketingTypes[index].checked = event.target.checked;
+           
+        
+        for (var i = 0, length = $scope.marketingTypes.length; i < length; i++) 
+        {
+            if($scope.marketingTypes[i].checked)
+            {
+                var typeName = $scope.marketingTypes[i].name;
+                
+                if( typeName == "Outdoor" )
+                {
+                    //if (heatmap.getMap() == null )
+                    $scope.initHeatMap();
+                }
+            }
+            else
+            {
+                var typeName = $scope.marketingTypes[i].name;
+                
+                if( typeName == "Outdoor" )
+                {
+                    heatmap.setMap(heatmap.getMap() ? null : map);
+                }
+            }
+        }
+    };
+
+    $scope.getData = function(event, index) 
+    {
+        var jsonObject = JSON.parse($scope.selectedStore);
+
+        $scope.clearAllPlacesMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearIndiaMarkers();
+        
+        if (jsonObject.category == "pos")
+        {
+            $scope.showStorePlaceTypes = true;
+            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
+            bounds  = new google.maps.LatLngBounds();
+            bounds.extend(latLng);
+    
+            // Creating a marker and putting it on the map
+            var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: jsonObject.name,
+            icon: 'images/purple.png',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+            });
+
+            /*var GLOBE_WIDTH = 256; // a constant in Google's map projection
+            var west = sw.lng();
+            var east = ne.lng();
+            var angle = east - west;
+            if (angle < 0) {
+            angle += 360;
+            }
+            var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);*/
+
+            map.fitBounds(bounds);      
+            map.panToBounds(bounds); 
+
+            if(map.getZoom()> 14)
+            {
+                map.setZoom(14);
+            }
+
+            infoWindow = new google.maps.InfoWindow();
+            (function(marker, storeData) {
+
+            // Attaching a click event to the current marker
+            google.maps.event.addListener(marker, "click", function(e) {
+            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
+            infoWindow.open(map, marker);
+
+            });
+
+            markers.push(marker);
+
+            })(marker, jsonObject);
+        }
+        else if (jsonObject.category == "productionsentres")
+        {
+            
+            $scope.showStorePlaceTypes = true;
+            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
+            bounds  = new google.maps.LatLngBounds();
+            bounds.extend(latLng);
+    
+            // Creating a marker and putting it on the map
+            var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: jsonObject.name,
+            icon: 'images/pink.png',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+            });
+
+            map.fitBounds(bounds);      
+            map.panToBounds(bounds); 
+
+            if(map.getZoom()> 14)
+            {
+                map.setZoom(14);
+            }
+
+            infoWindow = new google.maps.InfoWindow();
+            (function(marker, storeData) {
+
+            // Attaching a click event to the current marker
+            google.maps.event.addListener(marker, "click", function(e) {
+            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
+            infoWindow.open(map, marker);
+
+            });
+
+            markers.push(marker);
+
+            })(marker, jsonObject);
+        }
+        if (jsonObject.category == "warehouses")
+        {
+            
+            $scope.showStorePlaceTypes = true;
+            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
+            bounds  = new google.maps.LatLngBounds();
+            bounds.extend(latLng);
+    
+            // Creating a marker and putting it on the map
+            var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: jsonObject.name,
+            icon: 'images/green.png',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+            });
+
+            map.fitBounds(bounds);      
+            map.panToBounds(bounds); 
+
+            if(map.getZoom()> 14)
+            {
+                map.setZoom(14);
+            }
+
+            infoWindow = new google.maps.InfoWindow();
+            (function(marker, storeData) {
+
+            // Attaching a click event to the current marker
+            google.maps.event.addListener(marker, "click", function(e) {
+            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
+            infoWindow.open(map, marker);
+
+            });
+
+            markers.push(marker);
+
+            })(marker, jsonObject);
+        }
+        if (jsonObject.category == "distributioncentre")
+        {
+            
+            $scope.showStorePlaceTypes = true;
+            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
+            bounds  = new google.maps.LatLngBounds();
+            bounds.extend(latLng);
+    
+            // Creating a marker and putting it on the map
+            var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: jsonObject.name,
+            icon: 'images/blue.png',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+            });
+
+            map.fitBounds(bounds);      
+            map.panToBounds(bounds); 
+
+            if(map.getZoom()> 14)
+            {
+                map.setZoom(14);
+            }
+
+            infoWindow = new google.maps.InfoWindow();
+            (function(marker, storeData) {
+
+            // Attaching a click event to the current marker
+            google.maps.event.addListener(marker, "click", function(e) {
+            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
+            infoWindow.open(map, marker);
+
+            });
+
+            markers.push(marker);
+
+            })(marker, jsonObject);
+        }
+
+
+
+        var storeLatLng = { lat : jsonObject.latitude , lng : jsonObject.longitude};
+
+        //checking and assiging values got from callback( index nad event )
+        if(index!= -1)
+            $scope.placetypes[index].checked = event.target.checked;
+        
+        for (var i = 0, length = $scope.placetypes.length; i < length; i++) 
+        {
+            if($scope.placetypes[i].checked)
+            {
+                var typeName = $scope.placetypes[i].name;
+                if( typeName == "Restaurants" )
+                {
+                    var service = new google.maps.places.PlacesService(map);
+                    service.nearbySearch({
+                        location : storeLatLng,
+                        radius : 2000,
+                        componentRestrictions: {'country': 'SG'},
+                        type : [ 'restaurant']
+                    },$scope.restaurantCallback);
+                }
+                else if(typeName == "Airport")
+                {
+                    var service1 = new google.maps.places.PlacesService(map);
+                    service1.nearbySearch({
+                        location : storeLatLng,
+                        radius : 2000,
+                        componentRestrictions: {'country': 'SG'},
+                        type : [ 'airport']
+                    }, $scope.airportCallback);   
+                }
+                else if(typeName == "Bar")
+                {
+                    var service2 = new google.maps.places.PlacesService(map);
+                            service2.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'bar']
+                            }, $scope.barCallback);   
+                }
+                else if(typeName == "Bus Station")
+                {
+                    var service3 = new google.maps.places.PlacesService(map);
+                            service3.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'bus_station']
+                            }, $scope.busStationCallback);
+                }
+                else if(typeName == "Cafe")
+                {
+                    var service4 = new google.maps.places.PlacesService(map);
+                            service4.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'cafe']
+                            }, $scope.cafeCallback);
+                }
+                else if(typeName == "Casino")
+                {
+                    var service5 = new google.maps.places.PlacesService(map);
+                            service5.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'casino']
+                            }, $scope.casinoCallback);
+                }
+                else if(typeName == "Liquor Store")
+                {
+                    var service6 = new google.maps.places.PlacesService(map);
+                            service6.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'liquor_store']
+                            }, $scope.liquorStoreCallback);
+                }
+                else if(typeName == "Night Clubs")
+                {
+                    var service9 = new google.maps.places.PlacesService(map);
+                            service9.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'night_club']
+                            }, $scope.nightClubCallback);
+                }
+                else if(typeName == "Park")
+                {
+                    var service10 = new google.maps.places.PlacesService(map);
+                            service10.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'park']
+                            }, $scope.parkCallback);
+                }
+                else if(typeName == "Super Market")
+                {
+                    var service11 = new google.maps.places.PlacesService(map);
+                            service11.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'supermarket']
+                            }, $scope.supermarketCallback);
+                }
+                else if(typeName == "Subway")
+                {   
+                    var service12 = new google.maps.places.PlacesService(map);
+                            service12.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'subway_station']
+                            }, $scope.subwayCallback);
+                }
+                else if(typeName == "Shopping Mall")
+                {
+                    var service13 = new google.maps.places.PlacesService(map);
+                            service13.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'shopping_mall']
+                            }, $scope.shoppingmallCallback);
+                }
+                else if(typeName == "Meal Take Aways")
+                {
+                    var service13 = new google.maps.places.PlacesService(map);
+                            service13.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'meal_takeway']
+                            }, $scope.mealTakeawayCallback);
+                }
+                else if(typeName == "Movie Theaters")
+                {
+                    var service13 = new google.maps.places.PlacesService(map);
+                            service13.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'SG'},
+                                type : [ 'movie_theater']
+                            }, $scope.movieTheaterCallback);
+                }
+                
+            }
+            else
+            {
+                var typeName = $scope.placetypes[i].name;
+                if( typeName == "Restaurants" )
+                {
+                    $scope.clearRestaurantsMarker();
+                }
+                else if(typeName == "Airport")
+                {
+                    $scope.clearAirportMarkers();
+                }
+                else if(typeName == "Bar")
+                {
+                    $scope.clearBarMarkers();
+                }
+                else if(typeName == "Bus Station")
+                {
+                    $scope.clearBusstationMarkers();
+                }
+                else if(typeName == "Cafe")
+                {
+                    $scope.clearCafeMarkers();
+                }
+                else if(typeName == "Casino")
+                {
+                    $scope.clearCasinoMarkers();
+                }
+                else if(typeName == "Liquor Store")
+                {
+                    $scope.clearLiquorStoreMarkers();
+                }
+                else if(typeName == "Night Clubs")
+                {
+                    $scope.clearNightClubsMarker();
+                }
+                else if(typeName == "Park")
+                {
+                    $scope.clearParkMarkers();
+                }
+                else if(typeName == "Super Market")
+                {
+                    $scope.clearSuperMarketsMarker();
+                }
+                else if(typeName == "Subway")
+                { 
+                    $scope.clearSubwayMarker();
+                }
+                else if(typeName == "Shopping Mall")
+                {
+                    $scope.clearShoppingMallMarker();
+                }
+                else if(typeName == "Meal Take Aways")
+                {
+                    $scope.clearMealTakewayMarkers();
+                }
+                else if(typeName == "Movie Theaters")
+                {
+                    $scope.clearMovieTheatersMarkers();
+                }
+            }
+        }
+    };
+
+
     // Heatmap data: 500 Points
     $scope.getSouthPoints = function() 
     {
@@ -3183,2099 +5240,4 @@ new google.maps.LatLng(28.632743,77.219597)
                   ];
                 };
 
-
-    $scope.showHeatMap = function()
-    {
-        var latlng = new google.maps.LatLng(1.322532, 103.808953);
-        map = new google.maps.Map(document.getElementById('mymap'), {
-        center: latlng,
-        zoom: 11,
-        //mapTypeId: 'satellite'
-        });
-
-        heatmap = new google.maps.visualization.HeatmapLayer({
-        data: $scope.getPoints(),
-        map: map
-        });
-    }
-
-    $scope.clearIndiaMarkers = function()
-    {
-        for (var key in markers) 
-        {
-            markers[key].setMap(null);
-        };
-
-        if( countryMarkerCluster != null )
-        {
-            countryMarkerCluster.length = 0;
-            countryMarkerCluster.clearMarkers();
-        }
-        
-    };
-
-    $scope.clearAllPlacesMarkers = function()
-    {
-        $scope.clearRestaurantsMarker();
-        $scope.clearAirportMarkers();
-        $scope.clearBarMarkers();
-        $scope.clearBusstationMarkers();
-        $scope.clearCafeMarkers();
-        $scope.clearCasinoMarkers();
-        $scope.clearParkMarkers();
-        $scope.clearSubwayMarker();
-        $scope.clearShoppingMallMarker();
-        $scope.clearNightClubsMarker();
-        $scope.clearLiquorStoreMarkers();
-        $scope.clearMovieTheatersMarkers();
-        $scope.clearMealTakewayMarkers();
-        $scope.clearSuperMarketsMarker();
-    };
-
-    $scope.clearRestaurantsMarker = function()
-    {
-        for (var key in restaurantsMarkers) 
-        {
-            restaurantsMarkers[key].setMap(null);
-        };
-        //restaurantsMarkers.length = 0;
-
-        //if (countryMarkerCluster!=null)
-        //countryMarkerCluster.clearMarkers();
-    };
-
-    $scope.clearAirportMarkers = function()
-    {
-        for (var key in airportMarkers) 
-        {
-            airportMarkers[key].setMap(null);
-        };
-        //airportMarkers.length = 0;
-       // airportMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearBarMarkers = function()
-    {
-        for (var key in barMarkers) 
-        {
-            barMarkers[key].setMap(null);
-        };
-        //barMarkers.length = 0;
-       // barMarkersCluster.clearMarkers();
-
-    };
-
-    $scope.clearBusstationMarkers = function()
-    {
-        for (var key in busstationMarkers) 
-        {
-            busstationMarkers[key].setMap(null);
-        };
-        //busstationMarkers.length = 0;
-        //busstationMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearCafeMarkers = function()
-    {
-        for (var key in cafeMarkers) 
-        {
-            cafeMarkers[key].setMap(null);
-        };
-        //cafeMarkers.length = 0;
-        //cafeMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearCasinoMarkers = function()
-    {
-        for (var key in casinoMarkers) 
-        {
-            casinoMarkers[key].setMap(null);
-        };
-        //casinoMarkers.length = 0;
-        //casinoMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearParkMarkers = function()
-    {
-        for (var key in parkMarkers) 
-        {
-            parkMarkers[key].setMap(null);
-        };
-        //parkMarkers.length = 0;
-        //parkMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearSubwayMarker = function()
-    {
-        
-        for (var key in subwayMarkers) 
-        {
-            subwayMarkers[key].setMap(null);
-        };
-        //subwayMarkers.length = 0;
-        //subwayMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearShoppingMallMarker = function()
-    {
-        
-        for (var key in shoppingMallMarkers) 
-        {
-            shoppingMallMarkers[key].setMap(null);
-        };
-        //shoppingMallMarkers.length = 0;
-        //shoppingMallMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearNightClubsMarker = function()
-    {
-
-        for (var key in nightClubsMarkers) 
-        {
-            nightClubsMarkers[key].setMap(null);
-        };
-       // nightClubsMarkers.length = 0;
-       // nightClubsMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearSuperMarketsMarker = function()
-    {
-        for (var key in superMarketMarkers) 
-        {
-            superMarketMarkers[key].setMap(null);
-        };
-        //superMarketMarkers.length = 0;
-        //superMarketMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearLiquorStoreMarkers = function()
-    {
-        for (var key in liquorStoreMarkers) 
-        {
-            liquorStoreMarkers[key].setMap(null);
-        };
-        //liquorStoreMarkers.length = 0;
-        //liquorStoreMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearMovieTheatersMarkers = function()
-    {
-        for (var key in movietheatermarkers) 
-        {
-            movietheatermarkers[key].setMap(null);
-        };
-        //movietheatermarkers.length = 0;
-       // movietheatermarkersCluster.clearMarkers();
-    };
-
-    $scope.clearMealTakewayMarkers = function()
-    {
-        for (var key in MealTakeAwayMarkers) 
-        {
-            MealTakeAwayMarkers[key].setMap(null);
-        };
-       // MealTakeAwayMarkers.length = 0;
-        //MealTakeAwayMarkersCluster.clearMarkers();
-    };
-
-    $scope.clearAllCategoryMarkers = function()
-    {
-        $scope.clearCategoryPOSMarkers();
-        $scope.clearCategoryProductionCentresMarkers();
-        $scope.clearCategoryWarehouseMarkers();
-        $scope.clearDistributionCentreMarkers();
-    }
-
-    $scope.clearCategoryPOSMarkers = function()
-    {
-        for (var key in categoryPOSmarkers) 
-        {
-            categoryPOSmarkers[key].setMap(null);
-        };
-    };
-
-    $scope.clearCategoryProductionCentresMarkers = function()
-    {
-        for (var key in categoryProductionCentresMarker) 
-        {
-            categoryProductionCentresMarker[key].setMap(null);
-        };
-    };
-
-    $scope.clearCategoryWarehouseMarkers = function()
-    {
-        for (var key in categoryWarehouseMarker) 
-        {
-            categoryWarehouseMarker[key].setMap(null);
-        };
-    };
-
-    $scope.clearDistributionCentreMarkers = function()
-    {
-        for (var key in categoryDistributionCentreMarker) 
-        {
-            categoryDistributionCentreMarker[key].setMap(null);
-        };
-    };
-
-    $scope.clearAllCategoryMarkers = function()
-    {
-        $scope.clearCategoryPOSMarkers();
-        $scope.clearCategoryProductionCentresMarkers();
-        $scope.clearCategoryWarehouseMarkers();
-        $scope.clearDistributionCentreMarkers();
-    }
-
-    $scope.clearSubcategoryBeautyAndHygienemarkers = function()
-    {
-        for (var key in subcategoryBeautyAndHygienemarkers) 
-        {
-            subcategoryBeautyAndHygienemarkers[key].setMap(null);
-        };
-    };
-
-    $scope.clearSubcategoryBakeryAndCakesmarkers = function()
-    {
-        for (var key in subcategoryBakeryAndCakesmarkers) 
-        {
-            subcategoryBakeryAndCakesmarkers[key].setMap(null);
-        };
-    };
-
-    $scope.clearSubcategoryCleaningAndHouseholdmarkers = function()
-    {
-        for (var key in subcategoryCleaningAndHouseholdmarkers) 
-        {
-            subcategoryCleaningAndHouseholdmarkers[key].setMap(null);
-        };
-    };
-
-    $scope.clearSubcategoryFruitsAndVegetablesmarkers = function()
-    {
-        for (var key in subcategoryFruitsAndVegetablesmarkers) 
-        {
-            subcategoryFruitsAndVegetablesmarkers[key].setMap(null);
-        };
-    };
-
-    $scope.clearSubcategoryCerealsmarkers = function()
-    {
-        for (var key in subcategoryCerealsmarkers) 
-        {
-            subcategoryCerealsmarkers[key].setMap(null);
-        };
-    };
-
-    $scope.clearSubcategoryBabyCaremarkers = function()
-    {
-        for (var key in subcategoryBabyCaremarkers) 
-        {
-            subcategoryBabyCaremarkers[key].setMap(null);
-        };
-    };
-
-    $scope.clearAllSubcategoryMarkers = function()
-    {
-        $scope.clearSubcategoryBeautyAndHygienemarkers();
-        $scope.clearSubcategoryBakeryAndCakesmarkers();
-        $scope.clearSubcategoryCleaningAndHouseholdmarkers();
-        $scope.clearSubcategoryFruitsAndVegetablesmarkers();
-        $scope.clearSubcategoryCerealsmarkers();
-        $scope.clearSubcategoryBabyCaremarkers();
-    };
-
-
-    $scope.clearRadius = function()
-    {
-        if (radius_circle) 
-        {
-            radius_circle.setMap(null);
-            radius_circle = null;
-        }
-    };
-
-    $scope.clearDirection = function()
-    {
-        if (directionsDisplayCollection != null) 
-        {
-            for (var i = 0; i < directionsDisplayCollection.length; i++) 
-            {
-                directionsDisplayCollection[i].setMap(null);
-                directionsDisplayCollection[i] = null;
-            }
-            directionsDisplayCollection = [];
-        }
-    };
-
-    $scope.clearInfoWindow = function()
-    {
-        if(infowindowsCollection != null)
-        {
-            for(var j = 0; j < infowindowsCollection.length; j++)
-            {
-                console.log(j);
-                infowindowsCollection[j].close();
-            }
-            infowindowsCollection = [];
-        }
-    };
-
-    $scope.showDirections = function(start, end, locationObject)
-    {
-        $scope.clearDirection();
-        $scope.clearInfoWindow();
-        $scope.clearRadius();
-
-        var directionsService = new google.maps.DirectionsService();
-        var directionsDisplay = new google.maps.DirectionsRenderer();
-            
-        request = {
-            origin: start,
-            destination: end,
-            travelMode: google.maps.DirectionsTravelMode.DRIVING
-        };
-
-        directionsService.route(request, function (response, status) 
-        {
-            if (status == google.maps.DirectionsStatus.OK) 
-            {
-            var directionsDisplay = new google.maps.DirectionsRenderer(
-                {
-                    suppressMarkers: true
-                }
-            );
-            directionsDisplay.setMap(map);
-            directionsDisplay.setOptions({ preserveViewport: true });
-            directionsDisplay.setDirections(response);
-            directionsDisplayCollection.push(directionsDisplay);
-            directionsDisplay.setPanel(document.getElementById('directionsList'));
-
-            
-            infowindow2 = new google.maps.InfoWindow();
-
-            infowindow2.setContent(locationObject.name + "<br>" 
-            +locationObject.address + "<br>" 
-            +response.routes[0].legs[0].distance.text + "<br>" 
-            +response.routes[0].legs[0].duration.text + " ");
-            if (response.routes) 
-            {
-                if (response.routes[0].overview_path) {
-                    var index = parseInt(response.routes[0].overview_path.length / 2);
-                    //var infoposition = new google.maps.LatLng(response.routes[0].overview_path[index].lat(), response.routes[0].overview_path[index].lng());
-                }
-            }
-            //infowindow2.setPosition(infoposition ? infoposition : end);
-            infowindow2.open(map);
-            infowindowsCollection.push(infowindow2);
-            }
-            else
-            {
-
-            console.log(" Direction Not found : " ) + start + " , " + end;
-            }
-            });
-    };
-
-    $scope.restaurantCallback = function(results, status)
-    {
-       // var restaurantsCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForRestaurant(results[i]);
-        }
-        }
-       
-        // countryMarkerCluster = new MarkerClusterer(map, restaurantsMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.airportCallback = function(results, status)
-    {
-        //var airportCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForAirport(results[i]);
-        }
-        }
-        // airportMarkersCluster = new MarkerClusterer(map, airportMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.barCallback = function(results, status)
-    {
-        //var barCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForBar(results[i]);
-        }
-        }
-        // barMarkersCluster = new MarkerClusterer(map, barMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.busStationCallback = function(results, status)
-    {
-       // var busCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForBusStop(results[i]);
-        }
-        }
-        // busstationMarkersCluster = new MarkerClusterer(map, busstationMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.cafeCallback = function(results, status)
-    {
-        //var cafeCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForCafe(results[i]);
-        }
-        }
-        // cafeMarkersCluster = new MarkerClusterer(map, cafeMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.casinoCallback = function(results, status)
-    {
-        //var casinoCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForCasino(results[i]);
-        }
-        }
-        // casinoMarkersCluster = new MarkerClusterer(map, casinoMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.liquorStoreCallback = function(results, status)
-    {
-        //var liquorStoreCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForLiquor(results[i]);
-        }
-        }
-        // liquorStoreMarkersCluster = new MarkerClusterer(map, liquorStoreMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.mealTakeawayCallback = function(results, status)
-    {
-        //var mealTakeAwayCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForMealTakeAway(results[i]);
-        }
-        }
-        // MealTakeAwayMarkersCluster = new MarkerClusterer(map, MealTakeAwayMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.movieTheaterCallback = function(results, status)
-    {
-        //var movieTheaterCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForMovieTheater(results[i]);
-        }
-        }
-        
-        // movietheatermarkersCluster = new MarkerClusterer(map, movietheatermarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.nightClubCallback = function(results, status)
-    {
-        //var nightClubCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForNightClubs(results[i]);
-        }
-        }
-        // nightClubsMarkersCluster = new MarkerClusterer(map, nightClubsMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.parkCallback = function(results, status)
-    {
-        //var parkCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForPark(results[i]);
-        }
-        }
-        // parkMarkersCluster = new MarkerClusterer(map, parkMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.supermarketCallback = function(results, status)
-    {
-        //var superMarketCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForSuperMarket(results[i]);
-        }
-        }
-        // superMarketMarkersCluster = new MarkerClusterer(map, superMarketMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.subwayCallback = function(results, status)
-    {
-        //var subwayCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForSubway(results[i]);
-        }
-        }
-        // subwayMarkersCluster = new MarkerClusterer(map, subwayMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.shoppingmallCallback = function(results, status)
-    {
-        //var shoppingMallCount = results.length;
-        if (status === google.maps.places.PlacesServiceStatus.OK) 
-        {
-        google.maps.places.type
-        for (var i = 0; i < results.length; i++) 
-        {
-            $scope.createPlacesMarkerForShoppingMall(results[i]);
-        }
-        }
-        // shoppingMallMarkersCluster = new MarkerClusterer(map, shoppingMallMarkers,
-        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    };
-
-    $scope.createPlacesMarkerForRestaurant = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/restaurant.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-    
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-        infowindowplacesmarker.setContent( "Name     : " + place.name
-                                        + "<br>" + "Ratings     : " + place.rating
-                                        + "<br>" + "Address     : " + place.formatted_address
-                                        + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                        + "<br>" + "Vicinity    : " + place.vicinity
-                                        + "<br>" + "Website     : " + place.website
-                                        + "<br>" + "International Number: " + place.international_phone_number
-                                        + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                        + "<br>" + "Place Id    : " + place.place_id
-                                        //+ "<br>" + "Reviews    : " + place.reviews[0].text
-                                    );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        restaurantsMarkers.push(restaurantMarker); 
-    };
-
-    $scope.createPlacesMarkerForPark = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/restaurant.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        parkMarkers.push(restaurantMarker); 
-    };
-
-    $scope.createPlacesMarkerForNightClubs = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/restaurant.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        nightClubsMarkers.push(restaurantMarker); 
-    };
-
-    $scope.createPlacesMarkerForCasino = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/casino-2.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        casinoMarkers.push(restaurantMarker); 
-    };
-
-
-    $scope.createPlacesMarkerForLiquor = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/liquor.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        liquorStoreMarkers.push(restaurantMarker); 
-    };
-
-
-    $scope.createPlacesMarkerForAirport = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/airport.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-        infowindowplacesmarker.setContent( "Name     : " + place.name
-                                        + "<br>" + "Ratings     : " + place.rating);
-                                        //+ "<br>" + "Address     : " + place.formatted_address
-                                        //+ "<br>" + "Phone Number: " + place.formatted_phone_number);
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        airportMarkers.push(restaurantMarker); 
-    };
-
-
-    $scope.createPlacesMarkerForBusStop = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/busstop.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            //+ "<br>" + "Reviews    : " + place.reviews[0].text
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        busstationMarkers.push(restaurantMarker); 
-    };
-
-
-    $scope.createPlacesMarkerForBar = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/bar_coktail.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            + "<br>" + "isOpen      : " + place.opening_hours.open
-                                        );
-
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        barMarkers.push(restaurantMarker); 
-    };
-
-
-    $scope.createPlacesMarkerForSuperMarket = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/supermarket.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            + "<br>" + "isOpen      : " + place.opening_hours.open
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        superMarketMarkers.push(restaurantMarker); 
-    };
-
-    
-
-    $scope.createPlacesMarkerForShoppingMall = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/supermarket.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            + "<br>" + "isOpen      : " + place.opening_hours.open
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        shoppingMallMarkers.push(restaurantMarker); 
-    };
-
-    $scope.createPlacesMarkerForMovieTheater = function(place)
-    {
-        $scope.clearInfoWindow();
-        var image = 'images/supermarket.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-        
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            + "<br>" + "isOpen      : " + place.opening_hours.open
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        movietheatermarkers.push(restaurantMarker); 
-    };
-
-
-    $scope.createPlacesMarkerForCafe = function(place) {
-        $scope.clearInfoWindow();
-        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
-        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
-        var image = 'images/fastfood.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-    
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            + "<br>" + "isOpen      : " + place.opening_hours.open
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        cafeMarkers.push(restaurantMarker); 
-    };
-
-    $scope.createPlacesMarkerForSubway = function(place) {
-        $scope.clearInfoWindow();
-        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
-        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
-        var image = 'images/fastfood.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-    
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            + "<br>" + "isOpen      : " + place.opening_hours.open
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        subwayMarkers.push(restaurantMarker); 
-    };
-
-    $scope.createPlacesMarkerForMealTakeAway = function(place) {
-        $scope.clearInfoWindow();
-        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
-        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
-        var image = 'images/fastfood.png';
-
-        infowindowplacesmarker = new google.maps.InfoWindow();
-        var placeLoc = place.geometry.location;
-        restaurantMarker = new google.maps.Marker({
-        map : map,
-        icon : image,
-        position : place.geometry.location
-        });
-
-    
-        google.maps.event.addListener(restaurantMarker, 'click', function() {
-            infowindowplacesmarker.setContent( "Name     : " + place.name
-                                            + "<br>" + "Ratings     : " + place.rating
-                                            + "<br>" + "Address     : " + place.formatted_address
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Vicinity    : " + place.vicinity
-                                            + "<br>" + "Website     : " + place.website
-                                            + "<br>" + "International Number: " + place.international_phone_number
-                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                            + "<br>" + "Place Id    : " + place.place_id
-                                            + "<br>" + "isOpen      : " + place.opening_hours.open
-                                        );
-        infowindowplacesmarker.open(map, this);
-        infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
-        });
-        MealTakeAwayMarkers.push(restaurantMarker); 
-    };
-
-
-    $scope.toggleTrafficLayer = function () 
-    {
-        if(trafficLayer.getMap() == null)
-        {
-            //traffic layer is disabled.. enable it
-            trafficLayer.setMap(map);
-        } else 
-        {
-            //traffic layer is enabled.. disable it
-            trafficLayer.setMap(null);             
-        }
-    };
-
-    $scope.regionChange = function () {
- 
-        $scope.clearIndiaMarkers();
-        $scope.clearAllCategoryMarkers();
-        $scope.clearAllSubcategoryMarkers();
-        $scope.clearAllPlacesMarkers();
-
-        if( $scope.selectedRegion == "East" )
-        {
-            map.setCenter({lat:22.551296,lng: 88.385557});
-            map.setZoom(10);
-            
-            heatmapEast = new google.maps.visualization.HeatmapLayer({
-            data: $scope.getEastPoints(),
-            map: map
-            });
-
-            heatmapEast.set('radius', heatmapEast.get('radius') ? null : 20);
-        }
-        else if( $scope.selectedRegion == "West" )
-        {   	
-            map.setCenter({lat:18.517116,lng: 73.859531});
-            map.setZoom(10);
-            
-            heatmapWest = new google.maps.visualization.HeatmapLayer({
-            data: $scope.getWestPoints(),
-            map: map
-            });
-            heatmapWest.set('radius', heatmapWest.get('radius') ? null : 20);
-        } 
-        else if( $scope.selectedRegion == "South" )
-        {
-            map.setCenter({lat:12.973054,lng: 77.584958});
-            map.setZoom(10);
-            
-            heatmapSouth = new google.maps.visualization.HeatmapLayer({
-            data: $scope.getSouthPoints(),
-            map: map
-            });
-            heatmapSouth.set('radius', heatmapSouth.get('radius') ? null : 20);
-        } 
-        else if( $scope.selectedRegion == "North" )
-        {
-            map.setCenter({lat:28.624982,lng: 77.185231});
-            map.setZoom(8);
-            
-            heatmapNorth = new google.maps.visualization.HeatmapLayer({
-            data: $scope.getNorthPoints(),
-            map: map
-            });
-            heatmapNorth.set('radius', heatmapNorth.get('radius') ? null : 20);
-        } 
-        
-    };
-
-    $scope.cityChange = function (value) {
-
-        $scope.clearIndiaMarkers();
-        $scope.clearAllCategoryMarkers();
-        $scope.clearAllSubcategoryMarkers();
-        $scope.clearAllPlacesMarkers();
-
-        if ( value == 0 )
-        {
-            if( $scope.selectedCity == "Delhi" )
-            {
-                latLng = new google.maps.LatLng(28.624982, 77.185231); 
-                	  
-                map.setCenter({lat:28.624982,lng: 77.185231});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/1.png'></div>");
-                infoWindow.open(map, marker);
-                });
-                markers.push(marker);
-                })(marker);
-            }
-            else if( $scope.selectedCity == "Bengaluru" )
-            {
-                //12.973054	77.584958
-                latLng = new google.maps.LatLng(12.973054, 77.584958); 
-                	  
-                map.setCenter({lat:12.973054,lng: 77.584958});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div class='info-window1'><img src='images/2.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Mumbai" )
-            {
-                //19.070517	72.877055
-                latLng = new google.maps.LatLng(19.070517, 72.877055); 
-                	  
-                map.setCenter({lat:19.070517,lng: 72.877055});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/3.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Chennai" )
-            {
-                //13.066886	80.19252
-                latLng = new google.maps.LatLng(13.066886, 80.19252); 
-                	  
-                map.setCenter({lat:13.066886,lng: 80.19252});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/4.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Pune" )
-            {
-                //18.517116	73.859531
-                latLng = new google.maps.LatLng(18.517116, 73.859531); 
-                	  
-                map.setCenter({lat:18.517116,lng: 73.859531});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/5.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Indore" )
-            {
-                //	
-                latLng = new google.maps.LatLng(22.716753, 75.856801); 
-                	  
-                map.setCenter({lat:22.716753,lng: 75.856801});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/6.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Ahmedabad" )
-            {	
-                latLng = new google.maps.LatLng(23.049881, 72.605137); 
-                	  
-                map.setCenter({lat:23.049881,lng: 72.605137});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/7.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Kolkata" )
-            {	
-                latLng = new google.maps.LatLng(22.657698, 88.348537); 	
-                	  
-                map.setCenter({lat:22.657698,lng: 88.348537});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Kolkata",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/7.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-        }
-        else if( value == 1 )
-        {
-            if( $scope.selectedCityForSales == "Delhi" )
-            {
-                latLng = new google.maps.LatLng(28.624982, 77.185231); 
-                	  
-                map.setCenter({lat:28.624982,lng: 77.185231});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/sales-delhi.png'></div><div style='float:right;'><img src='images/total-sales-delhi.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            }
-            else if( $scope.selectedCityForSales == "Bengaluru" )
-            {
-                latLng = new google.maps.LatLng(12.973054, 77.584958); 
-                	  
-                map.setCenter({lat:12.973054,lng: 77.584958});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/sales-bengaluru.png'></div><div style='float:right;'><img src='images/total-sales-bengaluru.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Mumbai" )
-            {
-                //19.070517	72.877055
-                latLng = new google.maps.LatLng(19.070517, 72.877055); 
-                	  
-                map.setCenter({lat:19.070517,lng: 72.877055});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent("<div><img src='images/sales-mumbai.png'></div><div style='float:right;'><img src='images/total-sales-mumbai.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Chennai" )
-            {
-                //13.066886	80.19252
-                latLng = new google.maps.LatLng(13.066886, 80.19252); 
-                	  
-                map.setCenter({lat:13.066886,lng: 80.19252});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                
-                    infoWindow.setContent("<div><img src='images/sales-chennai.png'></div><div style='float:right;'><img src='images/total-sales-chennai.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Pune" )
-            {
-                //18.517116	73.859531
-                latLng = new google.maps.LatLng(18.517116, 73.859531); 
-                	  
-                map.setCenter({lat:18.517116,lng: 73.859531});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                
-                infoWindow.setContent("<div><img src='images/sales-pune.png'></div><div style='float:right;'><img src='images/total-sales-pune.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Indore" )
-            {
-                //	
-                latLng = new google.maps.LatLng(22.716753, 75.856801); 
-                	  
-                map.setCenter({lat:22.716753,lng: 75.856801});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                
-                infoWindow.setContent("<div><img src='images/sales-indore.png'></div><div style='float:right;'><img src='images/total-sales-indore.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Ahmedabad" )
-            {	
-                latLng = new google.maps.LatLng(23.049881, 72.605137); 
-                	  
-                map.setCenter({lat:23.049881,lng: 72.605137});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                    
-                infoWindow.setContent("<div><img src='images/sales-ahmedabad.png'></div><div style='float:right;'><img src='images/total-sales-ahmedabad.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Kolkata" )
-            {	
-                latLng = new google.maps.LatLng(22.657698, 88.348537); 	
-                	  
-                map.setCenter({lat:22.657698,lng: 88.348537});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Kolkata",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                    
-                infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                markers.push(marker);
-                })(marker);
-            } 
-            
-        }
-    };
-
-    $scope.getMarketingData = function(event,index){
-        
-        //clear all the markers and checked categories
-        $scope.clearAllPlacesMarkers();
-        $scope.clearAllCategoryMarkers();
-        $scope.clearIndiaMarkers();
-       
-        for (var i = 0, length = $scope.categories.length; i < length; i++) 
-        {
-            $scope.categories[i].checked = false;
-        }
-
-        //trafficLayer.setMap(null);
-
-
-        if(map.getZoom()> 12)
-            {
-                map.setZoom(12);
-            }
-        
-
-        if(index!= -1)
-            $scope.marketingTypes[index].checked = event.target.checked;
-           
-        
-        for (var i = 0, length = $scope.marketingTypes.length; i < length; i++) 
-        {
-            if($scope.marketingTypes[i].checked)
-            {
-                var typeName = $scope.marketingTypes[i].name;
-                
-                if( typeName == "Outdoor" )
-                {
-                    //if (heatmap.getMap() == null )
-                    $scope.initHeatMap();
-                }
-            }
-            else
-            {
-                var typeName = $scope.marketingTypes[i].name;
-                
-                if( typeName == "Outdoor" )
-                {
-                    heatmap.setMap(heatmap.getMap() ? null : map);
-                }
-            }
-        }
-    };
-
-    $scope.getData = function(event, index) 
-    {
-        var jsonObject = JSON.parse($scope.selectedStore);
-
-        $scope.clearAllPlacesMarkers();
-        $scope.clearAllCategoryMarkers();
-        $scope.clearIndiaMarkers();
-        
-        if (jsonObject.category == "pos")
-        {
-            $scope.showStorePlaceTypes = true;
-            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
-            bounds  = new google.maps.LatLngBounds();
-            bounds.extend(latLng);
-    
-            // Creating a marker and putting it on the map
-            var marker = new google.maps.Marker({
-            position: latLng,
-            map: map,
-            title: jsonObject.name,
-            icon: 'images/purple.png',
-            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-            });
-
-            /*var GLOBE_WIDTH = 256; // a constant in Google's map projection
-            var west = sw.lng();
-            var east = ne.lng();
-            var angle = east - west;
-            if (angle < 0) {
-            angle += 360;
-            }
-            var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);*/
-
-            map.fitBounds(bounds);      
-            map.panToBounds(bounds); 
-
-            if(map.getZoom()> 14)
-            {
-                map.setZoom(14);
-            }
-
-            // trafficLayer = new google.maps.TrafficLayer();
-            // trafficLayer.setMap(map);
-
-            infoWindow = new google.maps.InfoWindow();
-            (function(marker, storeData) {
-
-            // Attaching a click event to the current marker
-            google.maps.event.addListener(marker, "click", function(e) {
-            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
-            infoWindow.open(map, marker);
-
-            });
-
-            markers.push(marker);
-
-            })(marker, jsonObject);
-        }
-        else if (jsonObject.category == "productionsentres")
-        {
-            
-            $scope.showStorePlaceTypes = true;
-            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
-            bounds  = new google.maps.LatLngBounds();
-            bounds.extend(latLng);
-    
-            // Creating a marker and putting it on the map
-            var marker = new google.maps.Marker({
-            position: latLng,
-            map: map,
-            title: jsonObject.name,
-            icon: 'images/pink.png',
-            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-            });
-
-            /*var GLOBE_WIDTH = 256; // a constant in Google's map projection
-            var west = sw.lng();
-            var east = ne.lng();
-            var angle = east - west;
-            if (angle < 0) {
-            angle += 360;
-            }
-            var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);*/
-
-            map.fitBounds(bounds);      
-            map.panToBounds(bounds); 
-
-            if(map.getZoom()> 14)
-            {
-                map.setZoom(14);
-            }
-
-            // trafficLayer = new google.maps.TrafficLayer();
-            // trafficLayer.setMap(map);
-
-            infoWindow = new google.maps.InfoWindow();
-            (function(marker, storeData) {
-
-            // Attaching a click event to the current marker
-            google.maps.event.addListener(marker, "click", function(e) {
-            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
-            infoWindow.open(map, marker);
-
-            });
-
-            markers.push(marker);
-
-            })(marker, jsonObject);
-        }
-        if (jsonObject.category == "warehouses")
-        {
-            
-            $scope.showStorePlaceTypes = true;
-            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
-            bounds  = new google.maps.LatLngBounds();
-            bounds.extend(latLng);
-    
-            // Creating a marker and putting it on the map
-            var marker = new google.maps.Marker({
-            position: latLng,
-            map: map,
-            title: jsonObject.name,
-            icon: 'images/green.png',
-            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-            });
-
-            /*var GLOBE_WIDTH = 256; // a constant in Google's map projection
-            var west = sw.lng();
-            var east = ne.lng();
-            var angle = east - west;
-            if (angle < 0) {
-            angle += 360;
-            }
-            var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);*/
-
-            map.fitBounds(bounds);      
-            map.panToBounds(bounds); 
-
-            if(map.getZoom()> 14)
-            {
-                map.setZoom(14);
-            }
-
-            // trafficLayer = new google.maps.TrafficLayer();
-            // trafficLayer.setMap(map);
-
-            infoWindow = new google.maps.InfoWindow();
-            (function(marker, storeData) {
-
-            // Attaching a click event to the current marker
-            google.maps.event.addListener(marker, "click", function(e) {
-            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
-            infoWindow.open(map, marker);
-
-            });
-
-            markers.push(marker);
-
-            })(marker, jsonObject);
-        }
-        if (jsonObject.category == "distributioncentre")
-        {
-            
-            $scope.showStorePlaceTypes = true;
-            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
-            bounds  = new google.maps.LatLngBounds();
-            bounds.extend(latLng);
-    
-            // Creating a marker and putting it on the map
-            var marker = new google.maps.Marker({
-            position: latLng,
-            map: map,
-            title: jsonObject.name,
-            icon: 'images/blue.png',
-            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-            });
-
-            /*var GLOBE_WIDTH = 256; // a constant in Google's map projection
-            var west = sw.lng();
-            var east = ne.lng();
-            var angle = east - west;
-            if (angle < 0) {
-            angle += 360;
-            }
-            var zoom = Math.round(Math.log(pixelWidth * 360 / angle / GLOBE_WIDTH) / Math.LN2);*/
-
-            map.fitBounds(bounds);      
-            map.panToBounds(bounds); 
-
-            if(map.getZoom()> 14)
-            {
-                map.setZoom(14);
-            }
-
-            // trafficLayer = new google.maps.TrafficLayer();
-            // trafficLayer.setMap(map);
-
-            infoWindow = new google.maps.InfoWindow();
-            (function(marker, storeData) {
-
-            // Attaching a click event to the current marker
-            google.maps.event.addListener(marker, "click", function(e) {
-            infoWindow.setContent('<h3>' + jsonObject.name + '</h3>'+ "<br/>" + jsonObject.address + "<br/>" + jsonObject.contact);
-            infoWindow.open(map, marker);
-
-            });
-
-            markers.push(marker);
-
-            })(marker, jsonObject);
-        }
-
-
-
-        var storeLatLng = { lat : jsonObject.latitude , lng : jsonObject.longitude};
-
-        //checking and assiging values got from callback( index nad event )
-        if(index!= -1)
-            $scope.placetypes[index].checked = event.target.checked;
-        
-        for (var i = 0, length = $scope.placetypes.length; i < length; i++) 
-        {
-            if($scope.placetypes[i].checked)
-            {
-                var typeName = $scope.placetypes[i].name;
-                if( typeName == "Restaurants" )
-                {
-                    var service = new google.maps.places.PlacesService(map);
-                    service.nearbySearch({
-                        location : storeLatLng,
-                        radius : 2000,
-                        componentRestrictions: {'country': 'SG'},
-                        type : [ 'restaurant']
-                    },$scope.restaurantCallback);
-                }
-                else if(typeName == "Airport")
-                {
-                    var service1 = new google.maps.places.PlacesService(map);
-                    service1.nearbySearch({
-                        location : storeLatLng,
-                        radius : 2000,
-                        componentRestrictions: {'country': 'SG'},
-                        type : [ 'airport']
-                    }, $scope.airportCallback);   
-                }
-                else if(typeName == "Bar")
-                {
-                    var service2 = new google.maps.places.PlacesService(map);
-                            service2.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'bar']
-                            }, $scope.barCallback);   
-                }
-                else if(typeName == "Bus Station")
-                {
-                    var service3 = new google.maps.places.PlacesService(map);
-                            service3.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'bus_station']
-                            }, $scope.busStationCallback);
-                }
-                else if(typeName == "Cafe")
-                {
-                    var service4 = new google.maps.places.PlacesService(map);
-                            service4.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'cafe']
-                            }, $scope.cafeCallback);
-                }
-                else if(typeName == "Casino")
-                {
-                    var service5 = new google.maps.places.PlacesService(map);
-                            service5.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'casino']
-                            }, $scope.casinoCallback);
-                }
-                else if(typeName == "Liquor Store")
-                {
-                    var service6 = new google.maps.places.PlacesService(map);
-                            service6.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'liquor_store']
-                            }, $scope.liquorStoreCallback);
-                }
-                else if(typeName == "Night Clubs")
-                {
-                    var service9 = new google.maps.places.PlacesService(map);
-                            service9.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'night_club']
-                            }, $scope.nightClubCallback);
-                }
-                else if(typeName == "Park")
-                {
-                    var service10 = new google.maps.places.PlacesService(map);
-                            service10.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'park']
-                            }, $scope.parkCallback);
-                }
-                else if(typeName == "Super Market")
-                {
-                    var service11 = new google.maps.places.PlacesService(map);
-                            service11.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'supermarket']
-                            }, $scope.supermarketCallback);
-                }
-                else if(typeName == "Subway")
-                {   
-                    var service12 = new google.maps.places.PlacesService(map);
-                            service12.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'subway_station']
-                            }, $scope.subwayCallback);
-                }
-                else if(typeName == "Shopping Mall")
-                {
-                    var service13 = new google.maps.places.PlacesService(map);
-                            service13.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'shopping_mall']
-                            }, $scope.shoppingmallCallback);
-                }
-                else if(typeName == "Meal Take Aways")
-                {
-                    var service13 = new google.maps.places.PlacesService(map);
-                            service13.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'meal_takeway']
-                            }, $scope.mealTakeawayCallback);
-                }
-                else if(typeName == "Movie Theaters")
-                {
-                    var service13 = new google.maps.places.PlacesService(map);
-                            service13.nearbySearch({
-                                location : storeLatLng,
-                                radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
-                                type : [ 'movie_theater']
-                            }, $scope.movieTheaterCallback);
-                }
-                
-            }
-            else
-            {
-                var typeName = $scope.placetypes[i].name;
-                if( typeName == "Restaurants" )
-                {
-                    $scope.clearRestaurantsMarker();
-                }
-                else if(typeName == "Airport")
-                {
-                    $scope.clearAirportMarkers();
-                }
-                else if(typeName == "Bar")
-                {
-                    $scope.clearBarMarkers();
-                }
-                else if(typeName == "Bus Station")
-                {
-                    $scope.clearBusstationMarkers();
-                }
-                else if(typeName == "Cafe")
-                {
-                    $scope.clearCafeMarkers();
-                }
-                else if(typeName == "Casino")
-                {
-                    $scope.clearCasinoMarkers();
-                }
-                else if(typeName == "Liquor Store")
-                {
-                    $scope.clearLiquorStoreMarkers();
-                }
-                else if(typeName == "Night Clubs")
-                {
-                    $scope.clearNightClubsMarker();
-                }
-                else if(typeName == "Park")
-                {
-                    $scope.clearParkMarkers();
-                }
-                else if(typeName == "Super Market")
-                {
-                    $scope.clearSuperMarketsMarker();
-                }
-                else if(typeName == "Subway")
-                { 
-                    $scope.clearSubwayMarker();
-                }
-                else if(typeName == "Shopping Mall")
-                {
-                    $scope.clearShoppingMallMarker();
-                }
-                else if(typeName == "Meal Take Aways")
-                {
-                    $scope.clearMealTakewayMarkers();
-                }
-                else if(typeName == "Movie Theaters")
-                {
-                    $scope.clearMovieTheatersMarkers();
-                }
-            }
-        }
-    };
 });

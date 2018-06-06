@@ -33,6 +33,11 @@ router.get('/demo', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../', 'views', 'cocacola.html'));
 });
 
+//BIdemo home page
+router.get('/searceBIplatform', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../', 'views', 'BIplatformhome.html'));
+});
+
 //BIdemo page
 router.get('/bidemo', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../', 'views', 'bidemo.html'));
