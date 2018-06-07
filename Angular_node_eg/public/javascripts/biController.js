@@ -219,6 +219,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         $scope.clearAllCategoryMarkers();
         $scope.clearAllSubcategoryMarkers();
         $scope.clearAllPlacesMarkers();
+        $scope.clearAllHeatMaps();
         $scope.storeNames.length = 0;  
 
         //checking and assiging values got from callback( index and event )
@@ -407,6 +408,8 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 $scope.showSubCatergorisedLocations = function (event,index) 
 {
     $.getJSON('/getBIData', {}, function (data) {
+
+    $scope.clearAllHeatMaps();
   
     $scope.storeNames.length = 0;  
 
@@ -744,6 +747,7 @@ $scope.countryChange = function()
             //$scope.storeNames.length = 0;  commented to display , POS related data.
             //$scope.storeNames.push(allOption);
             //$scope.clearAllCategoryMarkers();add this later.
+            $scope.clearAllHeatMaps();
 
             for (var i = 0, length = data.length; i < length; i++) 
             { 
@@ -1104,6 +1108,47 @@ $scope.countryChange = function()
         $scope.clearSubcategoryCerealsmarkers();
         $scope.clearSubcategoryBabyCaremarkers();
     };
+
+    $scope.clearAllHeatMaps = function()
+    {
+        $scope.clearEastHeatmap();
+        $scope.clearWestHeatmap();
+        $scope.clearSouthHeatmap();
+        $scope.clearNorthHeatmap();
+    };
+
+    $scope.clearEastHeatmap = function()
+    {
+        if(heatmapEast)
+        {
+            heatmapEast.setMap(null);
+        }  
+    };
+
+    $scope.clearWestHeatmap = function()
+    {
+        if(heatmapWest)
+        {
+            heatmapWest.setMap(null);
+        }  
+    };
+
+    $scope.clearSouthHeatmap = function()
+    {
+        if(heatmapSouth)
+        {
+            heatmapSouth.setMap(null);
+        } 
+    };
+
+    $scope.clearNorthHeatmap = function()
+    {
+        if(heatmapNorth)
+        {
+            heatmapNorth.setMap(null);
+        } 
+    };
+
 
 
     $scope.clearRadius = function()
@@ -1903,7 +1948,7 @@ $scope.countryChange = function()
         }
         else if( $scope.selectedRegion == "West" )
         {   	
-            map.setCenter({lat:18.517116,lng: 73.859531});
+            map.setCenter({lat:19.070517,lng: 72.877055});
             map.setZoom(10);
             
             heatmapWest = new google.maps.visualization.HeatmapLayer({
@@ -2427,6 +2472,7 @@ $scope.countryChange = function()
         $scope.clearAllPlacesMarkers();
         $scope.clearAllCategoryMarkers();
         $scope.clearIndiaMarkers();
+        //$scope.clearAllHeatMaps();
        
         for (var i = 0, length = $scope.categories.length; i < length; i++) 
         {
@@ -2474,6 +2520,7 @@ $scope.countryChange = function()
         $scope.clearAllPlacesMarkers();
         $scope.clearAllCategoryMarkers();
         $scope.clearIndiaMarkers();
+        $scope.clearAllHeatMaps();
         
         if (jsonObject.category == "pos")
         {
