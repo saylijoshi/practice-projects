@@ -45,7 +45,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
     $scope.countries =
     [
-        {"name":"", "selected":false},
+        {"name":"", "selected":true},
         {"name":"India", "selected":false},
         {"name":"Singapore", "selected":false}
     ]
@@ -193,7 +193,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         "categoryData": []
     };
 
-    $scope.SelectedCountry = "Singapore";
+    //$scope.SelectedCountry = "Singapore";
 
     setTimeout(function ()
     {
@@ -568,6 +568,9 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     };
 
     $scope.showFilters = function (filterName) {
+
+        map.setCenter({lat:23.492690,lng: 78.680398});
+        map.setZoom(5);
         
         $scope.whichOverlayToShow = filterName;
         $scope.TotalWeightage = 0;
@@ -956,7 +959,7 @@ $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDo
         if(index!= -1)
         $scope.categories[index].checked = event.target.checked;
 
-        console.log("---$scope.SelectedCountry---:",$scope.SelectedCountry);
+        //console.log("---$scope.SelectedCountry---:",$scope.SelectedCountry);
 
         for (var i = 0, length = data.length; i < length; i++) 
         {
@@ -975,6 +978,7 @@ $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDo
                 if($scope.categories[j].checked)
                 { 
                     var Country = cocacolaStoreData.country;
+                    console.log("---Country---:", Country);
 
                     if( $scope.SelectedCountry == "India" && Country == "India"  )
                     {
@@ -1839,9 +1843,10 @@ $scope.showSubCatergorisedLocations = function (event,index)
 });
 };
 
-$scope.countryChange = function()
+$scope.countryChange = function(name)
 {
-    
+    console.log("---name---:",name);
+    console.log("---countryChange---:",$scope.SelectedCountry);
     $scope.clearAllCategoryMarkers();
     $scope.clearAllSubcategoryMarkers();
     $scope.clearAllPlacesMarkers();
@@ -1852,6 +1857,15 @@ $scope.countryChange = function()
     {
         $scope.categories[i].checked = false;
     }
+
+    for (var i = 0, length = $scope.subCategories.length; i < length; i++) 
+    {
+        $scope.subCategories[i].checked = false;
+    }
+
+    $scope.clearDirection();
+
+    //console.log("---$scope.SelectedCountry---:",$scope.SelectedCountry);
 
     if( $scope.SelectedCountry == "India" )
     {
@@ -1865,6 +1879,7 @@ $scope.countryChange = function()
     }
     else
     {
+        $scope.clearIndiaMarkers();
         map.setCenter({lat:23.492690,lng: 78.680398});
         map.setZoom(5);
     }

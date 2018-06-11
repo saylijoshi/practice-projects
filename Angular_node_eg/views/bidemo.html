@@ -83,7 +83,7 @@
                     <div id="collapse1" class="panel-collapse collapse in">
                         <div class="panel-body">
                             Select Country
-                            <select ng-model="SelectedCountry" ng-change = "countryChange();" >
+                            <select ng-model="SelectedCountry" ng-change = "countryChange(SelectedCountry);" >
                                     <option ng-repeat="country in countries" value="{{country.name}}" >{{ country.name }}</option>
                             </select>
                             </br>Select Category
@@ -116,7 +116,7 @@
                 <div class="panel panel-default">
                     <div data-toggle="collapse" data-parent="#accordion1" href="#collapse3" class="panel-heading">
                         <h4 class="panel-title">
-                            <a >Customers</a>
+                            <a >Customer Reach</a>
                         </h4>
                     </div>
                     <div id="collapse3" class="panel-collapse collapse">
@@ -151,7 +151,7 @@
     <button class="custom-button"  ng-click="toggleTrafficLayer()">Traffic Layer</button>
     <button class="custom-button"  ng-click="assetTracking()">Asset Tracking</button>
     <button class="custom-button"  ng-click="showFilters('salesPerson');">Sales Tracking</button>
-    <button class="custom-button"  ng-click="showFilters('POI');listAllCities();getPOIWeightages();">Points of Interst</button>
+    <button class="custom-button"  ng-click="showFilters('POI');listAllCities();getPOIWeightages();">City Score Card</button>
     <div class="bs-example">
         <div class="panel-group" id="accordion">
             <div class="panel panel-default">
