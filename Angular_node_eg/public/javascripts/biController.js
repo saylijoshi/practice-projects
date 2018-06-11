@@ -45,9 +45,9 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
     $scope.countries =
     [
+        {"name":"", "selected":false},
         {"name":"India", "selected":false},
-        {"name":"Singapore", "selected":false},
-        {"name":"", "selected":false}
+        {"name":"Singapore", "selected":false}
     ]
 
     $scope.cities =
@@ -171,6 +171,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     var arrInfowindows = [], arrInfowindowsAssetTrackingMarkers = [];
     var arrMarkers = [];
     var fusionLayer;
+    $scope.showPersonAnalysis = false;
 
     $scope.statesData = {
         'selectedStates': [],
@@ -755,9 +756,6 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
     $scope.showMarker = function(latitude,longitude,value)
     {
-        console.log("---latitude----",latitude);
-        console.log("---longitude---",longitude);
-                            
         latLng = new google.maps.LatLng(latitude, longitude); 
 
         // Creating a marker and putting it on the map

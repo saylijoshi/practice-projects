@@ -151,6 +151,7 @@
     <button class="custom-button"  ng-click="toggleTrafficLayer()">Traffic Layer</button>
     <button class="custom-button"  ng-click="assetTracking()">Asset Tracking</button>
     <button class="custom-button"  ng-click="showFilters('salesPerson');">Sales Tracking</button>
+    <button class="custom-button"  ng-click="showFilters('POI');listAllCities();getPOIWeightages();">Points of Interst</button>
     <div class="bs-example">
         <div class="panel-group" id="accordion">
             <div class="panel panel-default">
@@ -210,7 +211,7 @@
      
 </div>
 
-<div id="modal" style="width:50%; display:block;" ng-show="showPersonAnalysis == false" class="modal fade in">
+<div id="modal" style="width:50%; display:block;" ng-show="showPersonAnalysis == true" class="modal fade in">
     <div class="modal-dialog">
         <div style="margin: 0;width: 100%;" class="modal-content">
             <form name="form" novalidate="novalidate">
@@ -324,6 +325,39 @@
         <p class="{{ salesP.Ranking >= '8' ? 'salesRed': salesP.Ranking >= '5' ? 'salesBlue':'salesGreen'}}">
             {{salesP['Sales Rep Code']}}</p>
     </div>
+</div>
+
+<div id="POI" class="filterBlock" ng-if="whichOverlayToShow == 'POI'"
+     style="min-height: 500px; max-height: 680px;">
+
+    <label class="onlyMarginPadding" style="color: lawngreen;">Select location</label>
+    <div class="filter_group">
+        <label>Cities</label>
+        <select ui-select2 ng-model="statesData.selectedCity"
+                ng-change="calulateWeightageforPOI(statesData.selectedCity)">
+            <option value=""></option>
+            <option ng-repeat="state in statesData.allCities"> {{state}}</option>
+        </select>
+    </div>
+
+    <div ui-handsontable minSpareRows="0" stretchH="'all'" manualColumnMove="false" manualColumnResize="false"
+         selectedIndex="MySelectedIndex" columnSorting="true"
+         contextMenu="true" datarows="add in weightagePOI" id="lineitems-grid" height="300" style="overflow: hidden;">
+        <datacolumn width="80" value="add.Category" title="'Category'" type="'text'"></datacolumn>
+        <datacolumn width="80" value="add.Brand" title="'Brand'" type="'text'"></datacolumn>
+        <datacolumn width="40" value="add.Weigtage" title="'Weigtage'" type="'text'"></datacolumn>
+        <datacolumn width="30" value="add.count" title="'#'" type="'text'" readOnly></datacolumn>
+        <datacolumn width="40" value="add.TotalWeightage" title="'Total'" type="'text'" readOnly></datacolumn>
+
+    </div>
+    <div style="height: 10px;" ></div>
+
+    <div ng-repeat="(key,value) in categorizedWeightage">
+        <label style="color: white;">{{key}} - #{{value.count}} - score - {{value.score}}</label>
+    </div>
+    <div style="height: 10px;" ></div>
+    <label style="color: white;">Total - {{TotalWeightage}}</label>
+
 </div>
 
 
