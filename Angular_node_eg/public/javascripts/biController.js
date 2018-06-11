@@ -46,6 +46,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     $scope.countries =
     [
         {"name":"India", "selected":false},
+        {"name":"Singapore", "selected":false},
         {"name":"", "selected":false}
     ]
 
@@ -159,6 +160,38 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         {"name":"Distribution Centre 2", "checked":false},
     ]
 
+    $scope.marketingTypes =
+    [
+        {"name":"Indoor", "checked":false},
+        {"name":"Digital", "checked":false}
+    ]
+
+    var arrdirectionsDisplay = [];
+    var arrLatLongTruck = [];
+    var arrInfowindows = [], arrInfowindowsAssetTrackingMarkers = [];
+    var arrMarkers = [];
+    var fusionLayer;
+
+    $scope.statesData = {
+        'selectedStates': [],
+        'selectedZipcodes': [],
+        'selectedTalukas': [],
+        'selectedDistricts': [],
+        'selectedCity': [],
+        'states': [],
+        'talukas': [],
+        'districts': [],
+        'zipCodes': [],
+        'allCities': []
+    };
+
+    $scope.filter = {
+        "filterFields": [],
+        "filterCategories": [],
+        "selectedCategory": "",
+        "categoryData": []
+    };
+
     $scope.SelectedCountry = "Singapore";
 
     setTimeout(function ()
@@ -209,175 +242,1026 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         } 
     };
 
+    $scope.calulateWeightageforPOI = function (selectedCity) {
+        if (selectedCity == "" || selectedCity == undefined || selectedCity == null) {
+            return;
+        }
+
+        $scope.loading = true;
+        $scope.TotalWeightage = 0;
+        angular.forEach($scope.weightagePOI, function (item, index) {
+            $scope.weightagePOI[index]['TotalWeightage'] = "";
+            $scope.weightagePOI[index]['count'] = "";
+        });
+        flgShowAllMarkers = false;
+        $scope.placeMarkesrs(null);
+
+        var mapDataToload = {"type": "FeatureCollection", "features": []};
+
+        var itemData;
+        $.getJSON('/citiesShapeFile', {'properties.NAME': selectedCity.trim()}, function (data) {
+            itemData = data;
+
+//            mapDataToload['features'].push(item);
+
+            angular.forEach(itemData, function (item, index) {
+//                if (index == 0) {
+//                    var geocoder = new google.maps.Geocoder();
+//                    var addressToSearch = "";
+//                    if (item.properties.NAME != undefined && item.properties.NAME != null)
+//                        addressToSearch = addressToSearch + item.properties.NAME
+//                    if (item.properties.DISTRICT != undefined && item.properties.DISTRICT != null)
+//                        addressToSearch = addressToSearch + item.properties.DISTRICT
+//                    if (item.properties.PINCODE != undefined && item.properties.PINCODE != null)
+//                        addressToSearch = addressToSearch + item.properties.PINCODE
+//                    // Get LatLng information by name
+//                    if (addressToSearch != "") {
+//                        geocoder.geocode({
+//                            address: addressToSearch
+////                                    location: item.properties.PINCODE
+//                        }, function (results, status) {
+//                            if (status === 'OK') {
+//                                map.setCenter(results[0].geometry.location);
+//                            }
+//                        });
+//                    }
+//                }
+                mapDataToload['features'].push(item);
+            });
+
+//            for (var t=0; t<itemData.length; t++) {
+////                var polygon = item[t].getPath();
+//                // Iterate over the polygonBounds vertices.
+//
+////                    var polygon = mapDataToload['features'];//['geometry']['coordinates'];
+//                itemData[t].geometry.coordinates.forEach(function (path, index) {
+//
+////                    var points = path.getArray();
+//                    for (var p=0;p<  path.length;p++)
+//                        if (path[p])
+//                            boundsPOI.extend(new google.maps.LatLng(parseFloat(path[p][0]), parseFloat(path[p][1])));
+//                });
+//
+//
+//            }
+//            map.fitBounds(bounds);
+//            map.setZoom(getZoomByBounds(map, bounds));
+        });
+
+
+//        var location = new google.maps.LatLng($scope.wayPointsPOI[0].location.geometry.location.lat(), $scope.wayPointsPOI[0].location.geometry.location.lng());
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': selectedCity}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(8);
+//                    createMarkerPOI(results[0].geometry.location);
+                    callCalulationWeightage(results[0].geometry.location, mapDataToload)
+
+                } else {
+                    console.log('No results found');
+                }
+            } else {
+                console.log('Geocoder failed due to: ' + status);
+            }
+        });
+
+    };
+
+    function callCalulationWeightage(locationSelected, mapDataToload) {
+        $scope.categorizedWeightage = {};
+
+        angular.forEach($scope.weightagePOI, function (item, index) {
+            if (item != null) {
+                setTimeout(function () {
+                    // Specify location, radius and place types for your Places API search.
+                    var request = {
+                        location: locationSelected,
+//                bounds: boundsPOI,
+//                        radius:10000,
+                        name: item['Brand'],
+                        rankBy: google.maps.places.RankBy.DISTANCE,
+                        type: item['type']
+                    };
+
+                    // Create the PlaceService and send the request.
+                    // Handle the callback with an anonymous function.
+                    var service = new google.maps.places.PlacesService(map);
+//            service.nearbySearch(request, calculateWeightage);
+//            service.radarSearch(request, function (results, status, pagination) {
+                    service.nearbySearch(request, function (results, status, pagination) {
+//                        console.log(item['Brand'] + '  -  ' + results.length + '  -  ' + pagination);
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+//            console.log(request);
+                            console.log('-------------' + index + '--------' + $scope.weightagePOI[index]['Brand'] + '  -----  ' + pagination.hasNextPage + '------' + results.length + '-------------------');
+                            for (var g = 0; g < results.length; g++)
+                                console.log(results[g].name);
+//                    cntSearch++;
+                            var wt = parseFloat(results.length * $scope.weightagePOI[index]['Weigtage']);
+                            $scope.TotalWeightage = parseFloat($scope.TotalWeightage) + wt;
+                            var categoryName = $scope.weightagePOI[index]['Category'];
+
+                            if ($scope.categorizedWeightage[categoryName] == undefined || $scope.categorizedWeightage[categoryName] == null) {
+                                $scope.categorizedWeightage[categoryName] = {'count': 0, 'score': 0}
+                            }
+
+                            if ($scope.weightagePOI[index]['TotalWeightage'] == "") {
+                                $scope.weightagePOI[index]['TotalWeightage'] = wt;
+                                $scope.weightagePOI[index]['count'] = results.length;
+                            }
+                            else {
+                                $scope.weightagePOI[index]['TotalWeightage'] = parseFloat($scope.weightagePOI[index]['TotalWeightage']) + wt;
+                                $scope.weightagePOI[index]['count'] = parseFloat($scope.weightagePOI[index]['count']) + results.length;
+                            }
+
+
+                            $scope.categorizedWeightage[categoryName]['score'] = $scope.categorizedWeightage[categoryName]['score'] + wt;
+                            $scope.categorizedWeightage[categoryName]['count'] = parseFloat($scope.categorizedWeightage[categoryName]['count']) + $scope.weightagePOI[index]['count'];
+
+                            if (pagination.hasNextPage) {
+                                setTimeout(function () {
+                                    pagination.nextPage();
+                                }, 2000)
+
+                            }
+                        }
+                        else {
+                            console.log(status + '   ----' + $scope.weightagePOI[index]['Brand']);
+                        }
+                    });
+                }, 500 * index);
+            }
+        });
+
+
+        setTimeout(function () {
+            $scope.loading = false;
+            createMarkerPOI(locationSelected, mapDataToload);
+            $scope.$apply();
+
+//        $scope.placeZipcodesBoundries();
+        }, 10000);
+
+    }
+
+    function createMarkerPOI(place, mapDataToload) {
+
+        var marker = new google.maps.Marker({
+            map: map,
+            position: place,
+//            icon : place.icon
+        });
+        var infoWindow = new google.maps.InfoWindow();
+        var infoWindowContent = "";
+
+//        angular.forEach($scope.weightagePOI, function(item, index){
+//            infoWindowContent += '<label> ' + $scope.weightagePOI[index]['Brand']+ ' - ' + $scope.weightagePOI[index]['TotalWeightage'] + '</label> <br>'
+//        });
+
+        angular.forEach($scope.categorizedWeightage, function (item, index) {
+            infoWindowContent += '<label> ' + index + ' -  #' + item['count'] + '  - score - ' + item['score'] + '</label> <br>';
+        });
+        infoWindowContent += '<label> Total - ' + $scope.TotalWeightage + '</label> <br>';
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infoWindow.setContent(infoWindowContent);
+            infoWindow.open(map, this);
+        });
+
+        arrMarkers.push(marker);
+
+        loadMapShapePolygonJSON(mapDataToload, infoWindowContent);
+    }
+
+
+    function loadMapShapePolygonJSON(mapDataToload, infowindowContent) {
+        map.data.forEach(function (feature) {
+            // If you want, check here for some constraints.
+            map.data.remove(feature);
+        });
+        map.data.addGeoJson(mapDataToload);
+        map.data.addListener('click', function (event) {
+            var myHTML = '<div id="content"  class="infowindow_warehouse">' +
+                '<label id="firstHeading" class="firstHeading">' + event.feature.f['NAME'] + ', ' + event.feature.f['DISTRICT'] + ', ' +
+                event.feature.f['STATE'] + '</label>' +
+                '</div>';
+
+            if ($scope.whichOverlayToShow == 'zipCodes') {
+                var polygon = $scope.zipCodesData[0].geometry.coordinates;
+                isPointInPoly([ event.latLng.lat(), event.latLng.lng() ], polygon); // true
+            }
+            else if ($scope.whichOverlayToShow == 'POI') {
+                myHTML = infowindowContent;
+            }
+
+            for (i = 0; i < arrInfowindows.length; i++) {
+                arrInfowindows[i].close();
+            }
+            arrInfowindows = [];
+
+
+            var infowindow = new google.maps.InfoWindow({content: myHTML});
+            infowindow.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
+            infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
+            infowindow.open(map);
+            arrInfowindows.push(infowindow);
+        });
+        var featureStyle = {
+            strokeColor: '#ff3333',
+            strokeWeight: 1,
+            fillColor: 'green'
+        };
+
+        map.data.setStyle(featureStyle);
+        if ($scope.whichOverlayToShow != 'POI') {
+            map.setZoom(8);
+        }
+    }
+
+    function isPointInPoly(point, vs) {
+        var x = point[1], y = point[0];
+        console.log(x);
+        console.log(y);
+//        var y = 28.659141, x =  77.083273;
+//        Delhi
+//        28.659141	77.083273
+//        28.552771	76.744832
+//        28.743942	77.057525
+//        28.900662	77.464005
+//Banglore
+//        13.242760	77.430387
+//        13.018079	77.507291
+//        12.869517	77.867093
+//        12.869517	77.312284
+
+//Mumbai
+//        19.194422	72.817316
+//        19.055590	72.939538
+//        19.154860	73.017129
+//        19.337672	73.052835
+//        19.244347	72.955331
+//        19.186640	72.884607
+
+
+        vs = vs[0];
+        var poly = vs;
+        var pt = point;
+
+//        var a = google.maps.geometry.poly.containsLocation(point, vs);
+
+        var inside = false;
+
+//        for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+//            ((poly[i][1] <= pt[1] && pt[1] < poly[j][1]) || (poly[j][1] <= pt[1] && pt[1] < poly[i].y))
+//            && (pt[0] < (poly[j][0] - poly[i][0]) * (pt[1] - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
+//            && (c = !c);
+//        console.log(c);
+
+        for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+            var xi = vs[i][0], yi = vs[i][1];
+            var xj = vs[j][0], yj = vs[j][1];
+
+            var intersect = ((yi > y) != (yj > y))
+                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) inside = !inside;
+        }
+
+        if (inside == false) {
+            x = point[0];
+            y = point[1];
+//            console.log(x);
+//            console.log(y);
+
+
+            for (i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+                xi = vs[i][0], yi = vs[i][1];
+                xj = vs[j][0], yj = vs[j][1];
+
+                intersect = ((yi > y) != (yj > y))
+                    && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                if (intersect) inside = !inside;
+            }
+        }
+//        var msg  = 'Location is ' + inside?'inside ':'outside ' + 'the boundry'
+//        alert(inside );
+
+        return inside;
+    }
+
+
+    $scope.getSalesData = function (dbName) {
+        
+        $.getJSON('/getData', {"docType": dbName}, function (data) {
+            $scope.filter.categoryData = data;
+            $scope.salesPersonData = data;
+            $scope.$apply();
+//                $.each($scope.filter.filterFields, function (a, b) {
+//                    var unique = $scope.filter.categoryData.filter((set => f => !set.has(f[b.key]) && set.add(f[b.key]))(new Set));
+//                    console.log(unique);
+//                });
+
+            $scope.$apply();
+            $scope.placeMarkesrs(data);
+        });
+    };
+
+    $scope.showFilters = function (filterName) {
+        
+        $scope.whichOverlayToShow = filterName;
+        $scope.TotalWeightage = 0;
+        $scope.categorizedWeightage = {};
+        $scope.statesData.selectedCity = "";
+        $scope.addresses = [
+            {"lat": "", "lng": "", status: ""}
+        ];
+        $scope.wayPointsPOI = [
+            {
+                'location': {},
+                'locationName': {},
+                'POI': ""
+            }
+        ];
+
+        $scope.filter.selectedCategory = "All";
+        $scope.showNavigationSaveConfirmation = false;
+        //map.setZoom(5);
+        //trafficLayer.setMap(null);
+        //map.setCenter(myLatLng);
+
+        flgShowAllMarkers = true;
+        $scope.placeMarkesrs(null);
+
+
+//        setMapStyle('default');
+        if (filterName == "salesPerson") 
+        {
+            $scope.title = "Sales Tracking";
+            // alert("hi all" + filterName);
+            //$("#salerPersonPics").show();
+            $scope.filter.selectedCategory = "Top Perforrming Sales Executives";
+            $scope.showPersonAnalysis = false;
+            flgShowAllMarkers = true;
+            $scope.getSalesData('Top Perforrming Sales Executives');
+            $scope.placeMarkesrs();
+        }
+    };
+
+    
+    /**
+     * Place markers on map as per data given
+     * @param data
+     * @param isFilteredData
+     * @param filterValue
+     * @param filterKeyName
+     */
+
+    $scope.placeMarkesrs = function (data, isFilteredData, filterValue, filterKeyName) {
+        
+        if (data != null) 
+        {
+            var markerImage = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+            $.each(data, function (index, item) {
+            myLatLng = new google.maps.LatLng(parseFloat(this.latitude ? this.latitude : this.Latitude), parseFloat(this.longitude ? this.longitude : this.Longitude));
+            var infoWindowContent = "";
+            markerImage = 'http://maps.google.com/mapfiles/ms/icons/' + (this.markerColor ? this.markerColor : 'red') + '-dot.png';
+
+            if (this.docType == 'Top Perforrming Sales Executives') 
+            {
+                markerImage = this['Ranking'] >= 8 ? 'images/icon/user_red.png' : this['Ranking'] >= 5 ? 'images/icon/user_blue.png' : 'images/icon/user_green.png';
+
+                infoWindowContent = '<div id="content"  class="infowindow_warehouse">' +
+                    '<div id="siteNotice">' +
+                    '</div>' +
+                    '<img src=" images/' + this['Images1'] + '"><h2 id="firstHeading" class="firstHeading">' + this['First Name'] + ' ' + this['Last Name'] + '</h2>' +
+                    '<div id="bodyContent" class="infowindow_warehouse">' +
+                    '<big> <p>' +
+                    '<label>City - ' + this['City'] + ', ' +
+                    'State  - ' + this['State'] + '</label> <br>' +
+                    '<label>Last location -  ' + this['Lastlocation'] + '</label> <br>' +
+                    '<label>Battery -  ' + this['Battery'] + '</label> <br>' +
+                    '</p></big>' +
+                    '</div>' +
+                    '</div>'
+            }
+
+
+            if (isFilteredData && filterValue.length > 0 && this.docType != 'Top Perforrming Sales Executives') {
+
+
+                var idx = filterValue.indexOf(this[filterKeyName]);
+                console.log(idx);
+
+                if (idx != -1) {
+                    if (typeof colours[CSS_COLOR_NAMES[idx].toLowerCase()] != 'undefined')
+                        markerImage = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=|' + colours[CSS_COLOR_NAMES[idx].toLowerCase()] + '|0000FF'
+                }
+            }
+            var marker = new google.maps.Marker({
+                position: myLatLng, map: map,
+                icon: markerImage// 'http://maps.google.com/mapfiles/ms/icons/' + (this.markerColor?this.markerColor:'red') + '-dot.png'
+            });
+            marker.setMap(map);
+
+            var infoWindow = new google.maps.InfoWindow({
+                content: this.markerContent ? this.markerContent : infoWindowContent
+            });
+            marker.addListener('click', function () {
+                for (i = 0; i < arrInfowindows.length; i++) {
+                    arrInfowindows[i].close();
+                }
+                arrInfowindows = [];
+                infoWindow.open(map, marker);
+                arrInfowindows.push(infoWindow);
+            });
+            arrMarkers.push(marker);
+        });
+    }
+};
+
+    $scope.showModal = function (showToUser, img) 
+    {
+        $scope.showPersonAnalysis = showToUser;
+        $scope.salePersonImage = img;
+    };
+
+    $scope.marketingTypeChanged = function()
+    {
+        $scope.clearIndiaMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
+        $scope.clearAllHeatMaps();
+        $scope.clearFusionLayer();
+
+        if($scope.selectedMarketingType == "Indoor")
+        {
+            map.setCenter({lat:1.328178,lng: 103.845055});
+            map.setZoom(12);
+            fusionLayer = new google.maps.FusionTablesLayer({
+                query: {
+                select: '\'Geocodable address\'',
+                from: '1nt2z4yrRZHh9jOGqg_P_XolehEfbF7VC6-GT9Zo'
+                //1nt2z4yrRZHh9jOGqg_P_XolehEfbF7VC6-GT9Zo   = for Singapore
+                //1mZ53Z70NsChnBMm-qEYmSDOvLXgrreLTkQUvvg - Chicago
+                }
+            });
+            fusionLayer.setMap(map);
+            $scope.showMarker(1.378223,103.875572,1);
+            $scope.showMarker(1.334066,103.897101,1);
+            $scope.showMarker(1.303553,103.83418,1);
+            $scope.showMarker(1.273481,103.845322,1);
+            $scope.showMarker(1.281157,103.784939,1);
+        }
+        else if( $scope.selectedMarketingType == "Digital" )
+        {
+            map.setCenter({lat:1.328178,lng: 103.845055});
+            map.setZoom(11);
+            fusionLayer = new google.maps.FusionTablesLayer({
+                query: {
+                select: 'location',
+                from: '1pf56DPihj3fX_6YHNQp-OKeHA05Jj4aUqvWuCFc' //For HeatMap
+                },
+                heatmap: {
+                    enabled: true
+                  }
+            });
+            fusionLayer.setMap(map);
+        }
+    }
+
+    $scope.assetTracking = function ()
+    { 
+        map.setCenter({lat:1.328178,lng: 103.845055});
+        map.setZoom(11);
+        var assetOriginDestDetails = [
+            {"destination": {"Latitude": 1.381027, "Longitude": 103.917468}, "origin": {"Latitude": 1.345802, "Longitude": 103.639373}, "markerContent": '<div id="content"  class="infowindow_warehouse">' + '<div id="siteNotice">' + '<h6 >Driver Name - Ankush Jain </h6><br>' + '<h7> Vehicle# -  MH 12 JX 1634 </h7><br>' + '<h7> Mobile# -  9673990425 </h7><br>' + '<h7> Goods Type -  Food Product </h7><br>' + '<h7> Speed -  40 km/h </h7><br>' + '<h7> Battery -  67% </h7><br>' + '</div>'},
+            {"destination": {"Latitude": 1.265500, "Longitude": 103.823668}, "origin": {"Latitude": 1.438404, "Longitude": 103.766953}, "markerContent": '<div id="content"  class="infowindow_warehouse">' + '<div id="siteNotice">' + '<h6 >Driver Name - Akhilesh Aggarwal </h6><br>' + '<h7> Vehicle# -  MH 12 BQ 5454 </h7><br>' + '<h7> Mobile# -  8551089000 </h7><br>' + '<h7> Goods Type -  Electronics Items </h7><br>' + '<h7> Speed -  50 km/h </h7><br>' + '<h7> Battery -  43% </h7><br>' + '</div>'}
+            //{"destination": {"Latitude": 24.5854, "Longitude": 73.7125}, "origin": {"Latitude": 28.7041, "Longitude": 77.1025}, "markerContent": '<div id="content"  class="infowindow_warehouse">' + '<div id="siteNotice">' + '<h6 >Driver Name - Abhishek Jha </h6><br>' + '<h7> Vehicle# -  DL 2C AS 2935 </h7><br>' + '<h7> Mobile# -  7838757968 </h7><br>' + '<h7> Goods Type -  Cement </h7><br>' + '<h7> Speed -  30 km/h </h7><br>' + '<h7> Battery -  87% </h7><br>' + '</div>'},
+            //{"destination": {"Latitude": 24.5854, "Longitude": 74.7125}, "origin": {"Latitude": 26.7041, "Longitude": 80.1025}, "markerContent": '<div id="content"  class="infowindow_warehouse">' + '<div id="siteNotice">' + '<h6 >Driver Name - Akash Joshi </h6><br>' + '<h7> Vehicle# -  DL 2C AS 2935 </h7><br>' + '<h7> Mobile# -  7838757968 </h7><br>' + '<h7> Goods Type -  Furniture </h7><br>' + '<h7> Speed -  65 km/h </h7><br>' + '<h7> Battery -  10% </h7><br>' + '</div>'}
+        ];
+        calcRoute(assetOriginDestDetails, false, true);
+        $scope.showMarker(1.330700, 103.672792,0);
+        $scope.showMarker(1.345309, 103.689468,0);
+        $scope.showMarker(1.353045, 103.729125,0);
+        $scope.showMarker(1.329729, 103.858286,0);
+        $scope.showMarker(1.341565, 103.946813,0);
+        $scope.showMarker(1.436069, 103.768623,0);
+        $scope.showMarker(1.387756, 103.775031,0);
+        $scope.showMarker(1.318515, 103.830182,0);
+        $scope.showMarker(1.298473, 103.781391,0);
+
+    };
+
+    $scope.showMarker = function(latitude,longitude,value)
+    {
+        console.log("---latitude----",latitude);
+        console.log("---longitude---",longitude);
+                            
+        latLng = new google.maps.LatLng(latitude, longitude); 
+
+        // Creating a marker and putting it on the map
+        var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        title: "",
+        icon: 'images/purple.png',
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        });
+
+        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+        (function(marker) {
+
+        // Attaching a click event to the current marker
+        google.maps.event.addListener(marker, "click", function(e) {
+            // infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+            // + '<h3>' + cocacolaStoreData.name + '</h3>'
+            // + "<br/>" + "Address: " + cocacolaStoreData.address 
+            // + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+            // + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+            // + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+            if(value)
+            infoWindow.setContent("<div><img src='images/sales-singapore.png'></div><div style='float:right;'><img src='images/total-sales-singapore.png'></div>");
+                
+            
+        infoWindow.open(map, marker);
+        
+        });
+
+        markers.push(marker);
+        })(marker);
+    };
+
+    function calcRoute(assetOriginDestDetails, supressMarkers, isAssetTracking) 
+    {
+        flgShowAllMarkers = false;
+        if(arrdirectionsDisplay != null) 
+        {
+            for (i = 0; i < arrdirectionsDisplay.length; i++)
+            {
+                arrdirectionsDisplay[i].setMap(null);
+                arrdirectionsDisplay[i] = null;
+            }
+            arrdirectionsDisplay = [];
+        }
+        angular.forEach(assetOriginDestDetails, function (item, index) {
+            var start = new google.maps.LatLng(item.origin.Latitude, item.origin.Longitude);
+            var end = new google.maps.LatLng(item.destination.Latitude, item.destination.Longitude);
+            var infowindow2 = new google.maps.InfoWindow();
+            var request = {
+                origin: start,
+                destination: end,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            var directionsService = new google.maps.DirectionsService();
+
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) 
+                {
+                    var directionsDisplay = new google.maps.DirectionsRenderer(
+                        {
+                            suppressMarkers: supressMarkers ? supressMarkers : false
+                        }
+                    );
+                    directionsDisplay.setMap(map);
+                    directionsDisplay.setOptions({ preserveViewport: true });
+                    directionsDisplay.setDirections(response);
+                    arrdirectionsDisplay.push(directionsDisplay);
+                    infowindow2.setContent(response.routes[0].legs[0].distance.text + "<br>" + response.routes[0].legs[0].duration.text + " ");
+
+
+                    if (response.routes) {
+                        if (response.routes[0].overview_path) {
+                            if (arrLatLongTruck.length == 0) {
+                                arrLatLongTruck = [response.routes[0].overview_path];
+                            }
+                            else {
+                                arrLatLongTruck.push(response.routes[0].overview_path);
+                            }
+                            var index = parseInt(response.routes[0].overview_path.length / 2);
+                            var infoposition = new google.maps.LatLng(response.routes[0].overview_path[index].lat(), response.routes[0].overview_path[index].lng());
+                        }
+                    }
+                    infowindow2.setPosition(infoposition ? infoposition : end);
+                    infowindow2.open(map);
+                    arrInfowindows.push(infowindow2);
+
+                    if (isAssetTracking) 
+                    {
+                        var markerTruck = new google.maps.Marker({position: start, map: map, icon: 'images/icon/truck3.png'});
+                        markerTruck.setMap(map);
+                        markerTruck.addListener('click', function () {
+
+                        var infoWindowContent = '<div id="content"  class="infowindow_warehouse">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h1 id="firstHeading" class="firstHeading">' + this['Dealer Name'] + '</h1>' +
+                            '<div id="bodyContent" class="infowindow_warehouse">' +
+                            '<big> <p>' +
+                            '<label> nothing to show </label>' +
+                            '</p></big>' +
+                            '</div>' +
+                            '</div>'
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: item.markerContent ? item.markerContent : infoWindowContent
+                        });
+                        infoWindow.open(map, markerTruck);
+                        arrInfowindows.push(infoWindow);
+
+                        });
+                        arrMarkers.push(markerTruck);
+
+                        for (var i = 0; i < arrMarkers.length; i++) {
+                            $scope.moveTruck(map, arrMarkers[i], i, 0, 0);
+                        }
+                    }
+                }
+            });
+        });
+    };
+
+$scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDotMarker) {
+        
+    setTimeout(function () {
+        if (countDotMarker == 3 ) 
+        {
+            countDotMarker = 0;
+
+            var geocoder = geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'latLng': markerTruck.position }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) 
+                {
+                    if (results[1]) 
+                    {
+                        var markerDot = new google.maps.Marker({position: markerTruck.position, map: map, icon: 'images/marker-dot.png'});
+
+                        markerDot.setMap(map);
+                        markerDot.setPosition(markerTruck.position);
+                        markerDot.addListener('click', function () {
+                            for (i = 0; i < arrInfowindowsAssetTrackingMarkers.length; i++) 
+                            {
+                                arrInfowindowsAssetTrackingMarkers[i].close();
+                            }
+                            arrInfowindowsAssetTrackingMarkers = [];
+
+                            var infoWindowContent = '<div id="content"  class="inf owindow_warehouse">' +
+                                '<div id="siteNotice">' +
+                                '</div>' +
+                                '<div id="bodyContent" class="infowindow_warehouse">' +
+                                '<big> <p>' +
+                                '<label> ' + results[1].formatted_address + ' </label>' +
+                                '</p></big>' +
+                                '<p><i> Time : ' + $filter("date")(new Date(), "HH:mm:ss")
+                                + '</i></p></div>' +
+                                '</div>';
+                            var infoWindow = new google.maps.InfoWindow({
+                                content: infoWindowContent
+                            });
+                            infoWindow.open(map, markerDot);
+                            arrInfowindowsAssetTrackingMarkers.push(infoWindow);
+                        })
+                        arrMarkers.push(markerDot);
+                    }
+                }
+            });
+        }
+        else 
+        {
+            countDotMarker++;
+        }
+
+        markerTruck.setPosition(new google.maps.LatLng(arrLatLongTruck[markerIndex][latLngindex].lat(), arrLatLongTruck[markerIndex][latLngindex].lng()));
+        latLngindex++;
+
+        if (latLngindex <= arrLatLongTruck[markerIndex].length)
+        {
+            $scope.moveTruck(map, markerTruck, markerIndex, latLngindex, countDotMarker);
+        }
+
+    }, 3000)
+};
+
     $scope.showCatergorisedLocations = function (event,index) 
     {
         $.getJSON('/getBIData', {}, function (data) {
-
-            console.log("---showCatergorisedLocations---:");
 
         $scope.clearIndiaMarkers();
         $scope.clearAllCategoryMarkers();
         $scope.clearAllSubcategoryMarkers();
         $scope.clearAllPlacesMarkers();
         $scope.clearAllHeatMaps();
+        $scope.clearFusionLayer();
+
         $scope.storeNames.length = 0;  
 
         //checking and assiging values got from callback( index and event )
         if(index!= -1)
         $scope.categories[index].checked = event.target.checked;
 
-        //Set Center - When user returns from store details, need to set this.
-        map.setCenter({lat:23.492690,lng: 78.680398});
-        map.setZoom(5);
-        map.setMapTypeId('roadmap');
+        console.log("---$scope.SelectedCountry---:",$scope.SelectedCountry);
 
         for (var i = 0, length = data.length; i < length; i++) 
         {
             var cocacolaStoreData = data[i];
             var typeName = cocacolaStoreData.category;
-            //console.log("---Category---:",typeName);
+            var country = cocacolaStoreData.country;
+            // console.log("---$scope.SelectedCountry---:",$scope.SelectedCountry);
+            // console.log("---country------------------:",country);
+            // console.log("---typeName-----------------:",typeName);
+            
             for (var j = 0, categoryArraylength = $scope.categories.length; j < categoryArraylength; j++) 
             {
                 selectedCategoryName = $scope.categories[j].name;
-                console.log("---selectedCategoryName---:",selectedCategoryName);
+                //console.log("---selectedCategoryName-----:",selectedCategoryName);
+                
                 if($scope.categories[j].checked)
-                {        
-                    if( selectedCategoryName == "POS" && typeName == "pos" )
+                { 
+                    var Country = cocacolaStoreData.country;
+
+                    if( $scope.SelectedCountry == "India" && Country == "India"  )
                     {
-                        console.log("---inPOS---:");
-                        userSelectedCategoryName = "POS";
-                        $scope.storeNames.push(cocacolaStoreData);
+                        map.setCenter({lat:23.492690,lng: 78.680398});
+                        map.setZoom(5);
+    
+                        if( selectedCategoryName == "POS" && typeName == "pos" )
+                        {
+                            console.log("---in India POS---:");
+                            userSelectedCategoryName = "POS";
+                            $scope.storeNames.push(cocacolaStoreData);
 
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/purple.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
 
-                        //infoWindow = new google.maps.InfoWindow();
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            //infoWindow = new google.maps.InfoWindow();
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
 
-                        (function(marker, cocacolaStoreData) {
+                            (function(marker, cocacolaStoreData) {
 
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                        infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-
-                        infoWindow.open(map, marker);
-                        });
-
-                        categoryPOSmarkers.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
-                    else if(selectedCategoryName == "Production Centres" && typeName == "productioncentres" )
-                    {
-                        userSelectedCategoryName = "Production Centres";
-                        $scope.storeNames.push(cocacolaStoreData);
-
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/pink.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
                             infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-                        });
+                                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
 
-                        categoryProductionCentresMarker.push(marker);
-                        })(marker, cocacolaStoreData);
+                            infoWindow.open(map, marker);
+                            });
+
+                            categoryPOSmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedCategoryName == "Production Centres" && typeName == "productioncentres" )
+                        {
+                            userSelectedCategoryName = "Production Centres";
+                            $scope.storeNames.push(cocacolaStoreData);
+
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/pink.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            });
+
+                            categoryProductionCentresMarker.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedCategoryName == "Warehouses" && typeName == "warehouses")
+                        {
+                            userSelectedCategoryName = "Warehouses";
+                            $scope.storeNames.push(cocacolaStoreData);
+
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/green.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            });
+
+                            categoryWarehouseMarker.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedCategoryName == "Distribution Centres" && typeName == "distributioncentre")
+                        {
+                            userSelectedCategoryName = "Distrubition Centres";
+                            $scope.storeNames.push(cocacolaStoreData);
+
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/blue.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+
+                            });
+
+                            categoryDistributionCentreMarker.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
                     }
-                    else if(selectedCategoryName == "Warehouses" && typeName == "warehouses")
+                    else if($scope.SelectedCountry == "Singapore" && Country == "Singapore")
                     {
-                        userSelectedCategoryName = "Warehouses";
-                        $scope.storeNames.push(cocacolaStoreData);
+                        map.setCenter({lat:1.328178,lng: 103.845055});
+                        map.setZoom(11);
+    
+                        if( selectedCategoryName == "POS" && typeName == "pos" )
+                        {
+                            console.log("---in Singapore POS---:");
+                            userSelectedCategoryName = "POS";
+                            $scope.storeNames.push(cocacolaStoreData);
 
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/green.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
 
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
+                            //infoWindow = new google.maps.InfoWindow();
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
 
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
+                            (function(marker, cocacolaStoreData) {
+
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
                             infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-                        });
+                                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
 
-                        categoryWarehouseMarker.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
-                    else if(selectedCategoryName == "Distribution Centres" && typeName == "distributioncentre")
-                    {
-                        userSelectedCategoryName = "Distrubition Centres";
-                        $scope.storeNames.push(cocacolaStoreData);
+                            infoWindow.open(map, marker);
+                            });
 
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/blue.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
+                            categoryPOSmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedCategoryName == "Production Centres" && typeName == "productioncentres" )
+                        {
+                            userSelectedCategoryName = "Production Centres";
+                            $scope.storeNames.push(cocacolaStoreData);
 
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/pink.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
 
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
 
-                        });
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            });
 
-                        categoryDistributionCentreMarker.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
+                            categoryProductionCentresMarker.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedCategoryName == "Warehouses" && typeName == "warehouses")
+                        {
+                            userSelectedCategoryName = "Warehouses";
+                            $scope.storeNames.push(cocacolaStoreData);
+
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/green.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            });
+
+                            categoryWarehouseMarker.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedCategoryName == "Distribution Centres" && typeName == "distributioncentre")
+                        {
+                            userSelectedCategoryName = "Distrubition Centres";
+                            $scope.storeNames.push(cocacolaStoreData);
+
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/blue.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+
+                            });
+
+                            categoryDistributionCentreMarker.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                    } 
                 }
                 else
                 {
@@ -410,6 +1294,8 @@ $scope.showSubCatergorisedLocations = function (event,index)
     $.getJSON('/getBIData', {}, function (data) {
 
     $scope.clearAllHeatMaps();
+    $scope.clearFusionLayer();
+
   
     $scope.storeNames.length = 0;  
 
@@ -435,236 +1321,477 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
             if($scope.subCategories[j].checked)
             {
-                if( userSelectedCategoryName == "POS" )
-                {            
-                    $scope.clearCategoryPOSMarkers();
-                    if( selectedSubCategoryName == "Beauty & Hygiene" && typeName == "Beauty and Hygiene")
-                    {
-                        console.log("---Beauty & Hygiene---");
-                        
-                        $scope.storeNames.push(cocacolaStoreData);
+                var Country = cocacolaStoreData.country;
 
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/purple.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
-
-                        });
-
-                        subcategoryBeautyAndHygienemarkers.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
-                    else if(selectedSubCategoryName == "Bakery & Cakes" && typeName == "Bakery and Cakes" )
-                    {
-
-                        $scope.storeNames.push(cocacolaStoreData);
-
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude);
-                
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/purple.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
-
-                        });
-
-                        subcategoryBakeryAndCakesmarkers.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
-                    else if(selectedSubCategoryName == "Cleaning & Household" && typeName == "Cleaning and Household")
-                    {
-
-                        $scope.storeNames.push(cocacolaStoreData);
-
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/purple.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
-
-                        });
-
-                        subcategoryCleaningAndHouseholdmarkers.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
-                    else if(selectedSubCategoryName == "Fruits & Vegetables" && typeName == "Fruits and vegetables" )
-                    {
-                        $scope.storeNames.push(cocacolaStoreData);
-
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/purple.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-
-                        });
-
-                        subcategoryFruitsAndVegetablesmarkers.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
-                    else if(selectedSubCategoryName == "Cereals" && typeName == "Cereals" )
-                    {
-                        $scope.storeNames.push(cocacolaStoreData);
-
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/purple.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-
-                        });
-
-                        subcategoryCerealsmarkers.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
-                    else if(selectedSubCategoryName == "Baby Care" && typeName == "Baby Care")
-                    {
-                        $scope.storeNames.push(cocacolaStoreData);
-
-                        latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
-                
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: cocacolaStoreData.name,
-                        icon: 'images/purple.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, cocacolaStoreData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                            infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
-                            + '<h3>' + cocacolaStoreData.name + '</h3>'
-                            + "<br/>" + "Address: " + cocacolaStoreData.address 
-                            + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
-                            + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
-                            + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
-                        infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
-
-                        });
-
-                        subcategoryBabyCaremarkers.push(marker);
-                        })(marker, cocacolaStoreData);
-                    }
-                }
-                else if(userSelectedCategoryName == "Production Centres")
+                if( $scope.SelectedCountry == "India" && Country == "India"  )
                 {
+                    if( userSelectedCategoryName == "POS" )
+                    {            
+                        $scope.clearCategoryPOSMarkers();
+                        if( selectedSubCategoryName == "Beauty & Hygiene" && typeName == "Beauty and Hygiene")
+                        {
+                            console.log("---Beauty & Hygiene---");
+                            
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+    
+                            });
+    
+                            subcategoryBeautyAndHygienemarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Bakery & Cakes" && typeName == "Bakery and Cakes" )
+                        {
+    
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude);
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+    
+                            });
+    
+                            subcategoryBakeryAndCakesmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Cleaning & Household" && typeName == "Cleaning and Household")
+                        {
+    
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+    
+                            });
+    
+                            subcategoryCleaningAndHouseholdmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Fruits & Vegetables" && typeName == "Fruits and vegetables" )
+                        {
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+    
+                            });
+    
+                            subcategoryFruitsAndVegetablesmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Cereals" && typeName == "Cereals" )
+                        {
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+    
+                            });
+    
+                            subcategoryCerealsmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Baby Care" && typeName == "Baby Care")
+                        {
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+    
+                            });
+    
+                            subcategoryBabyCaremarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                    }
+                    else if(userSelectedCategoryName == "Production Centres")
+                    {
+    
+                    }
+                    else if(userSelectedCategoryName == "Warehouses")
+                    {
+    
+                    }
+                    else if(userSelectedCategoryName == "Distribution Centres")
+                    {
+    
+                    }
 
                 }
-                else if(userSelectedCategoryName == "Warehouses")
+                else if($scope.SelectedCountry == "Singapore" && Country == "Singapore" )
                 {
+                    if( userSelectedCategoryName == "POS" )
+                    {            
+                        $scope.clearCategoryPOSMarkers();
+                        if( selectedSubCategoryName == "Beauty & Hygiene" && typeName == "Beauty and Hygiene")
+                        {
+                            console.log("---Beauty & Hygiene---");
+                            
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+    
+                            });
+    
+                            subcategoryBeautyAndHygienemarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Bakery & Cakes" && typeName == "Bakery and Cakes" )
+                        {
+    
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude);
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+    
+                            });
+    
+                            subcategoryBakeryAndCakesmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Cleaning & Household" && typeName == "Cleaning and Household")
+                        {
+    
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+    
+                            });
+    
+                            subcategoryCleaningAndHouseholdmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Fruits & Vegetables" && typeName == "Fruits and vegetables" )
+                        {
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+    
+                            });
+    
+                            subcategoryFruitsAndVegetablesmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Cereals" && typeName == "Cereals" )
+                        {
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+    
+                            });
+    
+                            subcategoryCerealsmarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                        else if(selectedSubCategoryName == "Baby Care" && typeName == "Baby Care")
+                        {
+                            $scope.storeNames.push(cocacolaStoreData);
+    
+                            latLng = new google.maps.LatLng(cocacolaStoreData.latitude, cocacolaStoreData.longitude); 
+                    
+                            // Creating a marker and putting it on the map
+                            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: cocacolaStoreData.name,
+                            icon: 'images/purple.png',
+                            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                            });
+    
+                            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                            (function(marker, cocacolaStoreData) {
+    
+                            // Attaching a click event to the current marker
+                            google.maps.event.addListener(marker, "click", function(e) {
+                                infoWindow.setContent("<div style='float:left'><img src='images/"+ cocacolaStoreData.imagename + "'>" 
+                                + '<h3>' + cocacolaStoreData.name + '</h3>'
+                                + "<br/>" + "Address: " + cocacolaStoreData.address 
+                                + "<br/>" + "Contact No: " + cocacolaStoreData.contact 
+                                + "<br/>" + "Operating Hours: " +cocacolaStoreData.timing
+                                + "<br/>" + "Available Products: " +cocacolaStoreData.productclassification);
+                            infoWindow.open(map, marker);
+                            //$scope.clearDirection();
+                            dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                            //$scope.showDirections(myLatLng,dirLatLng,storeData );
+    
+                            });
+    
+                            subcategoryBabyCaremarkers.push(marker);
+                            })(marker, cocacolaStoreData);
+                        }
+                    }
+                    else if(userSelectedCategoryName == "Production Centres")
+                    {
+    
+                    }
+                    else if(userSelectedCategoryName == "Warehouses")
+                    {
+    
+                    }
+                    else if(userSelectedCategoryName == "Distribution Centres")
+                    {
+    
+                    }
 
                 }
-                else if(userSelectedCategoryName == "Distribution Centres")
-                {
-
-                }
+    
             }
             else
             {
@@ -733,6 +1860,11 @@ $scope.countryChange = function()
         $scope.clearIndiaMarkers();
         $scope.showAllLocations();
     }
+    else if( $scope.SelectedCountry == "Singapore" )
+    {
+        $scope.clearIndiaMarkers();
+        $scope.showAllLocations();
+    }
     else
     {
         map.setCenter({lat:23.492690,lng: 78.680398});
@@ -748,6 +1880,7 @@ $scope.countryChange = function()
             //$scope.storeNames.push(allOption);
             //$scope.clearAllCategoryMarkers();add this later.
             $scope.clearAllHeatMaps();
+            $scope.clearFusionLayer();
 
             for (var i = 0, length = data.length; i < length; i++) 
             { 
@@ -789,7 +1922,44 @@ $scope.countryChange = function()
                     markers.push(marker);
 
                     })(marker, storeData);
-                }  
+                } 
+                else if ($scope.SelectedCountry == "Singapore" && storeData.country == "Singapore")
+                {
+                    //$scope.storeNames.push(data[i]);
+                    latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+                    
+                    map.setCenter({lat:1.328178,lng: 103.845055});
+                    map.setZoom(8);
+                    map.setMapTypeId('roadmap');
+            
+                    // Creating a marker and putting it on the map
+                    var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: storeData.name,
+                    icon: 'images/red1.png',
+                    mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                    });
+
+                    infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                    (function(marker, storeData) {
+
+                    // Attaching a click event to the current marker
+                    google.maps.event.addListener(marker, "click", function(e) {
+                        infoWindow.setContent("<div style='float:left'><img src='images/"+ storeData.imagename + "'>" 
+                        + '<h3>' + storeData.name + '</h3>'
+                        + "<br/>" + "Address: " + storeData.address 
+                        + "<br/>" + "Contact No: " + storeData.contact 
+                        + "<br/>" + "Operating Hours: " +storeData.timing
+                        + "<br/>" + "Available Products: " +storeData.productclassification);
+                    infoWindow.open(map, marker);
+
+                    });
+
+                    markers.push(marker);
+
+                    })(marker, storeData);
+                }   
             }
             countryMarkerCluster = new MarkerClusterer(map, markers,
            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}); 
@@ -810,6 +1980,14 @@ $scope.countryChange = function()
         data: $scope.getPoints(),
         map: map
         });
+    }
+
+    $scope.clearFusionLayer = function()
+    {
+        if( fusionLayer != null )
+        {
+            fusionLayer.setMap(null);
+        }
     }
 
     $scope.clearIndiaMarkers = function()
@@ -1988,6 +3166,7 @@ $scope.countryChange = function()
         $scope.clearAllCategoryMarkers();
         $scope.clearAllSubcategoryMarkers();
         $scope.clearAllPlacesMarkers();
+        $scope.clearFusionLayer();
 
         if ( value == 0 )
         {
@@ -2521,6 +3700,7 @@ $scope.countryChange = function()
         $scope.clearAllCategoryMarkers();
         $scope.clearIndiaMarkers();
         $scope.clearAllHeatMaps();
+        $scope.clearFusionLayer();
         
         if (jsonObject.category == "pos")
         {
@@ -2574,7 +3754,7 @@ $scope.countryChange = function()
 
             })(marker, jsonObject);
         }
-        else if (jsonObject.category == "productionsentres")
+        else if (jsonObject.category == "productioncentres")
         {
             
             $scope.showStorePlaceTypes = true;
