@@ -1,3 +1,4 @@
+
 angular.module('angularjs_with_Nodejs').controller('biController', function ($scope, $timeout, $filter, $http) {
 
     var map,geocoder,radius_circle,places;;
@@ -42,10 +43,17 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     var trafficLayer;
     var selectedCategoryName;
     var userSelectedCategoryName;
+    $scope.SelectedCountry = "";
+    var showBikeMarker = false;
+    $scope.formblock = true;
+   
+    $scope.showMarketing = false;
+
+    $scope.showTrafficButton = true;
 
     $scope.countries =
     [
-        {"name":"", "selected":true},
+        //{"name":"", "selected":true},
         {"name":"India", "selected":false},
         {"name":"Singapore", "selected":false}
     ]
@@ -69,6 +77,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         {"name":"North", "selected":false},
         {"name":"South", "selected":false}
     ]
+
     $scope.placetypes = 
     [
         {"name":"Restaurants", "checked":false},
@@ -170,8 +179,13 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     var arrLatLongTruck = [];
     var arrInfowindows = [], arrInfowindowsAssetTrackingMarkers = [];
     var arrMarkers = [];
+    var arrShowMarkers = [];
     var fusionLayer;
     $scope.showPersonAnalysis = false;
+    $scope.weightagePOI = [];
+    $scope.TotalWeightage = 0;
+    $scope.categorizedWeightage = {};
+    var timer;
 
     $scope.statesData = {
         'selectedStates': [],
@@ -192,8 +206,6 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         "selectedCategory": "",
         "categoryData": []
     };
-
-    //$scope.SelectedCountry = "Singapore";
 
     setTimeout(function ()
     {
@@ -243,7 +255,82 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         } 
     };
 
+    $scope.showStoreLocatorUI = function()
+    {
+        $scope.clearIndiaMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
+        $scope.clearAllHeatMaps();
+        $scope.clearFusionLayer();
+        $scope.clearAllAssetTrackingMarkersAndInfoWindows();
+        $scope.clearCityAndRegionMarker();
+
+        $scope.storeNames.length = 0; 
+        $scope.showStorePlaceTypes = false;
+        for (var i = 0, length = $scope.categories.length; i < length; i++) 
+        {
+            $scope.categories[i].checked = false;
+        }
+
+        for (var i = 0, length = $scope.subCategories.length; i < length; i++) 
+        {
+            $scope.subCategories[i].checked = false;
+        }
+
+
+        $scope.formblock = true;
+        //show traffic button
+        $scope.showTrafficButton = true;
+        //Hide SalesTracking UI
+        $scope.whichOverlayToShow = ""; //this hides city score card UI too
+        if( arrMarkers != null )
+        {
+            for (var key in arrMarkers) 
+            {
+                //arrMarkers =[];
+                arrMarkers[key].setMap(null);
+            };
+        }
+
+        //hide Assettracking UI
+        $scope.clearAllAssetTrackingMarkersAndInfoWindows();
+        showBikeMarker = false;
+
+        //hide Marketing
+        $scope.showMarketing = false;
+
+    }
+
+    $scope.showMarketingUI = function()
+    {
+        $scope.showMarketing = true;
+
+        //hide traffic button
+        $scope.showTrafficButton = false;
+        //hide store locator
+        $scope.formblock = false;
+
+        //Hide SalesTracking UI
+        $scope.whichOverlayToShow = ""; //this hides city score card UI too
+        if( arrMarkers != null )
+        {
+            for (var key in arrMarkers) 
+            {
+                //arrMarkers =[];
+                arrMarkers[key].setMap(null);
+            };
+        }
+
+        //hide Assettracking UI
+        $scope.clearAllAssetTrackingMarkersAndInfoWindows();
+        showBikeMarker = false;
+        
+    }
+
+
     $scope.calulateWeightageforPOI = function (selectedCity) {
+        console.log("---calulateWeightageforPOI---",selectedCity);
         if (selectedCity == "" || selectedCity == undefined || selectedCity == null) {
             return;
         }
@@ -567,6 +654,20 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         });
     };
 
+    $scope.listAllCities = function () {
+        $.getJSON('/allCities', {}, function (data) {
+            $scope.statesData.allCities = data;
+            $scope.$apply();
+        });
+    };
+
+    $scope.getPOIWeightages = function () {
+        $.getJSON('/weightagePOI', {}, function (data) {
+            $scope.weightagePOI = data;
+            $scope.$apply();
+        });
+    };
+
     $scope.showFilters = function (filterName) {
 
         map.setCenter({lat:23.492690,lng: 78.680398});
@@ -600,6 +701,29 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 //        setMapStyle('default');
         if (filterName == "salesPerson") 
         {
+            // $scope.clearIndiaMarkers();
+            // $scope.clearAllCategoryMarkers();
+            // $scope.clearAllSubcategoryMarkers();
+            // $scope.clearAllPlacesMarkers();
+            // $scope.clearAllHeatMaps();
+            // $scope.clearFusionLayer();
+            // $scope.clearCityAndRegionMarker();
+
+            //hide store locator
+            $scope.formblock = false;
+
+            //hide traffic button
+            $scope.showTrafficButton = false;
+
+            //hide Assettracking UI
+            $scope.clearAllAssetTrackingMarkersAndInfoWindows();
+            showBikeMarker = false;
+
+            
+            //hide Marketing
+            $scope.showMarketing = false;
+
+
             $scope.title = "Sales Tracking";
             // alert("hi all" + filterName);
             //$("#salerPersonPics").show();
@@ -608,6 +732,31 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
             flgShowAllMarkers = true;
             $scope.getSalesData('Top Perforrming Sales Executives');
             $scope.placeMarkesrs();
+        }
+
+        if( filterName== "POI" )
+        {
+            $scope.formblock = false;
+            //Hide SalesTracking UI
+            //$scope.whichOverlayToShow = ""; //this hides city score card UI too
+            if( arrMarkers != null )
+            {
+                for (var key in arrMarkers) 
+                {
+                    //arrMarkers =[];
+                    arrMarkers[key].setMap(null);
+                };
+            }
+
+             //hide Assettracking UI
+            $scope.clearAllAssetTrackingMarkersAndInfoWindows();
+            showBikeMarker = false;
+
+            //hide Marketing
+            $scope.showMarketing = false;
+
+            //hide traffic button
+            $scope.showTrafficButton = false;
         }
     };
 
@@ -689,6 +838,65 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         $scope.salePersonImage = img;
     };
 
+    $scope.clearAllAssetTrackingMarkersAndInfoWindows = function()
+    {
+        if (arrdirectionsDisplay != null) 
+        {
+            for (var i = 0; i < arrdirectionsDisplay.length; i++) 
+            {
+                arrdirectionsDisplay[i].setMap(null);
+                arrdirectionsDisplay[i] = null;
+            }
+            arrdirectionsDisplay = [];
+        }
+
+        if(infowindowsCollection != null)
+        {
+            for(var j = 0; j < infowindowsCollection.length; j++)
+            {
+                //console.log(j);
+                infowindowsCollection[j].close();
+            }
+            infowindowsCollection = [];
+        }
+
+        if(arrInfowindowsAssetTrackingMarkers != null)
+        {
+            for(var j = 0; j < arrInfowindowsAssetTrackingMarkers.length; j++)
+            {
+                //console.log(j);
+                arrInfowindowsAssetTrackingMarkers[j].close();
+            }
+            arrInfowindowsAssetTrackingMarkers = [];
+        }
+
+        if(arrInfowindows != null)
+        {
+            for(var j = 0; j < arrInfowindows.length; j++)
+            {
+                //console.log(j);
+                arrInfowindows[j].close();
+            }
+            arrInfowindows = [];
+        }
+
+        if( arrMarkers != null )
+        {
+            for (var key in arrMarkers) 
+            {
+                arrMarkers[key].setMap(null);
+                //arrMarkers =[];
+            };
+        }
+
+        for (var key in arrShowMarkers) 
+        {
+            arrShowMarkers[key].setMap(null);
+        };
+
+        //$timeout.cancel(timer);
+    }
+
     $scope.marketingTypeChanged = function()
     {
         $scope.clearIndiaMarkers();
@@ -697,6 +905,8 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         $scope.clearAllPlacesMarkers();
         $scope.clearAllHeatMaps();
         $scope.clearFusionLayer();
+        $scope.clearAllAssetTrackingMarkersAndInfoWindows();
+        $scope.clearCityAndRegionMarker();
 
         if($scope.selectedMarketingType == "Indoor")
         {
@@ -736,6 +946,29 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
     $scope.assetTracking = function ()
     { 
+        $scope.clearIndiaMarkers();
+        $scope.clearAllCategoryMarkers();
+        $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
+        $scope.clearAllHeatMaps();
+        $scope.clearFusionLayer();
+        $scope.clearCityAndRegionMarker();
+        //hide storelocator
+        $scope.formblock = false;
+        //Hide SalesTracking UI
+        $scope.whichOverlayToShow = ""; //this hides city score card UI too
+        if( arrMarkers != null )
+        {
+            for (var key in arrMarkers) 
+            {
+                //arrMarkers =[];
+                arrMarkers[key].setMap(null);
+            };
+        }
+
+        //hide Marketing
+        $scope.showMarketing = false;
+
         map.setCenter({lat:1.328178,lng: 103.845055});
         map.setZoom(11);
         var assetOriginDestDetails = [
@@ -744,6 +977,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
             //{"destination": {"Latitude": 24.5854, "Longitude": 73.7125}, "origin": {"Latitude": 28.7041, "Longitude": 77.1025}, "markerContent": '<div id="content"  class="infowindow_warehouse">' + '<div id="siteNotice">' + '<h6 >Driver Name - Abhishek Jha </h6><br>' + '<h7> Vehicle# -  DL 2C AS 2935 </h7><br>' + '<h7> Mobile# -  7838757968 </h7><br>' + '<h7> Goods Type -  Cement </h7><br>' + '<h7> Speed -  30 km/h </h7><br>' + '<h7> Battery -  87% </h7><br>' + '</div>'},
             //{"destination": {"Latitude": 24.5854, "Longitude": 74.7125}, "origin": {"Latitude": 26.7041, "Longitude": 80.1025}, "markerContent": '<div id="content"  class="infowindow_warehouse">' + '<div id="siteNotice">' + '<h6 >Driver Name - Akash Joshi </h6><br>' + '<h7> Vehicle# -  DL 2C AS 2935 </h7><br>' + '<h7> Mobile# -  7838757968 </h7><br>' + '<h7> Goods Type -  Furniture </h7><br>' + '<h7> Speed -  65 km/h </h7><br>' + '<h7> Battery -  10% </h7><br>' + '</div>'}
         ];
+        showBikeMarker = true;
         calcRoute(assetOriginDestDetails, false, true);
         $scope.showMarker(1.330700, 103.672792,0);
         $scope.showMarker(1.345309, 103.689468,0);
@@ -754,11 +988,12 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         $scope.showMarker(1.387756, 103.775031,0);
         $scope.showMarker(1.318515, 103.830182,0);
         $scope.showMarker(1.298473, 103.781391,0);
-
+        
     };
 
     $scope.showMarker = function(latitude,longitude,value)
     {
+
         latLng = new google.maps.LatLng(latitude, longitude); 
 
         // Creating a marker and putting it on the map
@@ -767,7 +1002,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
         map: map,
         title: "",
         icon: 'images/purple.png',
-        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
         });
 
         infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
@@ -786,10 +1021,12 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                 
             
         infoWindow.open(map, marker);
+        arrInfowindowsAssetTrackingMarkers.push(infoWindow);
         
         });
 
-        markers.push(marker);
+        //markers.push(marker);
+        arrShowMarkers.push(marker);
         })(marker);
     };
 
@@ -845,7 +1082,8 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
                     }
                     infowindow2.setPosition(infoposition ? infoposition : end);
                     infowindow2.open(map);
-                    arrInfowindows.push(infowindow2);
+                    infowindowsCollection.push(infowindow2);
+                    //infowindowsCollection.push(infowindow2);
 
                     if (isAssetTracking) 
                     {
@@ -883,7 +1121,7 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
 
 $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDotMarker) {
         
-    setTimeout(function () {
+    timer = setTimeout(function () {
         if (countDotMarker == 3 ) 
         {
             countDotMarker = 0;
@@ -894,7 +1132,9 @@ $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDo
                 {
                     if (results[1]) 
                     {
-                        var markerDot = new google.maps.Marker({position: markerTruck.position, map: map, icon: 'images/marker-dot.png'});
+                        if (showBikeMarker)
+                        {
+                            var markerDot = new google.maps.Marker({position: markerTruck.position, map: map, icon: 'images/marker-dot.png'});
 
                         markerDot.setMap(map);
                         markerDot.setPosition(markerTruck.position);
@@ -922,6 +1162,7 @@ $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDo
                             arrInfowindowsAssetTrackingMarkers.push(infoWindow);
                         })
                         arrMarkers.push(markerDot);
+                        }
                     }
                 }
             });
@@ -952,6 +1193,7 @@ $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDo
         $scope.clearAllPlacesMarkers();
         $scope.clearAllHeatMaps();
         $scope.clearFusionLayer();
+        $scope.clearCityAndRegionMarker();
 
         $scope.storeNames.length = 0;  
 
@@ -1297,6 +1539,7 @@ $scope.showSubCatergorisedLocations = function (event,index)
 
     $scope.clearAllHeatMaps();
     $scope.clearFusionLayer();
+    $scope.clearCityAndRegionMarker();
 
   
     $scope.storeNames.length = 0;  
@@ -1843,10 +2086,12 @@ $scope.showSubCatergorisedLocations = function (event,index)
 });
 };
 
-$scope.countryChange = function(name)
+$scope.countryChange = function()
 {
-    console.log("---name---:",name);
-    console.log("---countryChange---:",$scope.SelectedCountry);
+    //$scope.formblock = false;
+
+    //$scope.SelectedCountry = name;
+
     $scope.clearAllCategoryMarkers();
     $scope.clearAllSubcategoryMarkers();
     $scope.clearAllPlacesMarkers();
@@ -1863,12 +2108,13 @@ $scope.countryChange = function(name)
         $scope.subCategories[i].checked = false;
     }
 
-    $scope.clearDirection();
 
-    //console.log("---$scope.SelectedCountry---:",$scope.SelectedCountry);
+    console.log("---$scope.SelectedCountry---:",$scope.SelectedCountry);
+    
 
     if( $scope.SelectedCountry == "India" )
     {
+        
         $scope.clearIndiaMarkers();
         $scope.showAllLocations();
     }
@@ -1876,6 +2122,7 @@ $scope.countryChange = function(name)
     {
         $scope.clearIndiaMarkers();
         $scope.showAllLocations();
+        
     }
     else
     {
@@ -1900,7 +2147,7 @@ $scope.countryChange = function(name)
                 var storeData = data[i];
                 
                 if ($scope.SelectedCountry == "India" && storeData.country == "India")
-                {
+                {       
                     //$scope.storeNames.push(data[i]);
                     latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                     
@@ -2020,7 +2267,7 @@ $scope.countryChange = function(name)
             countryMarkerCluster.clearMarkers();
         }
         
-    };
+    }; 
 
     $scope.clearAllPlacesMarkers = function()
     {
@@ -2376,6 +2623,7 @@ $scope.countryChange = function(name)
             infowindowsCollection = [];
         }
     };
+
 
     $scope.showDirections = function(start, end, locationObject)
     {
@@ -3124,6 +3372,10 @@ $scope.countryChange = function(name)
         $scope.clearAllCategoryMarkers();
         $scope.clearAllSubcategoryMarkers();
         $scope.clearAllPlacesMarkers();
+        $scope.clearAllHeatMaps();
+        $scope.clearFusionLayer();
+        $scope.clearAllAssetTrackingMarkersAndInfoWindows();
+        $scope.clearCityAndRegionMarker();
 
         if( $scope.selectedRegion == "East" )
         {
@@ -3180,6 +3432,11 @@ $scope.countryChange = function(name)
         $scope.clearAllSubcategoryMarkers();
         $scope.clearAllPlacesMarkers();
         $scope.clearFusionLayer();
+        $scope.clearAllAssetTrackingMarkersAndInfoWindows();
+        $scope.clearCityAndRegionMarker();
+        
+        
+        //$scope.clearAllHeatMaps();
 
         if ( value == 0 )
         {
@@ -3714,6 +3971,7 @@ $scope.countryChange = function(name)
         $scope.clearIndiaMarkers();
         $scope.clearAllHeatMaps();
         $scope.clearFusionLayer();
+        $scope.clearCityAndRegionMarker();
         
         if (jsonObject.category == "pos")
         {

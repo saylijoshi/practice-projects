@@ -58,19 +58,46 @@
 
 <body ng-controller="biController">
 
-    <img src="../images/gmp.png" style="margin: 15px 15px 15px 100px;width: 30%;position: absolute; z-index: 120" >
-    <div class="header-right">
-      <img src="../images/searce-logo.png" style="margin: 7px 100px 20px 50px;width: 65%;">
-    </div>
+    <!--<img src="../images/gmp.png" style="margin: 15px 15px 15px 100px;width: 30%;position: absolute; z-index: 120" >-->
+    
      
     
 <div class="main">
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="col-md-2">
+            <img id="logoImg" style="height: 40px;" src="images/searce.png">
+        </div>
+
+        <div class="col-md-7">
+            <ul class="nav-option">
+                <li><a ng-click="showStoreLocatorUI()">Store Locator</a></li>
+                <li><a > | </a></li>
+                <li><a ng-click="showFilters('salesPerson');">Sales Tracking</a></li>
+                <li><a > | </a></li>
+                <li><a ng-click="assetTracking()">Asset Tracking</a></li>
+                <li><a > | </a></li>
+                <!-- <li><a ng-click="showMarketingUI()">Marketing</a></li>-->
+                <li><a ng-click="showFilters('POI');listAllCities();getPOIWeightages();">City Score Card</a></li>
+            </ul>
+        </div>
+        
+        
+
+        <div class="col-md-3" >
+            <img class="head-img" src="../images/gmp.png">
+        </div>
+        
+    </div>
+</nav>
 
   
 <div id="mymap"></div> 
 
 
-<div class="form-block1">
+<div class="form-block1" ng-show="formblock" >
 
         <div class="bs-example">
             <div class="panel-group" id="accordion1">
@@ -83,15 +110,16 @@
                     <div id="collapse1" class="panel-collapse collapse in">
                         <div class="panel-body">
                             Select Country
-                            <select ng-model="SelectedCountry" ng-change = "countryChange(SelectedCountry);" >
-                                    <option ng-repeat="country in countries" value="{{country.name}}" >{{ country.name }}</option>
+                            <select ng-model="SelectedCountry" ng-change = "countryChange();" >
+                                    <option value="" selected></option>
+                                    <option ng-repeat="country in countries" value="{{country.name}}" >{{ country.name }} </option>
                             </select>
                             </br>Select Category
                             <div ng-repeat="opt in categories">
                                 <label class="container">
                                   <input type="checkbox" ng-click="showCatergorisedLocations($event, $index);" ng-model="opt.checked">
                                   <span class="checkmark"></span>{{opt.name}}
-                                </label>
+                                </label> 
                             </div> 
                         </div>
                     </div>
@@ -147,65 +175,68 @@
           </div>
           
 </div>
-<div class="form-block2">
+<div   class="form-block2" ng-show="formblock" >
     <button class="custom-button"  ng-click="toggleTrafficLayer()">Traffic Layer</button>
-    <button class="custom-button"  ng-click="assetTracking()">Asset Tracking</button>
-    <button class="custom-button"  ng-click="showFilters('salesPerson');">Sales Tracking</button>
-    <button class="custom-button"  ng-click="showFilters('POI');listAllCities();getPOIWeightages();">City Score Card</button>
+    
     <div class="bs-example">
         <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="panel-heading">
-                    <h4 class="panel-title">
-                        <a >Points of Interest</a>
-                    </h4>
-                </div>
-                <div id="collapseOne" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        Select Store :
-                        <select ng-model="selectedStore" ng-change = "getData(null, -1);" >
-                                <option ng-repeat="store in storeNames" value="{{store}}" >{{store.city +"-"+store.name}}</option>
-                        </select>
-                        <span ng-if="showStorePlaceTypes">
-                        <div ng-repeat="opt in placetypes">
-                            <label class="container">
-                                <input type="checkbox" ng-click="getData($event, $index);" ng-model="opt.checked">
-                                <span class="checkmark"></span>{{opt.name}}
-                              </label>
-                        </div>  
+           
+                <div class="panel panel-default">
+                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Points of Interest</a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            Select Store :
+                            <select ng-model="selectedStore" ng-change = "getData(null, -1);" >
+                                    <option ng-repeat="store in storeNames" value="{{store}}" >{{store.city +"-"+store.name}}</option>
+                            </select>
+                            <span ng-if="showStorePlaceTypes">
+                            <div ng-repeat="opt in placetypes">
+                                <label class="container">
+                                    <input type="checkbox" ng-click="getData($event, $index);" ng-model="opt.checked">
+                                    <span class="checkmark"></span>{{opt.name}}
+                                </label>
+                            </div>  
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="panel-heading">
-                    <h4 class="panel-title">
-                        <a >Demographics</a>
-                    </h4>
-                </div>
-                <div id="collapseTwo" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        Select City : 
-                        <select ng-model="selectedCity" ng-change = "cityChange(0);" >
-                                <option ng-repeat="city in cities" value="{{city.name}}" >{{ city.name }}</option>
-                        </select>
+                <div class="panel panel-default">
+                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Demographics</a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            Select City : 
+                            <select ng-model="selectedCity" ng-change = "cityChange(0);" >
+                                    <option ng-repeat="city in cities" value="{{city.name}}" >{{ city.name }}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="panel-heading">
-                    <h4 class="panel-title">
-                        <a >Marketing</a>
-                    </h4>
-                </div>
-                <div id="collapseThree" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        Select Type : 
-                        <select ng-model="selectedMarketingType" ng-change = "marketingTypeChanged();" >
-                                <option ng-repeat="type in marketingTypes" value="{{type.name}}" >{{ type.name }}</option>
-                        </select>
+           
+            <span >
+                <div class="panel panel-default">
+                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Marketing</a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            Select Type : 
+                            <select ng-model="selectedMarketingType" ng-change = "marketingTypeChanged();" >
+                                    <option ng-repeat="type in marketingTypes" value="{{type.name}}" >{{ type.name }}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </span>
+
         </div>
       </div>
      

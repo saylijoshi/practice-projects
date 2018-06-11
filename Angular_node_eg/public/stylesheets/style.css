@@ -102,12 +102,13 @@ fieldset {
 }
 .client_img_list{
     position: absolute;
-    width: 95%;
+    width: 100%;
     overflow-x: auto;
     background-color : transparent;
     white-space: nowrap;
     z-index: 200;
     margin-top: 35%;
+    margin-left: 4%;
 }
 .client_img_list .img_block{
     height : 140px;
@@ -634,6 +635,14 @@ pre{
     right: 0px;
 }
 
+.nav-option {
+    margin: 0 !important;
+}
+
+.head-img {
+    width: 100%;
+}
+
 .custom-button{
     width: 100%;
     margin: 5px 0;
@@ -670,8 +679,30 @@ pre{
     z-index: 110;
   }
 
+.nav-option li{
+    display: inline-block;
+    list-style: none;
+    padding: 5px 5px;
+    font-size: 20px;
+    font-weight: 900;
+    
+}
 
-  
+.nav-option li a {
+    display: inline-block;
+    text-decoration: none;
+    line-height: 40px;
+
+}
+
+.nav-option li a:active {
+    color: grey;
+}
+
+.nav-option li a:hover {
+    background-color: #666 !important;
+
+}
   /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */ 
   @media screen and (max-width: 500px) {
     .header a {
