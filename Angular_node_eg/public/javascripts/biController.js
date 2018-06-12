@@ -46,10 +46,9 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
     $scope.SelectedCountry = "";
     var showBikeMarker = false;
     $scope.formblock = true;
-   
     $scope.showMarketing = false;
-
     $scope.showTrafficButton = true;
+    $scope.loading = false;
 
     $scope.countries =
     [

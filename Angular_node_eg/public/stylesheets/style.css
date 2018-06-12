@@ -683,7 +683,7 @@ pre{
     display: inline-block;
     list-style: none;
     padding: 5px 5px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 900;
     
 }
@@ -691,16 +691,17 @@ pre{
 .nav-option li a {
     display: inline-block;
     text-decoration: none;
-    line-height: 40px;
-
+    line-height: 50px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .nav-option li a:active {
-    color: grey;
+    color: rgb(24, 24, 24);
 }
 
 .nav-option li a:hover {
-    background-color: #666 !important;
+    background-color: rgb(206, 206, 206) !important;
 
 }
   /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */ 
