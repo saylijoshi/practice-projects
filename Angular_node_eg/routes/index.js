@@ -9,7 +9,7 @@ var https = require('https');
 //var httpmodule = require('./httpModule');
 //var requestIp = require('request-ip');ç
 var fs = require('fs');
-var filename = "example.txt";
+var filename = "data.txt";
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -568,14 +568,14 @@ router.post('/getEWayBillGSTDetails', function (req, res) {
 
 router.post('/getIPAddress', function (req, res) {
     var ipaddress = req.body["ipAddress"];
-    console.log("---origin---:",ipaddress);
+    //console.log("---origin---:",ipaddress);
     
     fs.stat(filename, function(err, stats) { 
         if(err)
         {
           switch(err.code){
             case 'ENOENT':
-              console.log(filename + ' ===does not exist===');
+              console.log(filename + '===does not exist===');
               break;
            
           }
@@ -587,7 +587,7 @@ router.post('/getIPAddress', function (req, res) {
           console.log(filename + "===: is a directory");
         } else 
         {
-          console.log(filename);
+          //console.log(filename);
           var fileText = "1.\r\n2.\r\n5.\r\n";
       
           fs.appendFile(filename, "Website accessed from : " +ipaddress + "\r\n", function(error) {
