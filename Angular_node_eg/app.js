@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-var fs = require("fs");
+const fs = require("fs");
 var request = require('request');
 
 //var config = require('./config');
@@ -87,6 +87,109 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// var fs = require('fs'), filename = "example.txt";
+
+// fs.stat(filename, function(err, stats) { 
+//   if(err){
+//     //doing what I call "early return" pattern or basically "blacklisting"
+//     //we stop errors at this block and prevent further execution of code
+
+//     //in here, do something like check what error was returned
+//     switch(err.code){
+//       case 'ENOENT':
+//         console.log(filename + ' ===does not exist');
+//         break;
+     
+//     }
+//     //of course you should not proceed so you should return
+//     return;
+//   }
+
+//   //back there, we handled the error and blocked execution
+//   //beyond this line, we assume there's no error and proceed
+
+//   if (stats.isDirectory()) 
+//   {
+//     console.log(filename + "===: is a directory");
+//   } else 
+//   {
+//     console.log(filename);
+
+//     var fileText = "I am the first part of the info being emailed.\r\nI am the second part.\r\nI am the third part.\r\n";
+
+//     fs.open(filename, "w+", function(error, fd) {
+//         if (error) {
+//           console.error("open error:  " + error.message);
+//         } else {
+//           console.log("Successfully opened " + filename);
+//         }
+//       });
+
+//     fs.writeFile(filename, fileText, function(error) {
+//         if (error) {
+//             console.error("write error:  " + error.message);
+//         } else {
+//             console.log("Successful Write to " + filename);
+//         }
+//     });
+
+//     var fileText = "I am the first part of the info being emailed.\r\nI am the second part.\r\nI am the third part.\r\n";
+
+//     fs.appendFile(filename, fileText, function(error) {
+//         if (error) {
+//             console.error("write error:  " + error.message);
+//         } else {
+//             console.log("Successful Write to " + filename);
+//         }
+//     });
+
+//     // fs.writeFile(filename, fileText, function(error) {
+//     //     if (error) {
+//     //         console.error("write error:  " + error.message);
+//     //     } else {
+//     //         console.log("Successful Write to " + filename);
+//     //     }
+//     // });
+
+    
+
+//     // fs.readFile(filename, "utf8", function(error, data)
+//     // {
+//     //     if (error) {
+//     //         console.error("read error:  " + error.message);
+//     //     } else {
+//     //         console.log(data);
+//     //     }
+//     // });
+
+
+
+//     // var fileText = "I am the first part of the info being emailed.\r\nI am the second part.\r\nI am the third part.";
+
+//     // var blob = new Blob([fileText], {type: 'text/plain'}),
+//     //     e    = document.createEvent('MouseEvents'),
+//     //     a    = document.createElement('a')
+//     // // FOR IE:
+
+//     // if (window.navigator && window.navigator.msSaveOrOpenBlob) 
+//     // {
+//     // window.navigator.msSaveOrOpenBlob(blob, filename);
+//     // }
+//     // else
+//     // {
+//     // var e = document.createEvent('MouseEvents'),
+//     //     a = document.createElement('a');
+
+//     // a.download = filename;
+//     // a.href = window.URL.createObjectURL(blob);
+//     // a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+//     // e.initEvent('click', true, false, window,
+//     //     0, 0, 0, 0, 0, false, false, false, false, 0, null);
+//     // a.dispatchEvent(e);
+//     // }
+//   }
+// });
 
 function readCSVfile(){
     fs.createReadStream("addresses.csv")

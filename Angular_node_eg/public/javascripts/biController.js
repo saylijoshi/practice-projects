@@ -1,5 +1,5 @@
 
-angular.module('angularjs_with_Nodejs').controller('biController', function ($scope, $timeout, $filter, $http) {
+angular.module('angularjs_with_Nodejs').controller('biController', function ($rootScope,$scope, $timeout, $filter, $http) {
 
     var map,geocoder,radius_circle,places;;
     var infoWindow;
@@ -221,6 +221,8 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
             });
 
         trafficLayer = new google.maps.TrafficLayer();
+
+        $scope.storeIPAddress();
     }
 
     $scope.initHeatMap = function()
@@ -229,6 +231,18 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($sc
             data: $scope.getPoints(),
             map: map
             });
+    }
+
+    $scope.storeIPAddress = function()
+    {
+        var ipAddress = "111";
+        var url = "//freegeoip.net/json/";
+        $http.get(url).then(function(response) {
+        ipAddress = response.data.ip;
+        $.post('/getIPAddress', {'ipAddress': ipAddress}, function (data) {
+
+         });
+        });
     }
 
     $scope.getUserLocation = function()
