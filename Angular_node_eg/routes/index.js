@@ -564,8 +564,6 @@ router.post('/getEWayBillGSTDetails', function (req, res) {
     }
     
 
-
-
 router.post('/getIPAddress', function (req, res) {
     var ipaddress = req.body["ipAddress"];
     //console.log("---origin---:",ipaddress);
@@ -588,9 +586,9 @@ router.post('/getIPAddress', function (req, res) {
         } else 
         {
           //console.log(filename);
-          var fileText = "1.\r\n2.\r\n5.\r\n";
+          var fileText = "1.\r\n2.\r\n6.\r\n";
       
-          fs.appendFile(filename, "Website accessed from : " +ipaddress + "\r\n", function(error) {
+          fs.appendFile(filename, "Website accessed from : " +ipaddress + "  on " + new Date().toLocaleString + "\r\n", function(error) {
               if (error) {
                   console.error("write error:  " + error.message);
               } else {
