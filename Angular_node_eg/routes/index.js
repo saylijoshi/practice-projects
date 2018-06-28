@@ -10,6 +10,8 @@ var https = require('https');
 //var requestIp = require('request-ip');ç
 var fs = require('fs');
 var filename = "data.txt";
+var ObjectId = require('mongodb').ObjectID;
+
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -42,6 +44,16 @@ router.get('/searceBIplatform', function (req, res, next) {
 //BIdemo page
 router.get('/demo', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../', 'views', 'bidemo.html'));
+});
+
+//Accenturev2 Demo
+router.get('/accenturedemo', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../', 'views', 'accenturev2.html'));
+});
+
+//HCCB Demo
+router.get('/hccbdemo', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../', 'views', 'hccbdemo.html'));
 });
 
 //var googleMapsClient = googlemaps.createClient({
@@ -178,8 +190,6 @@ router.get('/stateData', function (req, res) {
             });
         });
     });
-
-
 });
 
 router.get('/zipcodBoundries', function (req, res) {
@@ -447,6 +457,125 @@ router.get('/getBIData', function (req, res) {
     });
 });
 
+router.get('/distributors', function (req, res) {
+    var db = req.db;
+    var collection = db.get('distributors');
+
+    collection.find({}, {}, function (e, docs) {
+        res.json(docs);
+    });
+});
+
+router.get('/retailers', function (req, res) {
+    var db = req.db;
+    var collection = db.get('retailers');
+    
+    collection.find({}, {}, function (e, docs) {
+        res.json(docs);
+    });
+});
+
+router.get('/retailers/:_id', function (req, res) {
+    var db = req.db;
+    var collection = db.get('retailers');
+    var value = req.params._id;
+    
+    collection.find({'_id': ObjectId(value)}, {}, function (e, docs) {
+        res.json(docs);
+    });
+});
+
+router.delete('/retailers/:_id', function (req, res) {
+    var db = req.db;
+    var collection = db.get('retailers');
+
+    collection.findOne({'_id': ObjectId(req.params._id)}, function(error,doc) {
+        if (error) {
+            console.log("---error---: ",error);
+        } else {
+            
+            collection.remove({
+                _id: ObjectId(req.params._id)
+            }, function(err) {
+                if (err)
+                    res.send(err);
+                    console.log("---Success---: ");
+                res.json({ status: 200, message: 'Successfully deleted' });
+            });
+        }
+    });
+});
+
+router.post('/retailers', function (req, res) {
+
+    var db = req.db;
+    var collection = db.get('retailers');
+
+    var name = req.body["name"];
+    var address = req.body["address"];
+    var latitude = req.body["latitude"];
+    var longitude = req.body["longitude"];
+    var distributor = req.body["distributor"];   
+    
+    var dbObj = {
+        "id" : 000,
+        name : name,
+        address : address,
+        latitude : latitude,
+        longitude : longitude,
+        "contact" : "020 6521 5656",
+        "zone" : "West",
+        "region" : 0,
+        "country" : 'India',
+        distributor : distributor
+    }
+    
+    collection.insert(dbObj);
+    
+    collection.find({}, {}, function (e, docs) {
+            res.json(docs);
+        });
+});
+
+router.put('/retailers', function (req, res) {
+    var db = req.db;
+    var collection = db.get('retailers');
+
+    var _id = req.body["_id"];
+    var name = req.body["name"];
+    var address = req.body["address"];
+    var latitude = req.body["latitude"];
+    var longitude = req.body["longitude"];
+    var distributor = req.body["distributor"];   
+    
+    var document = {
+        "_id" : ObjectId(_id),
+        "id" : 000,
+        "name" : name,
+        "address" : address,
+        "latitude" : latitude,
+        "longitude" : longitude,
+        "contact" : "020 6521 5656",
+        "zone" : "West",
+        "region" : 0,
+        "country" : 'India',
+        "distributor" : distributor
+    }
+
+    collection.update({_id:ObjectId(_id)}, {$set:document}, function(err, res) {
+        if (err){
+            console.log("---err---:",err);
+            throw err;
+        } 
+        console.log("---document updated---");
+      });
+    
+    collection.find({}, {}, function (e, docs) {
+       res.json(docs);
+    }); 
+});
+
+
 router.post('/getEWayBillGSTDetails', function (req, res) {
     //    console.log(req);
        var  origin = req.body["origin"];
@@ -587,8 +716,16 @@ router.post('/getIPAddress', function (req, res) {
         {
           //console.log(filename);
           var fileText = "1.\r\n2.\r\n6.\r\n";
+
+          var currentdate = new Date(); 
+          var datetime = currentdate.getDate() + "/"
+                        + (currentdate.getMonth()+1)  + "/" 
+                        + currentdate.getFullYear() + " @ "  
+                        + currentdate.getHours() + ":"  
+                        + currentdate.getMinutes() + ":" 
+                        + currentdate.getSeconds();
       
-          fs.appendFile(filename, "Website accessed from : " +ipaddress + "  on " + new Date().toLocaleString + "\r\n", function(error) {
+          fs.appendFile(filename, "Website accessed from : " +ipaddress + "  on " + datetime + "\r\n", function(error) {
               if (error) {
                   console.error("write error:  " + error.message);
               } else {

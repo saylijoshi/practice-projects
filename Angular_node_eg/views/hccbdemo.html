@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html ng-app="angularjs_with_Nodejs">
+<head>
+    <title>HCCB BI Platform</title>
+
+    <link type="text/css" rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/css/iziModal.min.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css"/>
+    <link rel="stylesheet" href="/vendor/handsontable/dist/angular-ui-handsontable.full.css">
+    <link type="text/css" rel="stylesheet" href="/vendor/bootstrap-3.3.7-dist/css/bootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="/vendor/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="vendor/select2/select2.css">
+
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    
+         <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8"/>
+
+    <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVR5iaxk4V2f3OqyyhwUrZdWvE7L7n8Uo&libraries=places,geometry,visualization"></script>
+    <script src="/vendor/jquery-1.9.1.js"></script>
+    <script src="/vendor/angular.js"></script>
+    <!--<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>-->
+    <script type="text/javascript" src="vendor/select2/select2.js"></script>
+    <!--<script type="text/javascript" src="bower_components/angular/angular.js"></script>-->
+    <script type="text/javascript" src="vendor/angular-ui-select2/src/select2.js"></script>
+    <script src="/vendor/handsontable/dist/angular-ui-handsontable.full.js"></script>
+    <script src="javascripts/app.js" type="text/javascript"></script>
+    <script src="javascripts/hccbController.js" type="text/javascript"></script>
+    <script src="/vendor/angular-cookies-1.0.0rc10.js"></script>
+    <script src="/vendor/angular-ui.js"></script>
+    <script src="/vendor/angular-ui-states.js"></script>
+    <script src="/vendor/angular-strap.min.js"></script>
+    <script src="/vendor/ui-bootstrap-tpls-0.6.0.js"></script>
+    <script src="/vendor/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/js/iziModal.min.js" type="text/javascript"
+            charset="utf-8"></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+
+</head>
+
+<body ng-controller="hccbController">
+
+<div class="main">
+
+    <div id="loaderdiv" ng-show="loading">
+            <img src="images/loader4.gif" class="ajax-loader"/>
+    </div>
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-2">
+                <img id="logoImg" style="height: 40px;" src="images/searce.png">
+            </div>
+
+            <div class="col-md-7">
+                <ul class="nav-option">
+                    <li><a ></a></li>
+                    <li><a ></a></li>
+                    <li><a ></a></li>
+                    <li><a ></a></li>
+                    <li><a ></a></li>
+                </ul>
+            </div>
+            
+            <div class="col-md-3" >
+                <img class="head-img" src="../images/gmp.png">
+            </div>
+            
+        </div>
+    </nav>
+
+    <div id="mymap"></div> 
+
+</div>
+
+</body>
+
+

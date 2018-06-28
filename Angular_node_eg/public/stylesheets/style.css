@@ -702,8 +702,14 @@ pre{
 
 .nav-option li a:hover {
     background-color: rgb(206, 206, 206) !important;
-
 }
+
+.navBardemoBasicUsage md-content .ext-content {
+    padding: 50px;
+    margin: 20px;
+    background-color: #FFF2E0; 
+}
+  
   /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */ 
   @media screen and (max-width: 500px) {
     .header a {
