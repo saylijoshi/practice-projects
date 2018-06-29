@@ -466,10 +466,110 @@ router.get('/distributors', function (req, res) {
     });
 });
 
+router.get('/distributors/:_id', function (req, res) {
+    var db = req.db;
+    var collection = db.get('distributors');
+    var value = req.params._id;
+    
+    collection.find({'_id': ObjectId(value)}, {}, function (e, docs) {
+        res.json(docs);
+    });
+});
+
+router.delete('/distributors/:_id', function (req, res) {
+    var db = req.db;
+    var collection = db.get('distributors');
+
+    collection.findOne({'_id': ObjectId(req.params._id)}, function(error,doc) {
+        if (error) {
+            console.log("---error---: ",error);
+        } else {
+            
+            collection.remove({
+                _id: ObjectId(req.params._id)
+            }, function(err) {
+                if (err)
+                    res.send(err);
+                    console.log("---Success---: ");
+                res.json({ status: 200, message: 'Distributor successfully deleted' });
+            });
+        }
+    });
+});
+
+router.post('/distributors', function (req, res) {
+
+    var db = req.db;
+    var collection = db.get('distributors');
+
+    var name = req.body["name"];
+    var address = req.body["address"];
+    var latitude = req.body["latitude"];
+    var longitude = req.body["longitude"];
+    var distributor = req.body["distributor"];   
+    
+    var dbObj = {
+        "id" : 000,
+        name : name,
+        address : address,
+        latitude : latitude,
+        longitude : longitude,
+        "contact" : "020 6521 5656",
+        "zone" : "West",
+        "region" : 0,
+        "country" : 'India',
+        distributor : distributor
+    }
+    
+    collection.insert(dbObj);
+    
+    collection.find({}, {}, function (e, docs) {
+            res.json(docs);
+        });
+});
+
+router.put('/distributors', function (req, res) {
+    var db = req.db;
+    var collection = db.get('distributors');
+
+    var _id = req.body["_id"];
+    var name = req.body["name"];
+    var address = req.body["address"];
+    var latitude = req.body["latitude"];
+    var longitude = req.body["longitude"];
+    var distributor = req.body["distributor"];   
+    
+    var document = {
+        "_id" : ObjectId(_id),
+        "id" : 000,
+        "name" : name,
+        "address" : address,
+        "latitude" : latitude,
+        "longitude" : longitude,
+        "contact" : "020 6521 5656",
+        "zone" : "West",
+        "region" : 0,
+        "country" : 'India',
+        "distributor" : distributor
+    }
+
+    collection.update({_id:ObjectId(_id)}, {$set:document}, function(err, res) {
+        if (err){
+            console.log("---err---:",err);
+            throw err;
+        } 
+        console.log("---document updated---");
+      });
+    
+    collection.find({}, {}, function (e, docs) {
+       res.json(docs);
+    }); 
+});
+
 router.get('/retailers', function (req, res) {
     var db = req.db;
     var collection = db.get('retailers');
-    
+
     collection.find({}, {}, function (e, docs) {
         res.json(docs);
     });
@@ -500,7 +600,7 @@ router.delete('/retailers/:_id', function (req, res) {
                 if (err)
                     res.send(err);
                     console.log("---Success---: ");
-                res.json({ status: 200, message: 'Successfully deleted' });
+                res.json({ status: 200, message: 'Retailer successfully deleted' });
             });
         }
     });

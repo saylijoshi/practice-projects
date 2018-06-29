@@ -50,8 +50,7 @@ angular.module('angularjs_with_Nodejs').controller('hccbController', function ($
     $scope.showTrafficButton = true;
     $scope.loading = false;
     var locationMarker;
-    //var ObjectId = require('mongodb').ObjectID;
-
+    
     $scope.countries =
     [
         //{"name":"", "selected":true},
@@ -284,7 +283,7 @@ angular.module('angularjs_with_Nodejs').controller('hccbController', function ($
             // });
             //map.setCenter(myLatLng);
 
-            geocodeLatLng(geocoder, map, infowindow);
+           // geocodeLatLng(geocoder, map, infowindow);
             
             
             });
@@ -2274,6 +2273,82 @@ $scope.countryChange = function()
     }
 }
 
+$scope.showDistributors = function()
+{
+    $.getJSON('/distributors', {}, function (data) {
+
+        map.setCenter({lat:27.15397244,lng: 73.70090906});
+        map.setZoom(8);
+        map.setMapTypeId('roadmap');
+                            
+        for (var i = 0, length = data.length; i < length; i++) 
+        { 
+            var storeData = data[i];
+            latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+            // Creating a marker and putting it on the map
+            var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: storeData.name,
+            icon: 'images/red1.png',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+            });
+
+            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+            (function(marker, storeData) {
+
+            // Attaching a click event to the current marker
+            google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent('<h3>' + storeData.name + '</h3>'
+                + "<br/>" + "Address: " + storeData.address 
+                + "<br/>" + "Contact No: " + storeData.contact);
+            infoWindow.open(map, marker);
+
+            });
+
+            markers.push(marker);
+            })(marker, storeData);
+        } 
+        $scope.$apply();
+    });
+};
+
+$scope.showRetailers = function()
+{
+    $.getJSON('/retailers', {}, function (data) {
+                            
+        for (var i = 0, length = data.length; i < length; i++) 
+        { 
+            var storeData = data[i];
+            latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude);     
+            // Creating a marker and putting it on the map
+            var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: storeData.name,
+            icon: 'images/green.png',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+            });
+
+            infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+            (function(marker, storeData) {
+
+            // Attaching a click event to the current marker
+            google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent('<h3>' + storeData.name + '</h3>'
+                + "<br/>" + "Address: " + storeData.address 
+                + "<br/>" + "Contact No: " + storeData.contact);
+            infoWindow.open(map, marker);
+
+            });
+
+            markers.push(marker);
+            })(marker, storeData);
+        } 
+        $scope.$apply();
+    });
+};
+
 $scope.showAllLocations = function () 
 {
     $.getJSON('/distributors', {}, function (data) {
@@ -2370,7 +2445,7 @@ $scope.showAllLocations = function ()
         }
     }
 
-    $scope.clearIndiaMarkers = function()
+    $scope.clearMarkers = function()
     {
         if( markers != null )
         {
@@ -2380,13 +2455,6 @@ $scope.showAllLocations = function ()
                 markers =[];
             };
         }
-        
-        if( countryMarkerCluster != null )
-        {
-            countryMarkerCluster.length = 0;
-            countryMarkerCluster.clearMarkers();
-        }
-        
     }; 
 
     $scope.clearAllPlacesMarkers = function()
