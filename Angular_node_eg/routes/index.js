@@ -448,6 +448,15 @@ router.get('/getcocacolastorelocations', function (req, res) {
     });
 });
 
+router.get('/getCountries', function (req, res) {
+    var db = req.db;
+    var collection = db.get('accentureData');
+
+    collection.find({}, {}, function (e, docs) {
+        res.json(docs);
+    });
+});
+
 router.get('/getBIData', function (req, res) {
     var db = req.db;
     var collection = db.get('biData');
@@ -457,15 +466,17 @@ router.get('/getBIData', function (req, res) {
     });
 });
 
-router.get('/distributors', function (req, res) {
+//Accenture 2.0 APIs
+router.get('/getAccentureData', function (req, res) {
     var db = req.db;
     var collection = db.get('distributors');
 
-    collection.find({}, {}, function (e, docs) {
+    collection.find({}, {category:1,subcategory:1,country:0}, function (e, docs) {
         res.json(docs);
     });
 });
 
+// HCCB Dummy data demo APIs for Distributors and Retailers
 router.get('/distributors/:_id', function (req, res) {
     var db = req.db;
     var collection = db.get('distributors');
@@ -506,7 +517,7 @@ router.post('/distributors', function (req, res) {
     var address = req.body["address"];
     var latitude = req.body["latitude"];
     var longitude = req.body["longitude"];
-    var distributor = req.body["distributor"];   
+    var retailers = req.body["retailers"];   
     
     var dbObj = {
         "id" : 000,
@@ -518,7 +529,7 @@ router.post('/distributors', function (req, res) {
         "zone" : "West",
         "region" : 0,
         "country" : 'India',
-        distributor : distributor
+        retailers : retailers
     }
     
     collection.insert(dbObj);
@@ -795,6 +806,7 @@ router.post('/getEWayBillGSTDetails', function (req, res) {
 
 router.post('/getIPAddress', function (req, res) {
     var ipaddress = req.body["ipAddress"];
+    var country = req.body["country"];
     //console.log("---origin---:",ipaddress);
     
     fs.stat(filename, function(err, stats) { 
@@ -825,7 +837,7 @@ router.post('/getIPAddress', function (req, res) {
                         + currentdate.getMinutes() + ":" 
                         + currentdate.getSeconds();
       
-          fs.appendFile(filename, "Website accessed from : " +ipaddress + "  on " + datetime + "\r\n", function(error) {
+          fs.appendFile(filename, "Website accessed from : " +ipaddress + " - "+ country + "  on " + datetime + "\r\n", function(error) {
               if (error) {
                   console.error("write error:  " + error.message);
               } else {

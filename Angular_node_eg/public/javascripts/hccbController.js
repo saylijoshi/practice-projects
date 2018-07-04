@@ -210,7 +210,7 @@ angular.module('angularjs_with_Nodejs').controller('hccbController', function ($
     setTimeout(function ()
     {
         $scope.initMap();
-        $scope.showAllLocations();
+        //$scope.showAllLocations();
 
         jQuery.each( [ "put", "delete" ], function( i, method ) {
             jQuery[ method ] = function( url, data, callback, type ) {
@@ -239,6 +239,10 @@ angular.module('angularjs_with_Nodejs').controller('hccbController', function ($
         // $.get('/retailers/5b3315904a2f8cfd270d839d', {}, function (data) {
         //     console.log("---Retailers GET Response ---: ", data);
         // });
+
+        $.get('/getAccentureData', {}, function (data) {
+            console.log("---getAccentureData GET Response ---: ", data);
+        });
 
         //Working code for DELETE
         // $http({ method: 'DELETE', url: '/retailers/5b335c9eb399641b962336f3' }).
@@ -327,10 +331,10 @@ function geocodeLatLng(geocoder, map, infowindow) {
     });
 }
 
-function addStore()
-{
-    console.log("---addStore---:");
-}
+// function addStore()
+// {
+//     console.log("---addStore---:");
+// }
 
 $scope.yourAngularController = function()
 {
@@ -363,14 +367,19 @@ $scope.yourAngularController = function()
 
     $scope.storeIPAddress = function()
     {
-        var ipAddress = "111";
-        var url = "//freegeoip.net/json/";
-        $http.get(url).then(function(response) {
-        ipAddress = response.data.ip;
-        $.post('/getIPAddress', {'ipAddress': ipAddress}, function (data) {
+        $.getJSON('https://ipapi.co/json/', function(data) {
+        // console.log("----ipapi-----",JSON.stringify(data, null, 2));
+            var ipAddress = data.ip;
+            //console.log("---ipapi ipAddress----",ipAddress);
+            $.post('/getIPAddress', {'ipAddress': data.ip, 'country': data.country_name}, function (data) {
 
-         });
+            });
+
         });
+        //optional method for getting client ip address
+        // $.getJSON('http://ip-api.com/json?callback=?', function(data) {
+        // console.log("----ip-api-----",JSON.stringify(data, null, 2));
+        // });
     }
 
     $scope.getUserLocation = function()

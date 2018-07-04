@@ -342,14 +342,18 @@ $scope.yourAngularController = function()
 
     $scope.storeIPAddress = function()
     {
-        var ipAddress = "111";
-        var url = "//freegeoip.net/json/";
-        $http.get(url).then(function(response) {
-        ipAddress = response.data.ip;
-        $.post('/getIPAddress', {'ipAddress': ipAddress}, function (data) {
+        $.getJSON('https://ipapi.co/json/', function(data) {
+        // console.log("----ipapi-----",JSON.stringify(data, null, 2));
+            ipAddress = data.ip;
+            //console.log("---ipapi ipAddress----",ipAddress);
+            $.post('/getIPAddress', {'ipAddress': data.ip, 'country': data.country_name}, function (data) {
 
-         });
+            });
         });
+        //optional method for getting client ip address
+        // $.getJSON('http://ip-api.com/json?callback=?', function(data) {
+        // console.log("----ip-api-----",JSON.stringify(data, null, 2));
+        // });
     }
 
     $scope.getUserLocation = function()
