@@ -6854,7 +6854,7 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
         $scope.storeIPAddress();
 
         $scope.initialiseData();
-        //$scope.showStores();
+        $scope.showStores();
     }
 
     
@@ -8103,9 +8103,6 @@ $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDo
 
 $scope.showLocations = function (name,event, index) 
 {
-    console.log("---NAME---:",name);
-    console.log("---event---:",event.target.checked);
-    console.log("---index---:",index);
     $scope.clearMalaysiaMarkers();
     $scope.clearAllCategoryMarkers();
     $scope.clearAllSubcategoryMarkers();
@@ -8672,15 +8669,9 @@ $scope.countryChange = function()
         {
             for (var key in markers) 
             {
-                //markers[key].setMap(null);
-                markers =[];
-            };
-        }
-        
-        if( countryMarkerCluster != null )
-        {
-            countryMarkerCluster.length = 0;
-            countryMarkerCluster.clearMarkers();
+                markers[key].setMap(null);
+                //markers =[];
+            };  
         }
     }; 
 
