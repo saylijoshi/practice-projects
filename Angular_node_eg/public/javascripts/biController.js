@@ -223,6 +223,15 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($ro
         trafficLayer = new google.maps.TrafficLayer();
 
         $scope.storeIPAddress();
+
+        // storeLatLng = {lat: 39.923845,lng: 116.452412};
+        // var service = new google.maps.places.PlacesService(map);
+        //             service.nearbySearch({
+        //                 location : storeLatLng,
+        //                 radius : 12000,
+        //                 //componentRestrictions: {'country': 'SG'},
+        //                 type : [ 'restaurant']
+        //             },$scope.restaurantCallback);
     }
 
     $scope.initHeatMap = function()
@@ -4183,8 +4192,9 @@ $scope.countryChange = function()
         }
 
 
-
+        	
         var storeLatLng = { lat : jsonObject.latitude , lng : jsonObject.longitude};
+        //var storeLatLng = { lat : 39.923845 , lng : 116.452412};
 
         //checking and assiging values got from callback( index nad event )
         if(index!= -1)
@@ -4200,6 +4210,7 @@ $scope.countryChange = function()
                     var service = new google.maps.places.PlacesService(map);
                     service.nearbySearch({
                         location : storeLatLng,
+                        //rankBy : google.maps.places.RankBy.DISTANCE,
                         radius : 2000,
                         componentRestrictions: {'country': 'SG'},
                         type : [ 'restaurant']

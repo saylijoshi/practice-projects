@@ -583,7 +583,7 @@ pre{
 .form-block1 {
     position: absolute;
     top: 30%;
-    width: 250px;
+    width: 270px;
     height: 490px;
     left: 20px;
     z-index: 150;
@@ -650,7 +650,7 @@ pre{
     font-size: 18px;
     font-weight: 900;
     color: #fff;
-    background: rgb(67, 181, 230);
+    background: rgb(61, 0, 63);
 }
 
 .custom-button1{

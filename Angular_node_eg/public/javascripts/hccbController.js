@@ -240,8 +240,46 @@ angular.module('angularjs_with_Nodejs').controller('hccbController', function ($
         //     console.log("---Retailers GET Response ---: ", data);
         // });
 
-        $.get('/getAccentureData', {}, function (data) {
+        $.get('/getFilterData', {}, function (data) {
             console.log("---getAccentureData GET Response ---: ", data);
+            var countryNames = [];
+            for (var i = 0, length = data.length; i < length; i++) 
+            {
+                countryNames.push(data[i].country);
+            }
+            uniqueCountryNames = countryNames.filter(function(item, pos) {
+                return countryNames.indexOf(item) == pos;
+            })
+            for (var i = 0, length = uniqueCountryNames.length; i < length; i++) 
+            {
+                console.log("----uniqueNames----",uniqueCountryNames[i]);
+            }
+
+            var categoryNames = [];
+            for (var i = 0, length = data.length; i < length; i++) 
+            {
+                categoryNames.push(data[i].category);
+            }
+            uniqueCategoryNames = categoryNames.filter(function(item, pos) {
+                return categoryNames.indexOf(item) == pos;
+            })
+            for (var i = 0, length = uniqueCategoryNames.length; i < length; i++) 
+            {
+                console.log("----uniqueCategoryNames----",uniqueCategoryNames[i]);
+            }
+
+            var subcategoryNames = [];
+            for (var i = 0, length = data.length; i < length; i++) 
+            {
+                subcategoryNames.push(data[i].subcategory);
+            }
+            uniquSubCategoryNames = subcategoryNames.filter(function(item, pos) {
+                return subcategoryNames.indexOf(item) == pos;
+            })
+            for (var i = 0, length = uniquSubCategoryNames.length; i < length; i++) 
+            {
+                console.log("----uniquSubCategoryNames----",uniquSubCategoryNames[i]);
+            }
         });
 
         //Working code for DELETE

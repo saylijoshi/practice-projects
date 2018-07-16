@@ -141,9 +141,11 @@ router.get('/getNearestData', function (req, res) {
 
 router.get('/templates', function (req, res) {
     var db = req.db;
+    console.log("---In Templates---",db);
     var collection = db.get('templates');
 
     collection.distinct('docType', {"showInFilter": true}, function (err, items) {
+        console.log("---In items---",items);
         res.json(items);
     });
 });
@@ -469,14 +471,32 @@ router.get('/getBIData', function (req, res) {
 //Accenture 2.0 APIs
 router.get('/getAccentureData', function (req, res) {
     var db = req.db;
-    var collection = db.get('distributors');
+    var collection = db.get('accentureData');
 
-    collection.find({}, {category:1,subcategory:1,country:0}, function (e, docs) {
+    collection.find({}, {}, function (e, docs) {
+        res.json(docs);
+    });
+});
+
+router.get('/getFilterData', function (req, res) {
+    var db = req.db;
+    var collection = db.get('accentureData');
+
+    collection.find({}, {'category':1,'subcategory':1,'country':1}, function (e, docs) {
         res.json(docs);
     });
 });
 
 // HCCB Dummy data demo APIs for Distributors and Retailers
+router.get('/distributors', function (req, res) {
+    var db = req.db;
+    var collection = db.get('distributors');
+
+    collection.find({}, {}, function (e, docs) {
+        res.json(docs);
+    });
+});
+
 router.get('/distributors/:_id', function (req, res) {
     var db = req.db;
     var collection = db.get('distributors');

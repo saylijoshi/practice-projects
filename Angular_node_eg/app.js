@@ -44,7 +44,8 @@ var mongo = require('mongodb');
 //console.log(mongo);
 var monk = require('monk');
 //console.log(monk);
-var db = monk('130.211.159.225:27017/googleMapData');
+//var db = monk('130.211.159.225:27017/googleMapData');
+var db = monk('35.225.101.214:27017/googleMapData');
 //console.log(db);
 
 //var handsontable = require('handsontable');
@@ -242,7 +243,10 @@ function getGeolocation(dataArray, index){
 //            console.log(index, location)
             if(response.json.results.length > 0){
                 response.json.results.map(function(x){
-                    console.log("%s,%s,%s,%s,%s", dataArray[0], x.formatted_address.replace(/,/g,' '), x.geometry.location.lat, x.geometry.location.lng,response.json.results.length);
+                    //console.log("%s,%s,%s,%s,%s", dataArray[0], x.formatted_address.replace(/,/g,' '), x.geometry.location.lat, x.geometry.location.lng,response.json.results.length);
+                    //console.log("%s,%s,%s", dataArray[0], x.geometry.location.lat, x.geometry.location.lng);
+                    //console.log("%s",dataArray[0]);
+                    console.log("%s,%s,%s",dataArray[0],x.geometry.location.lat, x.geometry.location.lng);
                 })
             }
             else
