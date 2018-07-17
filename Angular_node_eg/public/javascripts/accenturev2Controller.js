@@ -8298,6 +8298,815 @@ $scope.showLocations = function (name,event, index)
                   categoryOtherInstitutionalMarker.push(marker);
                   })(marker, storeData);
               } 
+              else if( name == "Catering" && typeName == "Catering" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Catering";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/purple.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  //infoWindow = new google.maps.InfoWindow();
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+  
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+  
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryCateringMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Supermarket" && typeName == "Supermarket" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Supermarket";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/pink.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categorySupermarketMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Large Provision Stores" && typeName == "Large Provision Stores" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Large Provision Stores";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/green.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryLargeProvisionStoresMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Petrol Mart Station" && typeName == "Petrol Mart Station" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Petrol Mart Station";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/blue.png',
+                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  //$scope.clearDirection();
+                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+  
+                  });
+  
+                  categoryPetrolMartStationMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Restaurant" && typeName == "Restaurant" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Restaurant";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/purple.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  //infoWindow = new google.maps.InfoWindow();
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+  
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+  
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryRestaurantMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "School" && typeName == "School" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "School";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/pink.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categorySchoolMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Pet Shop" && typeName == "Pet Shop" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Pet Shop";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/green.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryPetShopMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Medium Provision Stores" && typeName == "Medium Provision Stores" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Medium Provision Stores";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/blue.png',
+                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  //$scope.clearDirection();
+                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+  
+                  });
+  
+                  categoryMediumProvisionStoresMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Chinese Medical Hall" && typeName == "Chinese Medical Hall" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Chinese Medical Hall";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/purple.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  //infoWindow = new google.maps.InfoWindow();
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+  
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+  
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryChineseMedicalHallMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Other Convenience Stores" && typeName == "Other Convenience Stores" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Other Convenience Stores";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/pink.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryOtherConvenienceStoresMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Traditional Pharmacy" && typeName == "Traditional Pharmacy" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Traditional Pharmacy";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/green.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryTraditionalPharmacyMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Specialist Food & Drink" && typeName == "Specialist Food & Drink" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Specialist Food & Drink";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/blue.png',
+                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  //$scope.clearDirection();
+                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+  
+                  });
+  
+                  categorySpecialistFoodDrinkMarker.push(marker);
+                  })(marker, storeData);
+              } 
+              else if( name == "Bakery" && typeName == "Bakery" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Bakery";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/purple.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  //infoWindow = new google.maps.InfoWindow();
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+  
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+  
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryBakeryMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "QSR" && typeName == "QSR" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "QSR";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/pink.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryQSRMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Wholesale" && typeName == "Wholesale" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Wholesale";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/green.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryWholesaleMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Vending Machine" && typeName == "Vending Machine" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Vending Machine";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/blue.png',
+                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  //$scope.clearDirection();
+                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+  
+                  });
+  
+                  categoryendingMachineMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Specialist Other" && typeName == "Specialist Other" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Specialist Other";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/purple.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  //infoWindow = new google.maps.InfoWindow();
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+  
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+  
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categorySpecialistOtherMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "News / Magazine Store" && typeName == "News / Magazine Store" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "News / Magazine Store";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/pink.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryNewsMagazineStoreMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Hospitals" && typeName == "Hospitals" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Hospitals";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/green.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categoryHospitalsMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Modern Pharmacy" && typeName == "Modern Pharmacy" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Modern Pharmacy";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/blue.png',
+                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  //$scope.clearDirection();
+                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+  
+                  });
+  
+                  categoryModernPharmacyMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Speciality Other" && typeName == "Speciality Other" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Speciality Other";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/green.png',
+                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  });
+  
+                  categorySpecialityOtherMarker.push(marker);
+                  })(marker, storeData);
+              }
+              else if( name == "Baby Center" && typeName == "Baby Center" )
+              {
+                  console.log("---typeName---:",typeName);
+                  userSelectedCategoryName = "Baby Center";
+                  $scope.storeNames.push(storeData);
+  
+                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  // Creating a marker and putting it on the map
+                  var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  title: storeData.CUST_NAME,
+                  icon: 'images/blue.png',
+                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                  });
+  
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  (function(marker, storeData) {
+  
+                  // Attaching a click event to the current marker
+                  google.maps.event.addListener(marker, "click", function(e) {
+                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
+                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                  infoWindow.open(map, marker);
+                  //$scope.clearDirection();
+                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+  
+                  });
+  
+                  categoryBabyCenterMarker.push(marker);
+                  })(marker, storeData);
+              }
           }
           else
           {
@@ -8316,6 +9125,94 @@ $scope.showLocations = function (name,event, index)
               else if( name == "Other Institutional" && typeName == "Other Institutional" )
               {
                   $scope.clearCategoryOtherInstitutionalMarker();
+              }
+              else if( name == "Catering" && typeName == "Catering" )
+              {
+                  $scope.clearCategoryCateringMarker();
+              }
+              else if( name == "Supermarket" && typeName == "Supermarket" )
+              {
+                  $scope.clearCategorySupermarketMarker();
+              }
+              else if( name == "Large Provision Stores" && typeName == "Large Provision Stores" )
+              {
+                  $scope.clearCategoryLargeProvisionStoresMarker();
+              }
+              else if( name == "Petrol Mart Station" && typeName == "Petrol Mart Station" )
+              {
+                  $scope.clearCategoryPetrolMartStationMarker();
+              }
+              else if( name == "Restaurant" && typeName == "Restaurant" )
+              {
+                  $scope.clearCategoryRestaurantMarker();
+              }
+              else if( name == "School" && typeName == "School" )
+              {
+                  $scope.clearCategorySchoolMarker();
+              }
+              else if( name == "Pet Shop" && typeName == "Pet Shop" )
+              {
+                  $scope.clearCategoryPetShopMarker();
+              }
+              else if( name == "Medium Provision Stores" && typeName == "Medium Provision Stores" )
+              {
+                  $scope.clearCategoryMediumProvisionStoresMarker();
+              }
+              else if( name == "Chinese Medical Hall" && typeName == "Chinese Medical Hall" )
+              {
+                  $scope.clearCategoryChineseMedicalHallMarker();
+              }
+              else if( name == "Other Convenience Stores" && typeName == "Other Convenience Stores" )
+              {
+                  $scope.clearCategoryOtherConvenienceStoresMarker();
+              }
+              else if( name == "Traditional Pharmacy" && typeName == "Traditional Pharmacy" )
+              {
+                  $scope.clearCategoryTraditionalPharmacyMarker();
+              }
+              else if( name == "Specialist Food & Drink" && typeName == "Specialist Food & Drink" )
+              {
+                  $scope.clearCategorySpecialistFoodDrinkMarker();
+              }
+              else if( name == "Bakery" && typeName == "Bakery" )
+              {
+                  $scope.clearCategoryBakeryMarker();
+              }
+              else if( name == "QSR" && typeName == "QSR" )
+              {
+                  $scope.clearCategoryQSRMarker();
+              }
+              else if( name == "Wholesale" && typeName == "Wholesale" )
+              {
+                  $scope.clearCategoryWholesaleMarker();
+              }
+              else if( name == "Vending Machine" && typeName == "Vending Machine" )
+              {
+                  $scope.clearCategoryendingMachineMarker();
+              }
+              else if( name == "Specialist Other" && typeName == "Specialist Other" )
+              {
+                  $scope.clearCategorySpecialistOtherMarker();
+              }
+              else if( name == "News / Magazine Store" && typeName == "News / Magazine Store" )
+              {
+                  $scope.clearCategoryNewsMagazineStoreMarker();
+              }
+              else if( name == "Hospitals" && typeName == "Hospitals" )
+              {
+                  $scope.clearCategoryHospitalsMarker();
+              }
+              else if( name == "Modern Pharmacy" && typeName == "Modern Pharmacy" )
+              {
+                  $scope.clearCategoryModernPharmacyMarker();
+              }
+              else if( name == "Speciality Other" && typeName == "Speciality Other" )
+              {
+                  $scope.clearCategorySpecialityOtherMarker();
+              }
+              else if( name == "Baby Center" && typeName == "Baby Center" )
+              {
+                  $scope.clearCategoryBabyCenterMarker();
               }
           }
       }  
