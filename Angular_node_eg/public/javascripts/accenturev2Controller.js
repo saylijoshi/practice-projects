@@ -21,7 +21,33 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     var categoryPOSmarkers = [];
     var categoryProductionCentresMarker = [];
     var categoryWarehouseMarker = [];
-    var categoryDistributionCentreMarker = [];
+    var categoryDistributionCentre = [];
+    var categorySmallProvisionStoresMarker = [];
+    var categoryCaféMarker = [];
+    var categoryHypermarketMarker = [];
+    var categoryOtherInstitutionalMarker = [];
+    var categoryCateringMarker = [];
+    var categorySupermarketMarker = [];
+    var categoryLargeProvisionStoresMarker = [];
+    var categoryPetrolMartStationMarker = [];
+    var categoryRestaurantMarker = [];
+    var categorySchoolMarker = [];
+    var categoryPetShopMarker = [];
+    var categoryMediumProvisionStoresMarker = [];
+    var categoryChineseMedicalHallMarker = [];
+    var categoryOtherConvenienceStoresMarker = [];
+    var categoryTraditionalPharmacyMarker = [];
+    var categorySpecialistFoodDrinkMarker = [];
+    var categoryBakeryMarker = [];
+    var categoryQSRMarker = [];
+    var categoryWholesaleMarker = [];
+    var categoryendingMachineMarker = [];
+    var categorySpecialistOtherMarker = [];
+    var categoryNewsMagazineStoreMarker = [];
+    var categoryHospitalsMarker = [];
+    var categoryModernPharmacyMarker = [];
+    var categorySpecialityOtherMarker = [];
+    var categoryBabyCenterMarker = [];
     var subcategoryBakeryAndCakesmarkers = [];
     var subcategoryBeautyAndHygienemarkers = [];
     var subcategoryCleaningAndHouseholdmarkers = [];
@@ -8104,12 +8130,12 @@ $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDo
 $scope.showLocations = function (name,event, index) 
 {
     $scope.clearMalaysiaMarkers();
-    $scope.clearAllCategoryMarkers();
-    $scope.clearAllSubcategoryMarkers();
+    //$scope.clearAllCategoryMarkers();
+    //$scope.clearAllSubcategoryMarkers();
     $scope.clearAllPlacesMarkers();
-    $scope.clearAllHeatMaps();
-    $scope.clearFusionLayer();
-    $scope.clearCityAndRegionMarker();
+    //$scope.clearAllHeatMaps();
+    //$scope.clearFusionLayer();
+    //$scope.clearCityAndRegionMarker();
 
     $scope.storeNames.length = 0;  
 
@@ -8160,7 +8186,7 @@ $scope.showLocations = function (name,event, index)
                   infoWindow.open(map, marker);
                   });
   
-                  categoryPOSmarkers.push(marker);
+                  categorySmallProvisionStoresMarker.push(marker);
                   })(marker, storeData);
               }
               else if( name == "Café" && typeName == "Café" )
@@ -8195,7 +8221,7 @@ $scope.showLocations = function (name,event, index)
                   infoWindow.open(map, marker);
                   });
   
-                  categoryProductionCentresMarker.push(marker);
+                  categoryCaféMarker.push(marker);
                   })(marker, storeData);
               }
               else if( name == "Hypermarket" && typeName == "Hypermarket" )
@@ -8230,7 +8256,7 @@ $scope.showLocations = function (name,event, index)
                   infoWindow.open(map, marker);
                   });
   
-                  categoryWarehouseMarker.push(marker);
+                  categoryHypermarketMarker.push(marker);
                   })(marker, storeData);
               }
               else if( name == "Other Institutional" && typeName == "Other Institutional" )
@@ -8269,7 +8295,7 @@ $scope.showLocations = function (name,event, index)
   
                   });
   
-                  categoryDistributionCentreMarker.push(marker);
+                  categoryOtherInstitutionalMarker.push(marker);
                   })(marker, storeData);
               } 
           }
@@ -8277,226 +8303,25 @@ $scope.showLocations = function (name,event, index)
           {
               if( name == "Small Provision Stores" && typeName == "Small Provision Stores" )
               {
-                  $scope.clearCategoryPOSMarkers();
+                  $scope.clearCategorySmallProvisionStoresMarker();
               }
               else if( name == "Café" && typeName == "Café" )
               {
-                  $scope.clearCategoryProductionCentresMarkers();
+                  $scope.clearCategoryCaféMarker();
               }
               else if( name == "Hypermarket" && typeName == "Hypermarket" )
               {
-                  $scope.clearCategoryWarehouseMarkers();
+                  $scope.clearCategoryHypermarketMarker();
               }
               else if( name == "Other Institutional" && typeName == "Other Institutional" )
               {
-                  $scope.clearDistributionCentreMarkers();
+                  $scope.clearCategoryOtherInstitutionalMarker();
               }
           }
       }  
     }  
     setTimeout(function(){ $scope.$apply(); },100);
     //$scope.$apply();
-};
-
-    $scope.showCatergorisedLocations = function (event,index) 
-    {
-        $scope.clearMalaysiaMarkers();
-        $scope.clearAllCategoryMarkers();
-        $scope.clearAllSubcategoryMarkers();
-        $scope.clearAllPlacesMarkers();
-        $scope.clearAllHeatMaps();
-        $scope.clearFusionLayer();
-        $scope.clearCityAndRegionMarker();
-
-        $scope.storeNames.length = 0;  
-
-        //checking and assiging values got from callback( index and event )
-        if(index != -1)
-        $scope.standardHierarchy[index].checked = event.target.checked;
-
-
-        for (var i = 0, length = storeJSON.length; i < length; i++) 
-        {
-            var storeData = storeJSON[i];
-            var typeName = storeData.STANDARD_HIERARCHY;
-
-            for (var j = 0, categoryArraylength = $scope.standardHierarchy.length; j < categoryArraylength; j++) 
-            {
-                selectedCategoryName = $scope.standardHierarchy[j].name;
-                console.log("---selectedCategoryName---:",selectedCategoryName);
-                
-                if($scope.standardHierarchy[j].checked)
-                {  
-                    map.setCenter({lat:4.465754,lng: 107.501896});
-                    map.setZoom(6);
-            
-                    if( selectedCategoryName == "Small Provision Stores" )
-                    {
-                        userSelectedCategoryName = "Small Provision Stores";
-                        $scope.storeNames.push(storeData);
-
-                        latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: storeData.CUST_NAME,
-                        icon: 'images/purple.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        //infoWindow = new google.maps.InfoWindow();
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-
-                        (function(marker, storeData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                          infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                          + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                          + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                          + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                          + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                          + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                          + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                          + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-
-                        infoWindow.open(map, marker);
-                        });
-
-                        categoryPOSmarkers.push(marker);
-                        })(marker, storeData);
-                    }
-                    else if(selectedCategoryName == "Café" )
-                    {
-                        userSelectedCategoryName = "Café";
-                        $scope.storeNames.push(storeData);
-
-                        latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: storeData.CUST_NAME,
-                        icon: 'images/pink.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, storeData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                          infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                          + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                          + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                          + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                          + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                          + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                          + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                          + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                        infoWindow.open(map, marker);
-                        });
-
-                        categoryProductionCentresMarker.push(marker);
-                        })(marker, storeData);
-                    }
-                    else if(selectedCategoryName == "Hypermarket" )
-                    {
-                        userSelectedCategoryName = "Hypermarket";
-                        $scope.storeNames.push(storeData);
-
-                        latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: storeData.CUST_NAME,
-                        icon: 'images/green.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, storeData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                          infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                          + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                          + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                          + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                          + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                          + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                          + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                          + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                        infoWindow.open(map, marker);
-                        });
-
-                        categoryWarehouseMarker.push(marker);
-                        })(marker, storeData);
-                    }
-                    else if(selectedCategoryName == "Other Institutional" )
-                    {
-                        userSelectedCategoryName = "Other Institutional";
-                        $scope.storeNames.push(storeData);
-
-                        latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
-                        // Creating a marker and putting it on the map
-                        var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: map,
-                        title: storeData.CUST_NAME,
-                        icon: 'images/blue.png',
-                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                        });
-
-                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                        (function(marker, storeData) {
-
-                        // Attaching a click event to the current marker
-                        google.maps.event.addListener(marker, "click", function(e) {
-                          infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                          + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                          + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                          + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                          + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                          + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                          + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                          + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                        infoWindow.open(map, marker);
-                        //$scope.clearDirection();
-                        //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                        //$scope.showDirections(myLatLng,dirLatLng,storeData );
-
-                        });
-
-                        categoryDistributionCentreMarker.push(marker);
-                        })(marker, storeData);
-                    } 
-                }
-                else
-                {
-                    if( selectedCategoryName == "Small Provision Stores" )
-                    {
-                        $scope.clearCategoryPOSMarkers();
-                    }
-                    else if(selectedCategoryName == "Café" )
-                    {
-                        $scope.clearCategoryProductionCentresMarkers();
-                    }
-                    else if(selectedCategoryName == "Hypermarket" )
-                    {
-                        $scope.clearCategoryWarehouseMarkers();
-                    }
-                    else if(selectedCategoryName == "Other Institutional" )
-                    {
-                        $scope.clearDistributionCentreMarkers();
-                    }
-                }
-            }  
-        }  
-        
-        //$scope.$apply();
 };
 
 $scope.countryChange = function()
@@ -8849,51 +8674,241 @@ $scope.countryChange = function()
 
     $scope.clearAllCategoryMarkers = function()
     {
-        $scope.clearCategoryPOSMarkers();
-        $scope.clearCategoryProductionCentresMarkers();
-        $scope.clearCategoryWarehouseMarkers();
-        $scope.clearDistributionCentreMarkers();
-    }
+        $scope.clearCategorySmallProvisionStoresMarker();
+        $scope.clearCategoryCaféMarker();
+        $scope.clearCategoryHypermarketMarker();
+        $scope.clearCategoryOtherInstitutionalMarker();
+        $scope.clearCategoryCateringMarker();
+        $scope.clearCategorySupermarketMarker();
+        $scope.clearCategoryLargeProvisionStoresMarker();
+        $scope.clearCategoryPetrolMartStationMarker();
+        $scope.clearCategoryRestaurantMarker();
+        $scope.clearCategorySchoolMarker();
+        $scope.clearCategoryPetShopMarker();
+        $scope.clearCategoryMediumProvisionStoresMarker();
+        $scope.clearCategoryChineseMedicalHallMarker();
+        $scope.clearCategoryOtherConvenienceStoresMarker();
+        $scope.clearCategoryTraditionalPharmacyMarker();
+        $scope.clearCategorySpecialistFoodDrinkMarker();
+        $scope.clearCategoryBakeryMarker();
+        $scope.clearCategoryQSRMarker();
+        $scope.clearCategoryWholesaleMarker();
+        $scope.clearCategoryendingMachineMarker();
+        $scope.clearCategorySpecialistOtherMarker();
+        $scope.clearCategoryNewsMagazineStoreMarker();
+        $scope.clearCategoryHospitalsMarker();
+        $scope.clearCategoryModernPharmacyMarker();
+        $scope.clearCategorySpecialityOtherMarker();
+        $scope.clearCategoryBabyCenterMarker();
+    };
 
-    $scope.clearCategoryPOSMarkers = function()
+    $scope.clearCategorySmallProvisionStoresMarker = function()
     {
-        for (var key in categoryPOSmarkers) 
+        for (var key in categorySmallProvisionStoresMarker) 
         {
-            categoryPOSmarkers[key].setMap(null);
+          categorySmallProvisionStoresMarker[key].setMap(null);
         };
     };
 
-    $scope.clearCategoryProductionCentresMarkers = function()
+    $scope.clearCategoryCaféMarker = function()
     {
-        for (var key in categoryProductionCentresMarker) 
+        for (var key in categoryCaféMarker) 
         {
-            categoryProductionCentresMarker[key].setMap(null);
+          categoryCaféMarker[key].setMap(null);
         };
     };
 
-    $scope.clearCategoryWarehouseMarkers = function()
+    $scope.clearCategoryHypermarketMarker = function()
     {
-        for (var key in categoryWarehouseMarker) 
+        for (var key in categoryHypermarketMarker) 
         {
-            categoryWarehouseMarker[key].setMap(null);
+          categoryHypermarketMarker[key].setMap(null);
         };
     };
 
-    $scope.clearDistributionCentreMarkers = function()
+    $scope.clearCategoryOtherInstitutionalMarker = function()
     {
-        for (var key in categoryDistributionCentreMarker) 
+        for (var key in categoryOtherInstitutionalMarker) 
         {
-            categoryDistributionCentreMarker[key].setMap(null);
+          categoryOtherInstitutionalMarker[key].setMap(null);
         };
     };
 
-    $scope.clearAllCategoryMarkers = function()
+    $scope.clearCategoryCateringMarker = function()
     {
-        $scope.clearCategoryPOSMarkers();
-        $scope.clearCategoryProductionCentresMarkers();
-        $scope.clearCategoryWarehouseMarkers();
-        $scope.clearDistributionCentreMarkers();
-    }
+        for (var key in categoryCateringMarker) 
+        {
+          categoryCateringMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategorySupermarketMarker = function()
+    {
+        for (var key in categorySupermarketMarker) 
+        {
+          categorySupermarketMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryLargeProvisionStoresMarker = function()
+    {
+        for (var key in categoryLargeProvisionStoresMarker) 
+        {
+          categoryLargeProvisionStoresMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryPetrolMartStationMarker = function()
+    {
+        for (var key in categoryPetrolMartStationMarker) 
+        {
+          categoryPetrolMartStationMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryRestaurantMarker = function()
+    {
+        for (var key in categoryRestaurantMarker) 
+        {
+          categoryRestaurantMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategorySchoolMarker = function()
+    {
+        for (var key in categorySchoolMarker) 
+        {
+          categorySchoolMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryPetShopMarker = function()
+    {
+        for (var key in categoryPetShopMarker) 
+        {
+          categoryPetShopMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryMediumProvisionStoresMarker = function()
+    {
+        for (var key in categoryMediumProvisionStoresMarker) 
+        {
+          categoryMediumProvisionStoresMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryChineseMedicalHallMarker = function()
+    {
+        for (var key in categoryChineseMedicalHallMarker) 
+        {
+          categoryChineseMedicalHallMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryOtherConvenienceStoresMarker = function()
+    {
+        for (var key in categoryOtherConvenienceStoresMarker) 
+        {
+          categoryOtherConvenienceStoresMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryTraditionalPharmacyMarker = function()
+    {
+        for (var key in categoryTraditionalPharmacyMarker) 
+        {
+          categoryTraditionalPharmacyMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategorySpecialistFoodDrinkMarker = function()
+    {
+        for (var key in categorySpecialistFoodDrinkMarker) 
+        {
+          categorySpecialistFoodDrinkMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryBakeryMarker = function()
+    {
+        for (var key in categoryBakeryMarker) 
+        {
+          categoryBakeryMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryQSRMarker = function()
+    {
+        for (var key in categoryQSRMarker) 
+        {
+          categoryQSRMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryWholesaleMarker = function()
+    {
+        for (var key in categoryWholesaleMarker) 
+        {
+          categoryWholesaleMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryendingMachineMarker = function()
+    {
+        for (var key in categoryendingMachineMarker) 
+        {
+          categoryendingMachineMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategorySpecialistOtherMarker = function()
+    {
+        for (var key in categorySpecialistOtherMarker) 
+        {
+          categorySpecialistOtherMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryNewsMagazineStoreMarker = function()
+    {
+        for (var key in categoryNewsMagazineStoreMarker) 
+        {
+          categoryNewsMagazineStoreMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryHospitalsMarker = function()
+    {
+        for (var key in categoryHospitalsMarker) 
+        {
+          categoryHospitalsMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryModernPharmacyMarker = function()
+    {
+        for (var key in categoryModernPharmacyMarker) 
+        {
+          categoryModernPharmacyMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategorySpecialityOtherMarker = function()
+    {
+        for (var key in categorySpecialityOtherMarker) 
+        {
+          categorySpecialityOtherMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryBabyCenterMarker = function()
+    {
+        for (var key in categoryBabyCenterMarker) 
+        {
+          categoryBabyCenterMarker[key].setMap(null);
+        };
+    };
 
     $scope.clearSubcategoryBeautyAndHygienemarkers = function()
     {
@@ -10376,11 +10391,15 @@ $scope.countryChange = function()
         $scope.clearAllPlacesMarkers();
         $scope.clearAllCategoryMarkers();
         $scope.clearMalaysiaMarkers();
-        for (var key in markers) 
+        if( markers != null )
         {
-          markers[key].setMap(null);
-          markers = [];
-        };
+          for (var key in markers) 
+          {
+            //markers[key].setMap(null);
+            markers = [];
+          };
+        }
+        
         $scope.clearAllHeatMaps();
         $scope.clearFusionLayer();
         $scope.clearCityAndRegionMarker();
