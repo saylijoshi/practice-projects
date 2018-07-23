@@ -48,6 +48,10 @@ router.get('/demo', function (req, res, next) {
 
 //Accenturev2 Demo
 router.get('/accenturedemo', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../', 'views', 'accentureLogin.html'));
+});
+
+router.get('/AccentureBIPlatform', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../', 'views', 'accenturev2.html'));
 });
 

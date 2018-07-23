@@ -2175,6 +2175,8 @@ $scope.countryChange = function()
             $scope.clearAllHeatMaps();
             $scope.clearFusionLayer();
 
+            consle.log("---data.length---:",data.length);
+
             for (var i = 0, length = data.length; i < length; i++) 
             { 
                 var storeData = data[i];
