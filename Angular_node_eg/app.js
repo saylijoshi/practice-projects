@@ -89,6 +89,15 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.use(function(req, response, next) {
+    
+    // response.setHeader("Access-Control-Allow-Origin", "*");
+    // response.setHeader("Access-Control-Allow-Credentials", "true");
+    // response.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS, POST, GET, OPTIONS, PUT, DELETE");
+    // response.setHeader("Access-Control-Allow-Headers", "X-Zomato-API-Key, authorization,x-goog-authuser, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+    //next();
+  });
+  
 // var fs = require('fs'), filename = "example.txt";
 
 // fs.stat(filename, function(err, stats) { 
