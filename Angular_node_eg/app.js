@@ -44,8 +44,8 @@ var mongo = require('mongodb');
 //console.log(mongo);
 var monk = require('monk');
 //console.log(monk);
-//var db = monk('130.211.159.225:27017/googleMapData');
-var db = monk('35.225.101.214:27017/googleMapData');
+//var db = monk('35.225.101.214:27017/googleMapData');
+var db = monk('127.0.0.1:27017/googleMapData');
 //console.log(db);
 
 //var handsontable = require('handsontable');
