@@ -16,7 +16,7 @@
     "cors": "^2.8.4",
     "daemon": "^1.1.0",
     "debug": "~2.6.3",
-    "express": "~4.15.2",
+    "express": "^4.15.5",
     "fast-csv": "^2.4.1",
     "forever": "^0.15.3",
     "forever-monitor": "^1.7.1",

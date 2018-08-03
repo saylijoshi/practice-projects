@@ -493,12 +493,15 @@ router.get('/getFilterData', function (req, res) {
 
 // HCCB Dummy data demo APIs for Distributors and Retailers
 router.get('/distributors', function (req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    //res.setHeader('Access-Control-Allow-Origin', '*');
+    
     var db = req.db;
     var collection = db.get('distributors');
 
     collection.find({}, {}, function (e, docs) {
-        
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
         res.json(docs);
     });
 });
@@ -510,7 +513,9 @@ router.get('/distributors/:_id', function (req, res) {
     var value = req.params._id;
     
     collection.find({'_id': ObjectId(value)}, {}, function (e, docs) {
-        //res.setHeader('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
         res.json(docs);
     });
 });
@@ -530,6 +535,9 @@ router.delete('/distributors/:_id', function (req, res) {
                 if (err)
                     res.send(err);
                     console.log("---Success---: ");
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
                 res.json({ status: 200, message: 'Distributor successfully deleted' });
             });
         }
@@ -565,7 +573,9 @@ router.post('/distributors', function (req, res) {
     collection.insert(dbObj);
     
     collection.find({}, {}, function (e, docs) {
-        
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+            res.header('Access-Control-Allow-Headers', 'Content-Type');
             res.json(docs);
         });
 });
@@ -604,7 +614,10 @@ router.put('/distributors', function (req, res) {
       });
     
     collection.find({}, {}, function (e, docs) {
-       res.json(docs);
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
+        res.json(docs);
     }); 
 });
 
@@ -613,6 +626,9 @@ router.get('/retailers', function (req, res) {
     var collection = db.get('retailers');
 
     collection.find({}, {}, function (e, docs) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
         res.json(docs);
     });
 });
@@ -623,6 +639,9 @@ router.get('/retailers/:_id', function (req, res) {
     var value = req.params._id;
     
     collection.find({'_id': ObjectId(value)}, {}, function (e, docs) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
         res.json(docs);
     });
 });
@@ -642,6 +661,9 @@ router.delete('/retailers/:_id', function (req, res) {
                 if (err)
                     res.send(err);
                     console.log("---Success---: ");
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
                 res.json({ status: 200, message: 'Retailer successfully deleted' });
             });
         }
@@ -675,7 +697,10 @@ router.post('/retailers', function (req, res) {
     collection.insert(dbObj);
     
     collection.find({}, {}, function (e, docs) {
-            res.json(docs);
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.json(docs);
         });
 });
 
@@ -713,7 +738,10 @@ router.put('/retailers', function (req, res) {
       });
     
     collection.find({}, {}, function (e, docs) {
-       res.json(docs);
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
+        res.json(docs);
     }); 
 });
 
