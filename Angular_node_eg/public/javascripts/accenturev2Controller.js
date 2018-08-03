@@ -361,6 +361,21 @@ $scope.initialiseData = function()
 
 $scope.showStores = function()
 {
+
+    // $http({
+    //   method: 'GET',
+    //   url: 'http://mapsdashboard.searcelabs.com/distributors',
+    //   // headers: {'user-key' : '1b6ddcb47426d068e923e86a6046a39b'},
+    //   // params: {
+    //   //     lat: 18.45362817, 
+    //   //     lon: 73.57482847
+    //   // }
+    // }).success(function(data) {
+    //   console.log("---success---:",data);
+    // }).error(function(error) {
+    //   console.log("---error---:",error);
+    // });
+  
     var storeData;
     console.log("---storeJSON---:",storeJSON.length);
 
@@ -810,7 +825,7 @@ $scope.showLocations = function (name,event, index)
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
                     infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+                    + "<br/>" + "Customer Status    :" +storeData.CUST_STATUS 
                     + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
                     + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
                     + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
@@ -3083,6 +3098,12 @@ $scope.countryChange = function()
 
                       console.log("---success---:",data);
                       console.log("---data.nearby_restaurants.length---:",data.nearby_restaurants.length);
+
+                      //console.log("---data.all_reviews.length---:",data.nearby_restaurants.all_reviews.length);
+
+
+
+                      //console.log("---data.nearby_restaurants.length---:",data.nearby_restaurants.length);
                       for (var i = 0; i < data.nearby_restaurants.length; i++) 
                       {
                         var place = data.nearby_restaurants[i].restaurant;
@@ -4435,21 +4456,54 @@ $scope.countryChange = function()
         });
 
         google.maps.event.addListener(restaurantMarker, 'click', function() {
-          infowindowplacesmarker.setContent( "Name     : " + place.name
-                                          + "<br>" + "Ratings     : " + place.user_rating.aggregate_rating
-                                          + "<br>" + "Address     : " + place.location.address
-                                          + "<br>" + "City        : " + place.location.city
-                                          + "<br>" + "Locality    : " + place.location.locality
-                                          // + "<br>" + "Website     : " + place.website
-                                          // + "<br>" + "International Number: " + place.international_phone_number
-                                          // + "<br>" + "Phone Number: " + place.formatted_phone_number
-                                          // + "<br>" + "Place Id    : " + place.place_id
-                                          // //+ "<br>" + "Reviews    : " + place.reviews[0].text
-                                      );
-          infowindowplacesmarker.open(map, this);
-          infowindowsCollection.push(infowindowplacesmarker);
-          });
-          restaurantsMarkers.push(restaurantMarker); 
+
+            var reviewText = "";
+            $http({
+                method: 'GET',
+                url: 'https://developers.zomato.com/api/v2.1/reviews?',
+                headers: {'user-key' : '1b6ddcb47426d068e923e86a6046a39b'},
+                params: {
+                  res_id: place.id, 
+                  start: 0,
+                  count : 5
+                }
+            }).success(function(data) {
+              //console.log("---success---:",data);
+              for (var i = 0; i < data.user_reviews.length; i++) 
+              {
+                //console.log("---Review Text---: ",data.user_reviews[i].review.review_text);
+                //console.log("---Ratings-------: ",data.user_reviews[i].review.rating);
+                if( data.user_reviews.length == 1)
+                {
+                  reviewText = "<br>" + (i+1) + ". " + data.user_reviews[i].review.review_text;
+                }
+                else
+                {
+                  reviewText = reviewText + "<br>" + (i+1) + ". " + data.user_reviews[i].review.review_text;
+                }
+                
+              }
+              //console.log("---Final Text -------: ",reviewText);
+              infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.user_rating.aggregate_rating
+                                            + "<br>" + "Address     : " + place.location.address
+                                            + "<br>" + "City        : " + place.location.city
+                                            + "<br>" + "Locality    : " + place.location.locality
+                                            + "<br>" + "Reviews     : " + reviewText
+                                            // + "<br>" + "Website     : " + place.website
+                                            // + "<br>" + "International Number: " + place.international_phone_number
+                                            // + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            // + "<br>" + "Place Id    : " + place.place_id
+                                            // //+ "<br>" + "Reviews    : " + place.reviews[0].text
+                                        );
+            }).error(function(error) {
+              console.log("---error---:",error);
+            });
+
+            infowindowplacesmarker.open(map, this);
+            infowindowsCollection.push(infowindowplacesmarker);
+            });
+            restaurantsMarkers.push(restaurantMarker); 
     };
 
     $scope.createPlacesMarkerForRestaurant = function(place)

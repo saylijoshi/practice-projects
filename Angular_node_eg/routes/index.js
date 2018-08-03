@@ -493,13 +493,16 @@ router.get('/getFilterData', function (req, res) {
 
 // HCCB Dummy data demo APIs for Distributors and Retailers
 router.get('/distributors', function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
     var db = req.db;
     var collection = db.get('distributors');
 
     collection.find({}, {}, function (e, docs) {
+        
         res.json(docs);
     });
 });
+
 
 router.get('/distributors/:_id', function (req, res) {
     var db = req.db;
@@ -507,6 +510,7 @@ router.get('/distributors/:_id', function (req, res) {
     var value = req.params._id;
     
     collection.find({'_id': ObjectId(value)}, {}, function (e, docs) {
+        //res.setHeader('Access-Control-Allow-Origin', '*');
         res.json(docs);
     });
 });
@@ -534,6 +538,8 @@ router.delete('/distributors/:_id', function (req, res) {
 
 router.post('/distributors', function (req, res) {
 
+   
+
     var db = req.db;
     var collection = db.get('distributors');
 
@@ -559,6 +565,7 @@ router.post('/distributors', function (req, res) {
     collection.insert(dbObj);
     
     collection.find({}, {}, function (e, docs) {
+        
             res.json(docs);
         });
 });

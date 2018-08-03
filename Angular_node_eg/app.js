@@ -52,12 +52,21 @@ var db = monk('127.0.0.1:27017/googleMapData');
 
 var app = express();
 
+//var cors = require('cors');
+
+
+
+// use it before all route definitions
+//app.use(cors({'origin':'*'}));
+//app.use(cors()); or
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -71,6 +80,7 @@ app.use(function(req,res,next){
     next();
 });
 app.use('/', index);
+//app.use('Access-Control-Allow-Origin','*');
 app.use('/users', users);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -78,6 +88,37 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+// app.all('*', function(req, res,next) {
+//     /**
+//      * Response settings
+//      * @type {Object}
+//      */
+//     var responseSettings = {
+//         "AccessControlAllowOrigin": req.headers.origin,
+//         "AccessControlAllowHeaders": "Content-Type,X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5,  Date, X-Api-Version, X-File-Name",
+//         "AccessControlAllowMethods": "POST, GET, PUT, DELETE, OPTIONS",
+//         "AccessControlAllowCredentials": true
+//     };
+//     /**
+//      * Headers
+//      */
+//     res.header("Access-Control-Allow-Credentials", responseSettings.AccessControlAllowCredentials);
+//     res.header("Access-Control-Allow-Origin",  responseSettings.AccessControlAllowOrigin);
+//     res.header("Access-Control-Allow-Headers", (req.headers['access-control-request-headers']) ? req.headers['access-control-request-headers'] : "x-requested-with");
+//     res.header("Access-Control-Allow-Methods", (req.headers['access-control-request-method']) ? req.headers['access-control-request-method'] : responseSettings.AccessControlAllowMethods);
+
+//     if ('OPTIONS' == req.method) {
+//         res.send(200);
+//     }
+//     else {
+//         next();
+//     }
+// });
+
+
+
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -89,15 +130,35 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.use(function(req, response, next) {
-    
-    // response.setHeader("Access-Control-Allow-Origin", "*");
-    // response.setHeader("Access-Control-Allow-Credentials", "true");
-    // response.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS, POST, GET, OPTIONS, PUT, DELETE");
-    // response.setHeader("Access-Control-Allow-Headers", "X-Zomato-API-Key, authorization,x-goog-authuser, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-    //next();
-  });
+// // Add headers
+// app.use(function (req, res, next) {
+
+//     console.log("---Adding Headers---");
+//     // Website you wish to allow to connect
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+
+//     // Request methods you wish to allow
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+//     // Request headers you wish to allow
+//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+//     // Set to true if you need the website to include cookies in the requests sent
+//     // to the API (e.g. in case you use sessions)
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+
+//     // Pass to next layer of middleware
+//     next();
+// });
   
+
+
+
+
+
+
+
+
 // var fs = require('fs'), filename = "example.txt";
 
 // fs.stat(filename, function(err, stats) { 
