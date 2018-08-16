@@ -240,6 +240,7 @@ angular.module('angularjs_with_Nodejs').controller('hccbController', function ($
         //     console.log("---Retailers GET Response ---: ", data);
         // });
 
+        
         $.get('/getFilterData', {}, function (data) {
             console.log("---getAccentureData GET Response ---: ", data);
             var countryNames = [];

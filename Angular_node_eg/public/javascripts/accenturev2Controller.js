@@ -74,6 +74,7 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     $scope.showTrafficButton = true;
     $scope.loading = false;
     var locationMarker;
+    var restaurants = [];
    
 
     $scope.countries =
@@ -206,8 +207,6 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
         {"name":"Production House 2", "checked":false}
     ]
 
-   
-
     $scope.distributiontypes = 
     [
         {"name":"Main Distribution Centre", "checked":false},
@@ -261,6 +260,7 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     var bounds;
     $scope.heatmapArray = [];
     $scope.standardHierarchy = [];
+    $scope.AllInOneRestaurants = [];
     $scope.storeNames = [];
     $scope.selectedRatingFilter = 0;
     var selectedRatingFilterArray = [];
@@ -270,6 +270,8 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
         {"name":"Active", "checked":false},
         {"name":"Inactive", "checked":false}
     ]
+
+    var countryMarkerCluster;
 
   
     $scope.goto = function(page) {
@@ -304,8 +306,16 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
         $scope.initialiseData();
         $scope.showStores();
 
-        //$scope.stringValue = sharedProperties.getString;
-        //console.log("---$scope.stringValue---2 : ",$scope.stringValue);
+        // $http({ method: 'GET', url: 'https://graph.facebook.com/search?type=place&fields=name,checkins,hours,location,engagement,is_verified,link,overall_star_rating,payment_options,price_range,restaurant_specialties&q=cafe&center=18.7304,73.2921&distance=10000&access_token=1837470493045321|SdcUiYX-RcYgghJWMtc07ph0O6I' }).
+        //               success(function (data, status, headers, config) {
+        //                   console.log("---Success---:",status);
+        //                   console.log("---data---:",data);
+        //                   console.log("---data.length---:",data.data.length);
+        //               }).
+        //               error(function (data, status, headers, config) {
+        //                   console.log("---Error---:",status);
+        //           });
+
     }
 
     
@@ -315,7 +325,8 @@ $scope.initialiseData = function()
     var tempArray = [];
     geocoder = new google.maps.Geocoder;
     bounds = new google.maps.LatLngBounds();
-    var infowindow = new google.maps.InfoWindow;
+    //var infowindow = new google.maps.InfoWindow();
+    infowindow = new google.maps.InfoWindow();
     trafficLayer = new google.maps.TrafficLayer();
 
     heatmap = new google.maps.visualization.HeatmapLayer({
@@ -361,21 +372,6 @@ $scope.initialiseData = function()
 
 $scope.showStores = function()
 {
-
-    // $http({
-    //   method: 'GET',
-    //   url: 'http://mapsdashboard.searcelabs.com/distributors',
-    //   // headers: {'user-key' : '1b6ddcb47426d068e923e86a6046a39b'},
-    //   // params: {
-    //   //     lat: 18.45362817, 
-    //   //     lon: 73.57482847
-    //   // }
-    // }).success(function(data) {
-    //   console.log("---success---:",data);
-    // }).error(function(error) {
-    //   console.log("---error---:",error);
-    // });
-  
     var storeData;
     console.log("---storeJSON---:",storeJSON.length);
 
@@ -438,6 +434,24 @@ $scope.showStores = function()
     //$scope.theNext();
     
     $scope.$apply();
+};
+
+$scope.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = $scope.deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = $scope.deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos($scope.deg2rad(lat1)) * Math.cos($scope.deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d;
+};
+
+$scope.deg2rad = function(deg) {
+  return deg * (Math.PI/180)
 };
 
 $scope.getPoints = function() 
@@ -1777,6 +1791,7 @@ $scope.theNext = function()
   $scope.createMarker = function(add,lat,lng) 
   {
    var contentString = add;
+   //infowindow = new google.maps.InfoWindow();
    var marker = new google.maps.Marker({
      position: new google.maps.LatLng(lat,lng),
      icon: 'images/red1.png',
@@ -3096,14 +3111,8 @@ $scope.countryChange = function()
                         }
                     }).success(function(data) {
 
-                      console.log("---success---:",data);
+                      //console.log("---success---:",data);
                       console.log("---data.nearby_restaurants.length---:",data.nearby_restaurants.length);
-
-                      //console.log("---data.all_reviews.length---:",data.nearby_restaurants.all_reviews.length);
-
-
-
-                      //console.log("---data.nearby_restaurants.length---:",data.nearby_restaurants.length);
                       for (var i = 0; i < data.nearby_restaurants.length; i++) 
                       {
                         var place = data.nearby_restaurants[i].restaurant;
@@ -3130,6 +3139,68 @@ $scope.countryChange = function()
                     }).error(function(error) {
                       console.log("---error---:",error);
                     });
+
+                    //&q=cafe
+                    $http({ method: 'GET', url: 'https://graph.facebook.com/search?type=place&fields=name,checkins,hours,location,engagement,is_verified,link,overall_star_rating,payment_options,price_range,restaurant_specialties&q=restaurants&center='+ jsonObject.LATITUDE + ',' +jsonObject.LONGITUDE +'&distance=2000&access_token=1837470493045321|SdcUiYX-RcYgghJWMtc07ph0O6I' }).
+                      success(function (data, status, headers, config) {
+
+                        console.log("---Facebook Restaurants---:",data);
+                        console.log("---Facebook Restaurants length---:",data.data.length);
+  
+                        for (var i = 0; i < data.data.length; i++) 
+                        {
+                          var place = data.data[i];
+                          var object = {
+                                      "Name": place.name,
+                                      "Rating": place.overall_star_rating,
+                                      "Address": place.location.street,
+                                      "Latitude": place.location.latitude,
+                                      "Longitude": place.location.longitude,
+                          };
+                          restaurants.push(object);
+
+                          if( selectedRatingFilterArray.length == 0 || selectedRatingFilterArray.length == 2 )
+                          {
+                              $scope.createPlacesMarkerForFacebookRestaurant(place);
+                          }
+                          else if(selectedRatingFilterArray.length == 1 )
+                          {
+                              if( selectedRatingFilterArray[0] == 3 )
+                              {
+                                  if( typeof place.overall_star_rating == "undefined" || place.overall_star_rating < 3 )
+                                  {
+                                      $scope.createPlacesMarkerForFacebookRestaurant(place);
+                                  }
+                              }
+                              else if( place.overall_star_rating > 3 && selectedRatingFilterArray[0] == 5 )
+                              {
+                                  $scope.createPlacesMarkerForFacebookRestaurant(place);
+                              }
+                          }
+                        }
+                        //console.log("---restaurantsFb---",restaurants);
+
+                        // Array to keep track of duplicates
+                        var duplicates = [];
+                        $scope.AllInOneRestaurants = restaurants.filter(function(element) {
+                        // If it is not a duplicate, return true
+                        if (duplicates.indexOf(element.Name) == -1) 
+                        {
+                          duplicates.push(element.Name);
+                            return true;
+                        }
+                        return false;
+                        });
+
+                        console.log("---$scope.AllInOneRestaurants---",$scope.AllInOneRestaurants);
+                        
+                      }).
+                      error(function (data, status, headers, config) {
+                          console.log("---Error---:",status);
+                  });
+
+                  
+
                 }
                 else if(typeName == "Airport")
                 {
@@ -3269,6 +3340,7 @@ $scope.countryChange = function()
                 if( typeName == "Restaurants" )
                 {
                     $scope.clearRestaurantsMarker();
+                    restaurants = [];
                 }
                 else if(typeName == "Airport")
                 {
@@ -3938,6 +4010,18 @@ $scope.countryChange = function()
           //google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
+
+            var place = results[i];
+            var object = {
+                        "Name": place.name,
+                        "Rating": place.rating,
+                        "Address":place.formatted_address,
+                        "Latitude": place.geometry.location.lat(),
+                        "Longitude": place.geometry.location.lng(),
+            };
+            restaurants.push(object);
+
+
             if( selectedRatingFilterArray.length == 2 )
             {
                 $scope.createPlacesMarkerForRestaurant(results[i]);
@@ -3961,6 +4045,37 @@ $scope.countryChange = function()
                 $scope.createPlacesMarkerForRestaurant(results[i]);
             }
           }
+          console.log("--- Google Restaurants---", restaurants);
+          // Array to keep track of duplicates
+          var duplicates = [];
+          $scope.AllInOneRestaurants = restaurants.filter(function(element) {
+          // If it is not a duplicate, return true
+          if (duplicates.indexOf(element.Name) == -1) 
+          {
+            duplicates.push(element.Name);
+              return true;
+          }
+          return false;
+          });
+          console.log("---duplicates111---",duplicates);
+          console.log("---$scope.AllInOneRestaurants NAME---",$scope.AllInOneRestaurants);
+
+
+
+          for (var i = 0; i < restaurants.length; i++) 
+          {
+              var latitude1 = restaurants.Latitude;
+              var longitude1 = restaurants.Longitude;
+              for(var j = 0; j < restaurants.length; j++)
+              {
+                var latitude2 = restaurants.Latitude;
+                var longitude2 = restaurants.Longitude;
+                var distance = $scope.getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2);
+                console.log("---distance---: ",distance);
+              }
+
+          }
+
         }
        
         // countryMarkerCluster = new MarkerClusterer(map, restaurantsMarkers,
@@ -4506,6 +4621,32 @@ $scope.countryChange = function()
             restaurantsMarkers.push(restaurantMarker); 
     };
 
+    $scope.createPlacesMarkerForFacebookRestaurant = function(place)
+    {
+        $scope.clearInfoWindow();
+        locationLatLng = new google.maps.LatLng(place.location.latitude, place.location.longitude); 
+        var image = 'images/blue.png';
+        
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : locationLatLng
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+          infowindowplacesmarker.setContent( "Name     : " + place.name
+                                          + "<br>" + "Ratings  : " + place.overall_star_rating
+                                          + "<br>" + "Checkins : " + place.checkins
+                                          + "<br>" + "Address  : " + place.location.street
+                                      );
+          infowindowplacesmarker.open(map, this);
+          infowindowsCollection.push(infowindowplacesmarker);
+          });
+          restaurantsMarkers.push(restaurantMarker); 
+    };
+
     $scope.createPlacesMarkerForRestaurant = function(place)
     {
         $scope.clearInfoWindow();
@@ -4965,7 +5106,6 @@ $scope.countryChange = function()
         });
         MealTakeAwayMarkers.push(restaurantMarker); 
     };
-
 
     var storeJSON = [
       {

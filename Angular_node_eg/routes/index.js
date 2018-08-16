@@ -60,6 +60,11 @@ router.get('/hccbdemo', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../', 'views', 'hccbdemo.html'));
 });
 
+//ICICI Demo
+router.get('/icicidemo', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../', 'views', 'icici.html'));
+});
+
 //var googleMapsClient = googlemaps.createClient({
 //    key: 'AIzaSyDVR5iaxk4V2f3OqyyhwUrZdWvE7L7n8Uo'
 //});
