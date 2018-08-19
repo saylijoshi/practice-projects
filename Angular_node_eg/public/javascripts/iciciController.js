@@ -19,7 +19,7 @@ angular.module('angularjs_with_Nodejs').controller('iciciController', function (
     $scope.weightagePOI = [];
     $scope.TotalWeightage = 0;
     $scope.categorizedWeightage = {};
-    
+    $scope.showaverage = false;
 
     
 
@@ -33,6 +33,8 @@ angular.module('angularjs_with_Nodejs').controller('iciciController', function (
     $scope.selectedRatingFilter = 0;
     var selectedRatingFilterArray = [];
     var countryMarkerCluster;
+    var autocomplete, places,radius_circle;
+    var countryRestrict = {'country': 'in'};
 
   
     $scope.goto = function(page) {
@@ -53,9 +55,121 @@ angular.module('angularjs_with_Nodejs').controller('iciciController', function (
         mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
+        
+
+        var ctaLayer = new google.maps.KmlLayer({
+          url: 'https://www.dropbox.com/s/0grhlim3q4572jp/ROU_adm2%20-%20Copy.kml?dl=1'
+});
+ctaLayer.setMap(map);
+
+
         $scope.storeIPAddress();
         $scope.initialiseData();
         $scope.showStores();
+        initEvents();
+    }
+
+    /* DOM (drag/drop) functions */
+
+    function initEvents() {
+      // set up the drag & drop events
+      var mapContainer = document.getElementById('mymap');
+      var dropContainer = document.getElementById('drop-container');
+
+      // map-specific events
+      mapContainer.addEventListener('dragenter', showPanel, false);
+
+      // overlay specific events (since it only appears once drag starts)
+      dropContainer.addEventListener('dragover', showPanel, false);
+      dropContainer.addEventListener('drop', handleDrop, false);
+      dropContainer.addEventListener('dragleave', hidePanel, false);
+    }
+
+    function showPanel(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      document.getElementById('drop-container').style.display = 'block';
+      return false;
+    }
+
+    function hidePanel(e) {
+      document.getElementById('drop-container').style.display = 'none';
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      hidePanel(e);
+
+      var files = e.dataTransfer.files;
+      if (files.length) {
+        console.log("---flies.length---");
+        // process file(s) being dropped
+        // grab the file data from each file
+        for (var i = 0, file; file = files[i]; i++) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            loadGeoJsonString(e.target.result);
+          };
+          reader.onerror = function(e) {
+            console.error('reading failed');
+          };
+          reader.readAsText(file);
+        }
+      } else {
+        // process non-file (e.g. text or html) content being dropped
+        // grab the plain text version of the data
+        var plainText = e.dataTransfer.getData('text/plain');
+        if (plainText) {
+          console.log("---plainText---");
+          loadGeoJsonString(plainText);
+        }
+      }
+
+      // prevent drag event from bubbling further
+      return false;
+    }
+
+    function loadGeoJsonString(geoString) {
+      var geojson = JSON.parse(geoString);
+      var json = map.data.addGeoJson(geojson);
+      //console.log("---json---: ",json[0]);
+      console.log("---json---: ",json[0].f.NAME_1);
+     
+      map.data.setStyle({fillColor: 'pink',strokeWeight: 0.5});
+      zoom(map);
+    }
+
+    /**
+     * Update a map's viewport to fit each geometry in a dataset
+     * @param {google.maps.Map} map The map to adjust
+     */
+    function zoom(map) {
+      var bounds = new google.maps.LatLngBounds();
+      map.data.forEach(function(feature) {
+        processPoints(feature.getGeometry(), bounds.extend, bounds);
+      });
+      map.fitBounds(bounds);
+    }
+
+    /**
+     * Process each point in a Geometry, regardless of how deep the points may lie.
+     * @param {google.maps.Data.Geometry} geometry The structure to process
+     * @param {function(google.maps.LatLng)} callback A function to call on each
+     *     LatLng point encountered (e.g. Array.push)
+     * @param {Object} thisArg The value of 'this' as provided to 'callback' (e.g.
+     *     myArray)
+     */
+    function processPoints(geometry, callback, thisArg) {
+      if (geometry instanceof google.maps.LatLng) {
+        callback.call(thisArg, geometry);
+      } else if (geometry instanceof google.maps.Data.Point) {
+        callback.call(thisArg, geometry.get());
+      } else {
+        geometry.getArray().forEach(function(g) {
+          processPoints(g, callback, thisArg);
+        });
+      }
     }
 
     
@@ -69,7 +183,177 @@ $scope.initialiseData = function()
     infowindow = new google.maps.InfoWindow();
     trafficLayer = new google.maps.TrafficLayer();
 
+    // Create the autocomplete object and associate it with the UI input control.
+    // Restrict the search to the default country, and to place type "cities".
+    autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */ (
+          document.getElementById('mylocation')), {
+        //types: ['address'],
+        componentRestrictions: countryRestrict
+      });
+    places = new google.maps.places.PlacesService(map);
+  
+
+  autocomplete.addListener('place_changed', $scope.onPlaceChanged);
+
     $scope.$apply();
+};
+
+
+// When the user selects a city, get the place details for the city and
+// zoom the map in on the city.
+$scope.onPlaceChanged = function() {
+  var place = autocomplete.getPlace();
+  if (place.geometry) {
+    map.panTo(place.geometry.location);
+    map.setZoom(15);
+    //search();
+    $scope.showNearbyLocations();
+  } else {
+    document.getElementById('mylocation').placeholder = 'Enter a location';
+  }
+}
+
+function clearRadius()
+{
+  if (radius_circle) 
+  {
+    radius_circle.setMap(null);
+    radius_circle = null;
+  }
+} 
+
+$scope.showNearbyLocations = function() 
+{
+  // clearDirection();
+  // clearAllMarker();
+  // clearInfoWindow();
+  clearRadius();
+  //$scope.clearMarkers();
+
+  $scope.showaverage = true;
+  $scope.$apply();
+
+
+  var mylocation = document.getElementById("mylocation").value;
+  var givenLatLng;
+  var mygeocoder = new google.maps.Geocoder();
+
+  mygeocoder.geocode( { 'address': mylocation}, function(results, status) 
+  {
+
+        if (status == google.maps.GeocoderStatus.OK) 
+        {
+          var latitude = results[0].geometry.location.lat();
+          var longitude = results[0].geometry.location.lng();
+          
+          givenLatLng = { lat : latitude , lng : longitude};
+
+          if (mygeocoder) 
+          {
+            mygeocoder.geocode({'location': givenLatLng}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) 
+            {
+              if (status != google.maps.GeocoderStatus.ZERO_RESULTS) 
+              {
+                var current_lat_lng = results[0].geometry.location;
+                radius_circle = new google.maps.Circle({
+                center: current_lat_lng,
+                radius: 5000,
+                clickable: false,
+                map: map
+                });
+
+                radius_circle.setOptions({
+                            fillColor: '#ffcf70',
+                            strokeColor: '#ffac05'
+                        });
+
+                if ( radius_circle )
+                {
+                  map.fitBounds(radius_circle.getBounds());
+                } 
+
+                for (var i = 0, length =  realestateData.length; i < length; i++) 
+                {
+                  var storeData =  realestateData[i];
+                  var marker_lat_lng = new google.maps.LatLng( realestateData[i].latitude,  realestateData[i].longitude);
+                  //distance in meters between your location and the marker
+          
+                  var distance_from_location = google.maps.geometry.spherical.computeDistanceBetween(current_lat_lng, marker_lat_lng); 
+                  if (distance_from_location <= 5000) 
+                  {
+                    //console.log(" finalLocations[i].CTLPNO: "+  finalLocations[i].CTLPNO );
+                    var new_marker = new google.maps.Marker({
+                    position: marker_lat_lng,
+                    map: map,
+                    icon: 'https://maps.gstatic.com/intl/en_us/mapfiles/markers2/measle_blue.png',
+                    //title:  realestateData[i].price
+                    });      								
+                    
+                    var storeName =  finalLocations[i].CTLPNO;
+
+                    infoWindow = new google.maps.InfoWindow();
+                    (function(new_marker, storeData) {
+
+                    
+                    google.maps.event.addListener(infoWindow, 'domready', function() {
+
+                      // Reference to the DIV that wraps the bottom of infowindow
+                      var iwOuter = $('.gm-style-iw');
+
+                      var iwBackground = iwOuter.prev();
+
+                      jQuery('.gm-style-iw').prev('div').remove();
+
+                    });
+
+
+                    if( i < 30 )
+                    {
+                      infoWindow.setContent('<div id="iw-container">' +'<div class="iw-title">' + storeData.price + " L " + '</div>' + '</div>');
+                      infoWindow.open(map, new_marker);
+                    }
+
+                    // Attaching a click event to the current marker
+                    google.maps.event.addListener(new_marker, "click", function(e) {
+
+                      infoWindow.setContent('<div id="iw-container">' +'<div class="iw-title">' + storeData.price + " L " + '</div>' + '</div>');
+                      infoWindow.open(map, new_marker);
+                      //clearDirection();
+                      dirLatLng = { lat : storeData.latitude , lng : storeData.longitude};
+                      //showDirections(myLatLng,dirLatLng,storeData );
+                    });
+
+                    markers.push(new_marker);
+
+                    })(new_marker, storeData);
+                  }
+                }
+              } 
+              else 
+              {
+                alert("No results found while geocoding!");
+              }
+            } 
+            else 
+            {
+            alert("Geocode was not successful: " + status);
+            }
+            });
+          }
+        } 
+
+        
+  });
+}
+
+$scope.clearMarkers = function()
+{
+    for (var key in markers) 
+    {
+      markers[key].setMap(null);
+    };
 };
 
 $scope.createMyMarker = function(data) 
@@ -289,6 +573,110 @@ $scope.showHeatMap = function()
     });
 }
 
+var realestateData = [
+
+  {"latitude":28.670498,"longitude":77.18528,"price":84},
+{"latitude":28.613599,"longitude":77.215497,"price":49},
+{"latitude":28.621196,"longitude":77.166753,"price":115},
+{"latitude":28.670753,"longitude":77.225169,"price":114},
+{"latitude":28.627688,"longitude":77.221554,"price":32},
+{"latitude":28.673061,"longitude":77.164978,"price":29},
+{"latitude":28.615552,"longitude":77.197377,"price":100},
+{"latitude":28.673093,"longitude":77.261362,"price":71},
+{"latitude":28.638516,"longitude":77.260299,"price":27},
+{"latitude":28.658324,"longitude":77.166634,"price":30},
+{"latitude":28.618276,"longitude":77.276072,"price":93},
+{"latitude":28.624584,"longitude":77.272197,"price":82},
+{"latitude":28.660682,"longitude":77.229607,"price":52},
+{"latitude":28.617989,"longitude":77.220393,"price":112},
+{"latitude":28.656248,"longitude":77.251963,"price":83},
+{"latitude":28.635986,"longitude":77.175035,"price":43},
+{"latitude":28.626026,"longitude":77.272613,"price":101},
+{"latitude":28.657113,"longitude":77.198884,"price":64},
+{"latitude":28.637026,"longitude":77.218375,"price":60},
+{"latitude":28.664009,"longitude":77.245569,"price":42},
+{"latitude":28.671163,"longitude":77.224939,"price":70},
+{"latitude":28.676861,"longitude":77.169706,"price":67},
+{"latitude":28.649768,"longitude":77.234301,"price":80},
+{"latitude":28.667642,"longitude":77.258916,"price":77},
+{"latitude":28.623682,"longitude":77.203614,"price":76},
+{"latitude":28.645663,"longitude":77.223381,"price":20},
+{"latitude":28.668757,"longitude":77.19566,"price":71},
+{"latitude":28.660352,"longitude":77.187275,"price":60},
+{"latitude":28.627327,"longitude":77.189603,"price":89},
+{"latitude":28.66497,"longitude":77.269204,"price":107},
+{"latitude":28.640864,"longitude":77.267248,"price":71},
+{"latitude":28.611022,"longitude":77.167671,"price":94},
+{"latitude":28.631769,"longitude":77.203948,"price":111},
+{"latitude":28.666156,"longitude":77.217905,"price":67},
+{"latitude":28.66782,"longitude":77.190149,"price":84},
+{"latitude":28.650929,"longitude":77.256047,"price":50},
+{"latitude":28.619457,"longitude":77.226111,"price":50},
+{"latitude":28.666004,"longitude":77.180612,"price":48},
+{"latitude":28.67721,"longitude":77.188891,"price":74},
+{"latitude":28.655011,"longitude":77.207497,"price":33},
+{"latitude":28.612224,"longitude":77.173563,"price":120},
+{"latitude":28.672302,"longitude":77.209948,"price":23},
+{"latitude":28.67635,"longitude":77.247164,"price":71},
+{"latitude":28.616403,"longitude":77.228579,"price":108},
+{"latitude":28.669992,"longitude":77.168614,"price":57},
+{"latitude":28.669626,"longitude":77.199914,"price":82},
+{"latitude":28.667661,"longitude":77.203975,"price":112},
+{"latitude":28.643616,"longitude":77.261848,"price":25},
+{"latitude":28.675662,"longitude":77.242512,"price":102},
+{"latitude":28.642792,"longitude":77.217515,"price":79},
+{"latitude":28.659055,"longitude":77.278902,"price":70},
+{"latitude":28.649456,"longitude":77.177033,"price":105},
+{"latitude":28.650806,"longitude":77.186692,"price":115},
+{"latitude":28.62794,"longitude":77.218098,"price":101},
+{"latitude":28.656097,"longitude":77.247435,"price":101},
+{"latitude":28.647163,"longitude":77.19248,"price":41},
+{"latitude":28.650642,"longitude":77.279189,"price":120},
+{"latitude":28.663487,"longitude":77.198133,"price":57},
+{"latitude":28.631661,"longitude":77.196217,"price":34},
+{"latitude":28.67048,"longitude":77.265447,"price":94},
+{"latitude":28.660067,"longitude":77.24387,"price":66},
+{"latitude":28.618577,"longitude":77.224193,"price":111},
+{"latitude":28.658992,"longitude":77.204054,"price":110},
+{"latitude":28.643674,"longitude":77.270288,"price":106},
+{"latitude":28.615401,"longitude":77.220705,"price":64},
+{"latitude":28.621109,"longitude":77.217717,"price":119},
+{"latitude":28.671905,"longitude":77.233718,"price":80},
+{"latitude":28.666855,"longitude":77.19162,"price":91},
+{"latitude":28.672466,"longitude":77.255542,"price":98},
+{"latitude":28.66207,"longitude":77.25737,"price":59},
+{"latitude":28.660101,"longitude":77.193165,"price":90},
+{"latitude":28.619759,"longitude":77.191251,"price":59},
+{"latitude":28.61693,"longitude":77.218069,"price":84},
+{"latitude":28.677925,"longitude":77.26611,"price":117},
+{"latitude":28.610943,"longitude":77.257767,"price":93},
+{"latitude":28.613621,"longitude":77.187593,"price":46},
+{"latitude":28.662896,"longitude":77.199821,"price":51},
+{"latitude":28.637899,"longitude":77.258436,"price":51},
+{"latitude":28.618138,"longitude":77.16118,"price":30},
+{"latitude":28.651419,"longitude":77.185072,"price":96},
+{"latitude":28.634309,"longitude":77.246079,"price":114},
+{"latitude":28.669319,"longitude":77.165987,"price":24},
+{"latitude":28.666952,"longitude":77.275062,"price":29},
+{"latitude":28.632948,"longitude":77.270101,"price":50},
+{"latitude":28.643405,"longitude":77.251031,"price":78},
+{"latitude":28.642419,"longitude":77.24732,"price":85},
+{"latitude":28.671691,"longitude":77.228182,"price":41},
+{"latitude":28.62995,"longitude":77.201619,"price":79},
+{"latitude":28.614325,"longitude":77.250832,"price":84},
+{"latitude":28.630333,"longitude":77.205508,"price":28},
+{"latitude":28.623245,"longitude":77.279123,"price":74},
+{"latitude":28.642835,"longitude":77.164931,"price":38},
+{"latitude":28.636353,"longitude":77.254816,"price":27},
+{"latitude":28.651087,"longitude":77.174351,"price":116},
+{"latitude":28.62773,"longitude":77.210062,"price":101},
+{"latitude":28.67499,"longitude":77.233559,"price":45},
+{"latitude":28.658464,"longitude":77.172253,"price":108},
+{"latitude":28.674435,"longitude":77.27116,"price":78},
+{"latitude":28.649901,"longitude":77.197464,"price":105},
+{"latitude":28.652963,"longitude":77.263073,"price":116}
+
+];
 
     var finalLocations = [
 

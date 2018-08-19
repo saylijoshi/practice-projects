@@ -372,6 +372,7 @@ $scope.initialiseData = function()
 
 $scope.showStores = function()
 {
+  
     var storeData;
     console.log("---storeJSON---:",storeJSON.length);
 
@@ -436,7 +437,7 @@ $scope.showStores = function()
     $scope.$apply();
 };
 
-$scope.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2) {
+$scope.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2,place1,place2) {
   var R = 6371; // Radius of the earth in km
   var dLat = $scope.deg2rad(lat2-lat1);  // deg2rad below
   var dLon = $scope.deg2rad(lon2-lon1); 
@@ -447,6 +448,12 @@ $scope.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2) {
     ; 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
   var d = R * c; // Distance in km
+  if( d > 0 && d < 0.1000 )
+  {
+    var placename = place1.Name + "  and  " + place2.Name + " is : "
+    console.log("",placename + d);
+  }
+  
   return d;
 };
 
@@ -3193,6 +3200,20 @@ $scope.countryChange = function()
                         });
 
                         console.log("---$scope.AllInOneRestaurants---",$scope.AllInOneRestaurants);
+
+
+                        for (var i = 0; i < restaurants.length; i++) 
+                        {
+                            var latitude1 = restaurants[i].Latitude;
+                            var longitude1 = restaurants[i].Longitude;
+                            for(var j = 0; j < restaurants.length; j++)
+                            {
+                              var latitude2 = restaurants[j].Latitude;
+                              var longitude2 = restaurants[j].Longitude;
+                              $scope.getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2,restaurants[i],restaurants[j]);
+                              
+                            }
+                        }
                         
                       }).
                       error(function (data, status, headers, config) {
@@ -4064,16 +4085,15 @@ $scope.countryChange = function()
 
           for (var i = 0; i < restaurants.length; i++) 
           {
-              var latitude1 = restaurants.Latitude;
-              var longitude1 = restaurants.Longitude;
+              var latitude1 = restaurants[i].Latitude;
+              var longitude1 = restaurants[i].Longitude;
               for(var j = 0; j < restaurants.length; j++)
               {
-                var latitude2 = restaurants.Latitude;
-                var longitude2 = restaurants.Longitude;
-                var distance = $scope.getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2);
-                console.log("---distance---: ",distance);
+                var latitude2 = restaurants[j].Latitude;
+                var longitude2 = restaurants[j].Longitude;
+                $scope.getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2,restaurants[i],restaurants[j]);
+                
               }
-
           }
 
         }
