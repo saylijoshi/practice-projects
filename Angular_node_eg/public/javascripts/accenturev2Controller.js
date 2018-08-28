@@ -283,17 +283,17 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
 
     setTimeout(function ()
     {
-      // if( localStorage.getItem("token") == 'lzbPt76HhtGKhHRj' )
-      // {
-      //   $scope.initMap();
-      //   localStorage.setItem("token",'');
-      // }
-      // else
-      // {
-      //   window.location.href = '/accenturedemo';
-      // }
+      if( localStorage.getItem("token") == 'lzbPt76HhtGKhHRj' )
+      {
+        $scope.initMap();
+        localStorage.setItem("token",'');
+      }
+      else
+      {
+        window.location.href = '/accenturedemo';
+      }
 
-      $scope.initMap();
+      //$scope.initMap();
       
     }, 50);
 
