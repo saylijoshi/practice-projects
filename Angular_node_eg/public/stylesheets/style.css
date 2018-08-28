@@ -780,7 +780,7 @@ pre{
 #map-canvas img {
     max-width: none !important;
 }
-.gm-style-iw {
+/* .gm-style-iw {
     width: 80px !important;
     top: 45px !important;
     left: 0px !important;
@@ -789,7 +789,7 @@ pre{
     background-color: rgba(255, 255, 255, 0);
 }
 
-.gm-style-iw + div {display: none;}
+.gm-style-iw + div {display: none;} */
 
 #iw-container {
     margin-bottom: 2px;

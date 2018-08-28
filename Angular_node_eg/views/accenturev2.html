@@ -86,14 +86,14 @@
 
         <div class="col-md-7">
             <ul class="nav-option">
-                <li><a ng-click="showStoreLocatorUI()">Store Locator</a></li>
-                <li><a > | </a></li>
-                <li><a ng-click="showFilters('salesPerson');">Sales Tracking</a></li>
-                <li><a > | </a></li>
-                <li><a ng-click="assetTracking()">Asset Tracking</a></li>
-                <li><a > | </a></li>
-                <!-- <li><a ng-click="showMarketingUI()">Marketing</a></li>-->
-                <li><a ng-click="showFilters('POI');listAllCities();getPOIWeightages();">City Score Card</a></li>
+                <li><a >          </a></li>
+                <li><a >  </a></li>
+                <li><a >             </a></li>
+                <li><a >  </a></li>
+                <li><a >             </a></li>
+                <li><a >  </a></li>
+                
+                <li><a >             </a></li>
             </ul>
         </div>
         
@@ -123,13 +123,13 @@
                                     <option value="Malaysia" selected="selected"> Malaysia </option>
                                        <!-- <option ng-repeat="country in countries" value="{{country.name}}" >{{ country.name }} </option> -->
                             </select>
-                        </br>Select Type : 
+                        <!-- </br>Select Type : 
                         <div ng-repeat="opt in storeTypes">
                             <label class="container">
                               <input type="checkbox" ng-click="showTypes(opt.name,$event);" ng-model="opt.checked">
                               <span class="checkmark"></span>{{opt.name}}
                             </label> 
-                        </div> 
+                        </div>  -->
                         </div>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
                         <div class="panel-body">
                             Select Store :
                             <select ng-model="selectedStore" ng-change = "getData(null, -1);" >
-                                    <option ng-repeat="store in storeNames" value="{{store}}" >{{store.CUST_NAME}}</option>
+                                    <option ng-repeat="store in storeNames" value="{{store}}" >{{store.OUTLET_CODE}}</option>
                             </select>
                             <span ng-if="showStorePlaceTypes">
                                 <div ng-repeat="opt in placetypes">

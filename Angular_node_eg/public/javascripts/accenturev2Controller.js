@@ -6,6 +6,7 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     var markers = []; 
     var restaurantsMarkers = [];
     var airportMarkers = [];
+    var stationMarkers = [];
     var barMarkers = [];
     var busstationMarkers = [];
     var cafeMarkers = [];
@@ -19,7 +20,7 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     var MealTakeAwayMarkers = [];
     var movietheatermarkers = [];
     var categorySmallProvisionStoresMarker = [];
-    var categoryCaféMarker = [];
+    var chineseMedicalHallSmallMarker = [];
     var categoryHypermarketMarker = [];
     var categoryOtherInstitutionalMarker = [];
     var categoryCateringMarker = [];
@@ -31,6 +32,7 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     var categoryPetShopMarker = [];
     var categoryMediumProvisionStoresMarker = [];
     var categoryChineseMedicalHallMarker = [];
+    var categoryChineseMedicalHallLargeMarker = [];
     var categoryOtherConvenienceStoresMarker = [];
     var categoryTraditionalPharmacyMarker = [];
     var categorySpecialistFoodDrinkMarker = [];
@@ -132,6 +134,7 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     $scope.placetypes = 
     [
         {"name":"Restaurants", "checked":false},
+        {"name":"MRT Stations", "checked":false},
         {"name":"Bar", "checked":false},
         {"name":"Cafe", "checked":false},
         {"name":"Casino", "checked":false},
@@ -280,15 +283,17 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
 
     setTimeout(function ()
     {
-      if( localStorage.getItem("token") == 'lzbPt76HhtGKhHRj' )
-      {
-        $scope.initMap();
-        localStorage.setItem("token",'');
-      }
-      else
-      {
-        window.location.href = '/accenturedemo';
-      }
+      // if( localStorage.getItem("token") == 'lzbPt76HhtGKhHRj' )
+      // {
+      //   $scope.initMap();
+      //   localStorage.setItem("token",'');
+      // }
+      // else
+      // {
+      //   window.location.href = '/accenturedemo';
+      // }
+
+      $scope.initMap();
       
     }, 50);
 
@@ -304,18 +309,7 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
 
         $scope.storeIPAddress();
         $scope.initialiseData();
-        $scope.showStores();
-
-        // $http({ method: 'GET', url: 'https://graph.facebook.com/search?type=place&fields=name,checkins,hours,location,engagement,is_verified,link,overall_star_rating,payment_options,price_range,restaurant_specialties&q=cafe&center=18.7304,73.2921&distance=10000&access_token=1837470493045321|SdcUiYX-RcYgghJWMtc07ph0O6I' }).
-        //               success(function (data, status, headers, config) {
-        //                   console.log("---Success---:",status);
-        //                   console.log("---data---:",data);
-        //                   console.log("---data.length---:",data.data.length);
-        //               }).
-        //               error(function (data, status, headers, config) {
-        //                   console.log("---Error---:",status);
-        //           });
-
+        $scope.showStores(); 
     }
 
     
@@ -336,11 +330,11 @@ $scope.initialiseData = function()
     heatmap.setMap(null);
 
 
-    for (var i = 0, length = storeJSON.length; i < length; i++) 
+    for (var i = 0, length = newStores.length; i < length; i++) 
     {
-        var storeData = storeJSON[i];
+        var storeData = newStores[i];
         standardHierarchyNames.push({
-            name: storeData.STANDARD_HIERARCHY,
+            name: storeData.CHANNEL_HIERARCHY,
             selected: false,
         });
         //tempArray.push(standardHierarchyNames[i].name);
@@ -372,33 +366,62 @@ $scope.initialiseData = function()
 
 $scope.showStores = function()
 {
+
+  // for (var i = 0, length = 10; i < length; i++) 
+  // {
+      // var newstoreData = newStores[67];
+      // console.log("---newstoreData.ADDRESS---:",newstoreData.ADDRESS);
+      // geocoder.geocode({'address': newstoreData.ADDRESS}, function (results,status)
+      // { 
+      //   // If that was successful
+      //   if (status == google.maps.GeocoderStatus.OK) {
+      //     //console.log("---results---:",results);
+      //     //console.log("---formatted_address---:",results[0].formatted_address);
+      //     // Lets assume that the first marker is the one we want
+      //     var p = results[0].geometry.location;
+      //     var lat=p.lat();
+      //     var lng=p.lng();
+      //     // Output the data
+      //       var msg = '"geocodeaddress"' + ':"' +results[0].formatted_address+ '",' + '"latitude":'+lat+ ',' + '"longitude":' +lng + ',';
+      //       //document.getElementById("messages").innerHTML += msg;
+      //       //console.log("---OUTLET CODE---:",newstoreData.OUTLET_CODE);
+      //       console.log("---msg---:",msg);
+      //     // Create a marker
+      //     //$scope.createMarker(search,lat,lng);
+      //   }
+      //   else {
+      //     console.log("---Error---:",status); 
+      //   }
+      // });
+  //}
+
   
     var storeData;
-    console.log("---storeJSON---:",storeJSON.length);
+    console.log("---newStores---:",newStores.length);
 
     $scope.storeNames.length = 0;  
 
-    for (var i = 0, length = storeJSON.length; i < length; i++) 
+    for (var i = 0, length = newStores.length; i < length; i++) 
     {
-        storeData = storeJSON[i];
+        storeData = newStores[i];
 
-        if( storeData.LATITUDE != null && storeData.LONGITUDE != null  )
+        if( storeData.latitude != null && storeData.longitude != null  )
         {
             $scope.storeNames.push(storeData);
-            var heatmapPoint = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE);
+            var heatmapPoint = new google.maps.LatLng(storeData.latitude, storeData.longitude);
             $scope.heatmapArray.push(heatmapPoint);
-            latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+            latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
       
             // Creating a marker and putting it on the map
             var marker = new google.maps.Marker({
             position: latLng,
             map: map,
-            title: storeData.CUST_NAME,
+            title: storeData.OUTLET_CODE,
             icon: 'images/purple.png',
             mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
             });
 
-            infoWindow = new google.maps.InfoWindow();
+            infoWindow = new google.maps.InfoWindow({maxWidth:350});
             (function(marker, storeData) {
 
                 // Attaching a click event to the current marker
@@ -406,14 +429,16 @@ $scope.showStores = function()
                 
                 //infoWindow.setContent('<h3>' + storeData.name + '</h3>'+ "<br/>" + storeData.address + "<br/>" + storeData.contact);
                 
-                infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                infoWindow.setContent('<h3>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h3>'
+                + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
 
                 infoWindow.open(map, marker);
                 //clearDirection();
@@ -427,11 +452,11 @@ $scope.showStores = function()
         else
         {
             //console.log("---storeData.ADDR_TOTAL---:",storeData.ADDR_TOTAL);
-            AddressJSON.push(storeData.ADDR_TOTAL);
+            AddressJSON.push(storeData.ADDRESS);
         }
     }
   
-    console.log("---AddressJSON---:",AddressJSON.length);
+    //console.log("---AddressJSON---:",AddressJSON.length);
     //$scope.theNext();
     
     $scope.$apply();
@@ -478,12 +503,12 @@ $scope.showTypes = function (name,event)
 
     $scope.storeNames.length = 0;  
 
-    for (var i = 0, length = storeJSON.length; i < length; i++) 
+    for (var i = 0, length = newStores.length; i < length; i++) 
     {
-        var storeData = storeJSON[i];
+        var storeData = newStores[i];
         var type = storeData.CUST_STATUS;
 
-        if( storeData.LATITUDE != null && storeData.LONGITUDE != null  )
+        if( storeData.latitude != null && storeData.longitude != null  )
         {
           if(event.target.checked)
           {  
@@ -494,12 +519,12 @@ $scope.showTypes = function (name,event)
               {
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/green.png',
                   mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
@@ -511,15 +536,17 @@ $scope.showTypes = function (name,event)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-  
+                    infoWindow.setContent('<h3>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h3>' 
+                              + "<br/>" + "POSTAL_CODE                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+
                   infoWindow.open(map, marker);
                   });
   
@@ -545,7 +572,7 @@ $scope.showTypes = function (name,event)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+                    infoWindow.setContent('<h4>' + "Customer Name         :" + storeData.CUST_NAME + '</h4>'
                     + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
                     + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
                     + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
@@ -663,49 +690,51 @@ $scope.showLocations = function (name,event, index)
 
     $scope.storeNames.length = 0;  
 
-    for (var i = 0, length = storeJSON.length; i < length; i++) 
+    for (var i = 0, length = newStores.length; i < length; i++) 
     {
-        var storeData = storeJSON[i];
-        var typeName = storeData.STANDARD_HIERARCHY;
+        var storeData = newStores[i];
+        var typeName = storeData.CHANNEL_HIERARCHY;
 
-        if( storeData.LATITUDE != null && storeData.LONGITUDE != null  )
+        if( storeData.latitude != null && storeData.longitude != null  )
         {
           if(event.target.checked)
           {  
               map.setCenter({lat:4.465754,lng: 107.501896});
               map.setZoom(6);
-      
+
               if( name == "Small Provision Stores" && typeName == "Small Provision Stores" )
               {
                   console.log("---typeName---:",typeName);
                   userSelectedCategoryName = "Small Provision Stores";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/purple.png',
                   mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
                   //infoWindow = new google.maps.InfoWindow();
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350 });
   
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
   
                   infoWindow.open(map, marker);
                   });
@@ -713,182 +742,186 @@ $scope.showLocations = function (name,event, index)
                   categorySmallProvisionStoresMarker.push(marker);
                   })(marker, storeData);
               }
-              else if( name == "Café" && typeName == "Café" )
+              else if( name == "Chinese Medical Hall - Small" && typeName == "Chinese Medical Hall - Small" )
               {
                   console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Café";
+                  userSelectedCategoryName = "Chinese Medical Hall - Small";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/pink.png',
                   mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350});
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
                   infoWindow.open(map, marker);
                   });
   
-                  categoryCaféMarker.push(marker);
+                  chineseMedicalHallSmallMarker.push(marker);
                   })(marker, storeData);
               }
-              else if( name == "Hypermarket" && typeName == "Hypermarket" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Hypermarket";
-                  $scope.storeNames.push(storeData);
+              // else if( name == "Hypermarket" && typeName == "Hypermarket" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Hypermarket";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/green.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/green.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  });
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categoryHypermarketMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Other Institutional" && typeName == "Other Institutional" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Other Institutional";
-                  $scope.storeNames.push(storeData);
+              //     categoryHypermarketMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Other Institutional" && typeName == "Other Institutional" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Other Institutional";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/blue.png',
-                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/blue.png',
+              //     //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  //$scope.clearDirection();
-                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     //$scope.clearDirection();
+              //     //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+              //     //$scope.showDirections(myLatLng,dirLatLng,storeData );
   
-                  });
+              //     });
   
-                  categoryOtherInstitutionalMarker.push(marker);
-                  })(marker, storeData);
-              } 
-              else if( name == "Catering" && typeName == "Catering" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Catering";
-                  $scope.storeNames.push(storeData);
+              //     categoryOtherInstitutionalMarker.push(marker);
+              //     })(marker, storeData);
+              // } 
+              // else if( name == "Catering" && typeName == "Catering" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Catering";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/purple.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/purple.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  //infoWindow = new google.maps.InfoWindow();
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     //infoWindow = new google.maps.InfoWindow();
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
   
-                  (function(marker, storeData) {
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" +storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" +storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
   
-                  infoWindow.open(map, marker);
-                  });
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categoryCateringMarker.push(marker);
-                  })(marker, storeData);
-              }
+              //     categoryCateringMarker.push(marker);
+              //     })(marker, storeData);
+              // }
               else if( name == "Supermarket" && typeName == "Supermarket" )
               {
                   console.log("---typeName---:",typeName);
                   userSelectedCategoryName = "Supermarket";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/pink.png',
                   mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350});
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
                   infoWindow.open(map, marker);
                   });
   
@@ -901,29 +934,31 @@ $scope.showLocations = function (name,event, index)
                   userSelectedCategoryName = "Large Provision Stores";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/green.png',
                   mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350});
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
                   infoWindow.open(map, marker);
                   });
   
@@ -936,29 +971,31 @@ $scope.showLocations = function (name,event, index)
                   userSelectedCategoryName = "Petrol Mart Station";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/blue.png',
                   //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350});
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
                   infoWindow.open(map, marker);
                   //$scope.clearDirection();
                   //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -969,143 +1006,145 @@ $scope.showLocations = function (name,event, index)
                   categoryPetrolMartStationMarker.push(marker);
                   })(marker, storeData);
               }
-              else if( name == "Restaurant" && typeName == "Restaurant" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Restaurant";
-                  $scope.storeNames.push(storeData);
+              // else if( name == "Restaurant" && typeName == "Restaurant" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Restaurant";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/purple.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/purple.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  //infoWindow = new google.maps.InfoWindow();
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     //infoWindow = new google.maps.InfoWindow();
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
   
-                  (function(marker, storeData) {
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
   
-                  infoWindow.open(map, marker);
-                  });
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categoryRestaurantMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "School" && typeName == "School" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "School";
-                  $scope.storeNames.push(storeData);
+              //     categoryRestaurantMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "School" && typeName == "School" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "School";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/pink.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/pink.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  });
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categorySchoolMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Pet Shop" && typeName == "Pet Shop" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Pet Shop";
-                  $scope.storeNames.push(storeData);
+              //     categorySchoolMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Pet Shop" && typeName == "Pet Shop" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Pet Shop";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/green.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/green.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  });
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categoryPetShopMarker.push(marker);
-                  })(marker, storeData);
-              }
+              //     categoryPetShopMarker.push(marker);
+              //     })(marker, storeData);
+              // }
               else if( name == "Medium Provision Stores" && typeName == "Medium Provision Stores" )
               {
                   console.log("---typeName---:",typeName);
                   userSelectedCategoryName = "Medium Provision Stores";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/blue.png',
                   //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350});
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
                   infoWindow.open(map, marker);
                   //$scope.clearDirection();
                   //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -1122,31 +1161,33 @@ $scope.showLocations = function (name,event, index)
                   userSelectedCategoryName = "Chinese Medical Hall";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/purple.png',
                   mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
                   //infoWindow = new google.maps.InfoWindow();
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350});
   
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
   
                   infoWindow.open(map, marker);
                   });
@@ -1154,483 +1195,522 @@ $scope.showLocations = function (name,event, index)
                   categoryChineseMedicalHallMarker.push(marker);
                   })(marker, storeData);
               }
-              else if( name == "Other Convenience Stores" && typeName == "Other Convenience Stores" )
+              else if( name == "Convenience Store" && typeName == "Convenience Store" )
               {
                   console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Other Convenience Stores";
+                  userSelectedCategoryName = "Convenience Store";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/pink.png',
                   mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350});
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
                   infoWindow.open(map, marker);
                   });
   
                   categoryOtherConvenienceStoresMarker.push(marker);
                   })(marker, storeData);
               }
-              else if( name == "Traditional Pharmacy" && typeName == "Traditional Pharmacy" )
+              else if( name == "Chinese Medical Hall - Large" && typeName == "Chinese Medical Hall - Large" )
               {
                   console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Traditional Pharmacy";
+                  userSelectedCategoryName = "Chinese Medical Hall - Large";
                   $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+                  latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                   // Creating a marker and putting it on the map
                   var marker = new google.maps.Marker({
                   position: latLng,
                   map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/green.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
-  
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
-  
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  });
-  
-                  categoryTraditionalPharmacyMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Specialist Food & Drink" && typeName == "Specialist Food & Drink" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Specialist Food & Drink";
-                  $scope.storeNames.push(storeData);
-  
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/blue.png',
-                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
-  
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
-  
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  //$scope.clearDirection();
-                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
-  
-                  });
-  
-                  categorySpecialistFoodDrinkMarker.push(marker);
-                  })(marker, storeData);
-              } 
-              else if( name == "Bakery" && typeName == "Bakery" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Bakery";
-                  $scope.storeNames.push(storeData);
-  
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/purple.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
-  
-                  //infoWindow = new google.maps.InfoWindow();
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-  
-                  (function(marker, storeData) {
-  
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-  
-                  infoWindow.open(map, marker);
-                  });
-  
-                  categoryBakeryMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "QSR" && typeName == "QSR" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "QSR";
-                  $scope.storeNames.push(storeData);
-  
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
+                  title: storeData.OUTLET_CODE,
                   icon: 'images/pink.png',
                   mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                   });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                  infoWindow = new google.maps.InfoWindow({ maxWidth: 350});
                   (function(marker, storeData) {
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+                    infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+                              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+                              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+                              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+                              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+                              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+                              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+                              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+                              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
                   infoWindow.open(map, marker);
                   });
   
-                  categoryQSRMarker.push(marker);
+                  categoryChineseMedicalHallLargeMarker.push(marker);
                   })(marker, storeData);
               }
-              else if( name == "Wholesale" && typeName == "Wholesale" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Wholesale";
-                  $scope.storeNames.push(storeData);
+              // else if( name == "Traditional Pharmacy" && typeName == "Traditional Pharmacy" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Traditional Pharmacy";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/green.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/green.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  });
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categoryWholesaleMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Vending Machine" && typeName == "Vending Machine" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Vending Machine";
-                  $scope.storeNames.push(storeData);
+              //     categoryTraditionalPharmacyMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Specialist Food & Drink" && typeName == "Specialist Food & Drink" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Specialist Food & Drink";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/blue.png',
-                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/blue.png',
+              //     //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  //$scope.clearDirection();
-                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     //$scope.clearDirection();
+              //     //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+              //     //$scope.showDirections(myLatLng,dirLatLng,storeData );
   
-                  });
+              //     });
   
-                  categoryendingMachineMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Specialist Other" && typeName == "Specialist Other" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Specialist Other";
-                  $scope.storeNames.push(storeData);
+              //     categorySpecialistFoodDrinkMarker.push(marker);
+              //     })(marker, storeData);
+              // } 
+              // else if( name == "Bakery" && typeName == "Bakery" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Bakery";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/purple.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/purple.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  //infoWindow = new google.maps.InfoWindow();
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     //infoWindow = new google.maps.InfoWindow();
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
   
-                  (function(marker, storeData) {
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
   
-                  infoWindow.open(map, marker);
-                  });
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categorySpecialistOtherMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "News / Magazine Store" && typeName == "News / Magazine Store" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "News / Magazine Store";
-                  $scope.storeNames.push(storeData);
+              //     categoryBakeryMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "QSR" && typeName == "QSR" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "QSR";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/pink.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/pink.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  });
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categoryNewsMagazineStoreMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Hospitals" && typeName == "Hospitals" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Hospitals";
-                  $scope.storeNames.push(storeData);
+              //     categoryQSRMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Wholesale" && typeName == "Wholesale" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Wholesale";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/green.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/green.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  });
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  categoryHospitalsMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Modern Pharmacy" && typeName == "Modern Pharmacy" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Modern Pharmacy";
-                  $scope.storeNames.push(storeData);
+              //     categoryWholesaleMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Vending Machine" && typeName == "Vending Machine" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Vending Machine";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/blue.png',
-                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/blue.png',
+              //     //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  //$scope.clearDirection();
-                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     //$scope.clearDirection();
+              //     //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+              //     //$scope.showDirections(myLatLng,dirLatLng,storeData );
   
-                  });
+              //     });
   
-                  categoryModernPharmacyMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Speciality Other" && typeName == "Speciality Other" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Speciality Other";
-                  $scope.storeNames.push(storeData);
+              //     categoryendingMachineMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Specialist Other" && typeName == "Specialist Other" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Specialist Other";
+              //     $scope.storeNames.push(storeData);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/green.png',
-                  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/purple.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     //infoWindow = new google.maps.InfoWindow();
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  });
+              //     (function(marker, storeData) {
   
-                  categorySpecialityOtherMarker.push(marker);
-                  })(marker, storeData);
-              }
-              else if( name == "Baby Center" && typeName == "Baby Center" )
-              {
-                  console.log("---typeName---:",typeName);
-                  userSelectedCategoryName = "Baby Center";
-                  $scope.storeNames.push(storeData);
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
   
-                  latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
-                  // Creating a marker and putting it on the map
-                  var marker = new google.maps.Marker({
-                  position: latLng,
-                  map: map,
-                  title: storeData.CUST_NAME,
-                  icon: 'images/blue.png',
-                  //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                  });
+              //     infoWindow.open(map, marker);
+              //     });
   
-                  infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
-                  (function(marker, storeData) {
+              //     categorySpecialistOtherMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "News / Magazine Store" && typeName == "News / Magazine Store" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "News / Magazine Store";
+              //     $scope.storeNames.push(storeData);
   
-                  // Attaching a click event to the current marker
-                  google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
-                    + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
-                    + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
-                    + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
-                    + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
-                    + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
-                    + "<br/>" + "Latitude           :" +storeData.LATITUDE
-                    + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
-                  infoWindow.open(map, marker);
-                  //$scope.clearDirection();
-                  //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
-                  //$scope.showDirections(myLatLng,dirLatLng,storeData );
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/pink.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
   
-                  });
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
   
-                  categoryBabyCenterMarker.push(marker);
-                  })(marker, storeData);
-              }
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
+  
+              //     categoryNewsMagazineStoreMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Hospitals" && typeName == "Hospitals" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Hospitals";
+              //     $scope.storeNames.push(storeData);
+  
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/green.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
+  
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
+  
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
+  
+              //     categoryHospitalsMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Modern Pharmacy" && typeName == "Modern Pharmacy" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Modern Pharmacy";
+              //     $scope.storeNames.push(storeData);
+  
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/blue.png',
+              //     //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
+  
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
+  
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     //$scope.clearDirection();
+              //     //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+              //     //$scope.showDirections(myLatLng,dirLatLng,storeData );
+  
+              //     });
+  
+              //     categoryModernPharmacyMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Speciality Other" && typeName == "Speciality Other" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Speciality Other";
+              //     $scope.storeNames.push(storeData);
+  
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/green.png',
+              //     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
+  
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
+  
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     });
+  
+              //     categorySpecialityOtherMarker.push(marker);
+              //     })(marker, storeData);
+              // }
+              // else if( name == "Baby Center" && typeName == "Baby Center" )
+              // {
+              //     console.log("---typeName---:",typeName);
+              //     userSelectedCategoryName = "Baby Center";
+              //     $scope.storeNames.push(storeData);
+  
+              //     latLng = new google.maps.LatLng(storeData.LATITUDE, storeData.LONGITUDE); 
+              //     // Creating a marker and putting it on the map
+              //     var marker = new google.maps.Marker({
+              //     position: latLng,
+              //     map: map,
+              //     title: storeData.CUST_NAME,
+              //     icon: 'images/blue.png',
+              //     //mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+              //     });
+  
+              //     infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+              //     (function(marker, storeData) {
+  
+              //     // Attaching a click event to the current marker
+              //     google.maps.event.addListener(marker, "click", function(e) {
+              //       infoWindow.setContent('<h3>' + "Customer Name         :" + storeData.CUST_NAME + '</h3>'
+              //       + "<br/>" + "Customer Status    :" + storeData.CUST_STATUS 
+              //       + "<br/>" + "Postal Code        :" +storeData.POSTAL_CODE_1
+              //       + "<br/>" + "Address            :" +storeData.ADDR_TOTAL 
+              //       + "<br/>" + "Company Hierarchy  :" +storeData.COMPANY_HIERARCHY
+              //       + "<br/>" + "Standard Hierarchy :" +storeData.STANDARD_HIERARCHY 
+              //       + "<br/>" + "Latitude           :" +storeData.LATITUDE
+              //       + "<br/>" + "Longitude          :" +storeData.LONGITUDE);
+              //     infoWindow.open(map, marker);
+              //     //$scope.clearDirection();
+              //     //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
+              //     //$scope.showDirections(myLatLng,dirLatLng,storeData );
+  
+              //     });
+  
+              //     categoryBabyCenterMarker.push(marker);
+              //     })(marker, storeData);
+              // }
           }
           else
           {
@@ -1638,22 +1718,22 @@ $scope.showLocations = function (name,event, index)
               {
                   $scope.clearCategorySmallProvisionStoresMarker();
               }
-              else if( name == "Café" && typeName == "Café" )
+              else if( name == "Chinese Medical Hall - Small" && typeName == "Chinese Medical Hall - Small" )
               {
-                  $scope.clearCategoryCaféMarker();
+                  $scope.clearchineseMedicalHallSmallMarker();
               }
-              else if( name == "Hypermarket" && typeName == "Hypermarket" )
-              {
-                  $scope.clearCategoryHypermarketMarker();
-              }
-              else if( name == "Other Institutional" && typeName == "Other Institutional" )
-              {
-                  $scope.clearCategoryOtherInstitutionalMarker();
-              }
-              else if( name == "Catering" && typeName == "Catering" )
-              {
-                  $scope.clearCategoryCateringMarker();
-              }
+              // else if( name == "Hypermarket" && typeName == "Hypermarket" )
+              // {
+              //     $scope.clearCategoryHypermarketMarker();
+              // }
+              // else if( name == "Other Institutional" && typeName == "Other Institutional" )
+              // {
+              //     $scope.clearCategoryOtherInstitutionalMarker();
+              // }
+              // else if( name == "Catering" && typeName == "Catering" )
+              // {
+              //     $scope.clearCategoryCateringMarker();
+              // }
               else if( name == "Supermarket" && typeName == "Supermarket" )
               {
                   $scope.clearCategorySupermarketMarker();
@@ -1666,18 +1746,18 @@ $scope.showLocations = function (name,event, index)
               {
                   $scope.clearCategoryPetrolMartStationMarker();
               }
-              else if( name == "Restaurant" && typeName == "Restaurant" )
-              {
-                  $scope.clearCategoryRestaurantMarker();
-              }
-              else if( name == "School" && typeName == "School" )
-              {
-                  $scope.clearCategorySchoolMarker();
-              }
-              else if( name == "Pet Shop" && typeName == "Pet Shop" )
-              {
-                  $scope.clearCategoryPetShopMarker();
-              }
+              // else if( name == "Restaurant" && typeName == "Restaurant" )
+              // {
+              //     $scope.clearCategoryRestaurantMarker();
+              // }
+              // else if( name == "School" && typeName == "School" )
+              // {
+              //     $scope.clearCategorySchoolMarker();
+              // }
+              // else if( name == "Pet Shop" && typeName == "Pet Shop" )
+              // {
+              //     $scope.clearCategoryPetShopMarker();
+              // }
               else if( name == "Medium Provision Stores" && typeName == "Medium Provision Stores" )
               {
                   $scope.clearCategoryMediumProvisionStoresMarker();
@@ -1686,58 +1766,62 @@ $scope.showLocations = function (name,event, index)
               {
                   $scope.clearCategoryChineseMedicalHallMarker();
               }
-              else if( name == "Other Convenience Stores" && typeName == "Other Convenience Stores" )
+              else if( name == "Chinese Medical Hall - Large" && typeName == "Chinese Medical Hall - Large" )
+              {
+                  $scope.clearCategoryChineseMedicalHallLargeMarker();
+              }
+              else if( name == "Convenience Store" && typeName == "Convenience Store" )
               {
                   $scope.clearCategoryOtherConvenienceStoresMarker();
               }
-              else if( name == "Traditional Pharmacy" && typeName == "Traditional Pharmacy" )
-              {
-                  $scope.clearCategoryTraditionalPharmacyMarker();
-              }
-              else if( name == "Specialist Food & Drink" && typeName == "Specialist Food & Drink" )
-              {
-                  $scope.clearCategorySpecialistFoodDrinkMarker();
-              }
-              else if( name == "Bakery" && typeName == "Bakery" )
-              {
-                  $scope.clearCategoryBakeryMarker();
-              }
-              else if( name == "QSR" && typeName == "QSR" )
-              {
-                  $scope.clearCategoryQSRMarker();
-              }
-              else if( name == "Wholesale" && typeName == "Wholesale" )
-              {
-                  $scope.clearCategoryWholesaleMarker();
-              }
-              else if( name == "Vending Machine" && typeName == "Vending Machine" )
-              {
-                  $scope.clearCategoryendingMachineMarker();
-              }
-              else if( name == "Specialist Other" && typeName == "Specialist Other" )
-              {
-                  $scope.clearCategorySpecialistOtherMarker();
-              }
-              else if( name == "News / Magazine Store" && typeName == "News / Magazine Store" )
-              {
-                  $scope.clearCategoryNewsMagazineStoreMarker();
-              }
-              else if( name == "Hospitals" && typeName == "Hospitals" )
-              {
-                  $scope.clearCategoryHospitalsMarker();
-              }
-              else if( name == "Modern Pharmacy" && typeName == "Modern Pharmacy" )
-              {
-                  $scope.clearCategoryModernPharmacyMarker();
-              }
-              else if( name == "Speciality Other" && typeName == "Speciality Other" )
-              {
-                  $scope.clearCategorySpecialityOtherMarker();
-              }
-              else if( name == "Baby Center" && typeName == "Baby Center" )
-              {
-                  $scope.clearCategoryBabyCenterMarker();
-              }
+              // else if( name == "Traditional Pharmacy" && typeName == "Traditional Pharmacy" )
+              // {
+              //     $scope.clearCategoryTraditionalPharmacyMarker();
+              // }
+              // else if( name == "Specialist Food & Drink" && typeName == "Specialist Food & Drink" )
+              // {
+              //     $scope.clearCategorySpecialistFoodDrinkMarker();
+              // }
+              // else if( name == "Bakery" && typeName == "Bakery" )
+              // {
+              //     $scope.clearCategoryBakeryMarker();
+              // }
+              // else if( name == "QSR" && typeName == "QSR" )
+              // {
+              //     $scope.clearCategoryQSRMarker();
+              // }
+              // else if( name == "Wholesale" && typeName == "Wholesale" )
+              // {
+              //     $scope.clearCategoryWholesaleMarker();
+              // }
+              // else if( name == "Vending Machine" && typeName == "Vending Machine" )
+              // {
+              //     $scope.clearCategoryendingMachineMarker();
+              // }
+              // else if( name == "Specialist Other" && typeName == "Specialist Other" )
+              // {
+              //     $scope.clearCategorySpecialistOtherMarker();
+              // }
+              // else if( name == "News / Magazine Store" && typeName == "News / Magazine Store" )
+              // {
+              //     $scope.clearCategoryNewsMagazineStoreMarker();
+              // }
+              // else if( name == "Hospitals" && typeName == "Hospitals" )
+              // {
+              //     $scope.clearCategoryHospitalsMarker();
+              // }
+              // else if( name == "Modern Pharmacy" && typeName == "Modern Pharmacy" )
+              // {
+              //     $scope.clearCategoryModernPharmacyMarker();
+              // }
+              // else if( name == "Speciality Other" && typeName == "Speciality Other" )
+              // {
+              //     $scope.clearCategorySpecialityOtherMarker();
+              // }
+              // else if( name == "Baby Center" && typeName == "Baby Center" )
+              // {
+              //     $scope.clearCategoryBabyCenterMarker();
+              // }
           }
       }  
     }  
@@ -1812,7 +1896,6 @@ $scope.theNext = function()
    });
 
    bounds.extend(marker.position);
-
  }
 
 function geocodeLatLng(geocoder, map, infowindow) {
@@ -3001,38 +3084,38 @@ $scope.countryChange = function()
         $scope.clearFusionLayer();
         $scope.clearCityAndRegionMarker();
         
-        if (jsonObject.STANDARD_HIERARCHY == "Small Provision Stores" ||
-            jsonObject.STANDARD_HIERARCHY == "Café" ||
-            jsonObject.STANDARD_HIERARCHY == "Other Convenience Stores" ||
-            jsonObject.STANDARD_HIERARCHY == "Medium Provision Stores" ||
-            jsonObject.STANDARD_HIERARCHY == "Hypermarket" ||
-            jsonObject.STANDARD_HIERARCHY == "Other Institutional" ||
-            jsonObject.STANDARD_HIERARCHY == "Catering" ||
-            jsonObject.STANDARD_HIERARCHY == "Supermarket" ||
-            jsonObject.STANDARD_HIERARCHY == "Large Provision Stores" ||
-            jsonObject.STANDARD_HIERARCHY == "Petrol Mart Station" ||
-            jsonObject.STANDARD_HIERARCHY == "Restaurant" ||
-            jsonObject.STANDARD_HIERARCHY == "School" ||
-            jsonObject.STANDARD_HIERARCHY == "Pet Shop" ||
-            jsonObject.STANDARD_HIERARCHY == "Medium Provision Stores" ||
-            jsonObject.STANDARD_HIERARCHY == "Chinese Medical Hall" ||
-            jsonObject.STANDARD_HIERARCHY == "Other Convenience Stores" ||
-            jsonObject.STANDARD_HIERARCHY == "Traditional Pharmacy" ||
-            jsonObject.STANDARD_HIERARCHY == "Specialist Food & Drink" ||
-            jsonObject.STANDARD_HIERARCHY == "Bakery" ||
-            jsonObject.STANDARD_HIERARCHY == "QSR" ||
-            jsonObject.STANDARD_HIERARCHY == "Wholesale" ||
-            jsonObject.STANDARD_HIERARCHY == "Vending Machine" ||
-            jsonObject.STANDARD_HIERARCHY == "Specialist Other" ||
-            jsonObject.STANDARD_HIERARCHY == "News / Magazine Store" ||
-            jsonObject.STANDARD_HIERARCHY == "Hospitals" ||
-            jsonObject.STANDARD_HIERARCHY == "Modern Pharmacy" ||
-            jsonObject.STANDARD_HIERARCHY == "Speciality Other" ||
-            jsonObject.STANDARD_HIERARCHY == "Baby Center"
+        if (jsonObject.CHANNEL_HIERARCHY == "Chinese Medical Hall - Small" ||
+            jsonObject.CHANNEL_HIERARCHY == "Petrol Mart Station" ||
+            jsonObject.CHANNEL_HIERARCHY == "Supermarket" ||
+            jsonObject.CHANNEL_HIERARCHY == "Medium Provision Stores" ||
+            jsonObject.CHANNEL_HIERARCHY == "Large Provision Stores" ||
+            jsonObject.CHANNEL_HIERARCHY == "Convenience Store" ||
+            jsonObject.CHANNEL_HIERARCHY == "Small Provision Stores" ||
+            jsonObject.CHANNEL_HIERARCHY == "Chinese Medical Hall - Large" ||
+            jsonObject.CHANNEL_HIERARCHY == "Chinese Medical Hall"
+            // jsonObject.CHANNEL_HIERARCHY == "Petrol Mart Station" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Restaurant" ||
+            // jsonObject.CHANNEL_HIERARCHY == "School" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Pet Shop" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Medium Provision Stores" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Chinese Medical Hall" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Other Convenience Stores" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Traditional Pharmacy" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Specialist Food & Drink" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Bakery" ||
+            // jsonObject.CHANNEL_HIERARCHY == "QSR" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Wholesale" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Vending Machine" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Specialist Other" ||
+            // jsonObject.CHANNEL_HIERARCHY == "News / Magazine Store" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Hospitals" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Modern Pharmacy" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Speciality Other" ||
+            // jsonObject.CHANNEL_HIERARCHY == "Baby Center"
             )
         {
             $scope.showStorePlaceTypes = true;
-            latLng = new google.maps.LatLng(jsonObject.LATITUDE, jsonObject.LONGITUDE); 
+            latLng = new google.maps.LatLng(jsonObject.latitude, jsonObject.longitude); 
             bounds  = new google.maps.LatLngBounds();
             bounds.extend(latLng);
     
@@ -3040,7 +3123,7 @@ $scope.countryChange = function()
             var marker = new google.maps.Marker({
             position: latLng,
             map: map,
-            title: jsonObject.CUST_NAME,
+            title: jsonObject.OUTLET_CODE,
             icon: 'images/red1.png',
             mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
             });
@@ -3067,14 +3150,16 @@ $scope.countryChange = function()
 
             // Attaching a click event to the current marker
             google.maps.event.addListener(marker, "click", function(e) {
-              infoWindow.setContent('<h3>' + "Customer Name         :" + jsonObject.CUST_NAME + '</h3>'
-              + "<br/>" + "Customer Status    :" + jsonObject.CUST_STATUS 
-              + "<br/>" + "Postal Code        :" +jsonObject.POSTAL_CODE_1
-              + "<br/>" + "Address            :" +jsonObject.ADDR_TOTAL 
-              + "<br/>" + "Company Hierarchy  :" +jsonObject.COMPANY_HIERARCHY
-              + "<br/>" + "Standard Hierarchy :" +jsonObject.STANDARD_HIERARCHY 
-              + "<br/>" + "Latitude           :" +jsonObject.LATITUDE
-              + "<br/>" + "Longitude          :" +jsonObject.LONGITUDE);
+              infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
+              + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
+              + "<br/>" + "Address                      :" +storeData.ADDRESS 
+              + "<br/>" + "Channel Hierarchy            :" +storeData.CHANNEL_HIERARCHY
+              + "<br/>" + "No of Invoices               :" +storeData.NO_OF_INVOICES 
+              + "<br/>" + "Total Invoice Amount         :" +storeData.TOTAL_INVOICE_AMOUNT
+              + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
+              + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
+              + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
+              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
 
             infoWindow.open(map, marker);
 
@@ -3086,7 +3171,7 @@ $scope.countryChange = function()
         }
         
 
-        var storeLatLng = { lat : jsonObject.LATITUDE , lng : jsonObject.LONGITUDE};
+        var storeLatLng = { lat : jsonObject.latitude , lng : jsonObject.longitude};
 
         //checking and assiging values got from callback( index nad event )
         if(index!= -1)
@@ -3113,8 +3198,8 @@ $scope.countryChange = function()
                         url: 'https://developers.zomato.com/api/v2.1/geocode?',
                         headers: {'user-key' : '1b6ddcb47426d068e923e86a6046a39b'},
                         params: {
-                            lat: jsonObject.LATITUDE, 
-                            lon: jsonObject.LONGITUDE
+                            lat: jsonObject.latitude, 
+                            lon: jsonObject.longitude
                         }
                     }).success(function(data) {
 
@@ -3148,7 +3233,7 @@ $scope.countryChange = function()
                     });
 
                     //&q=cafe
-                    $http({ method: 'GET', url: 'https://graph.facebook.com/search?type=place&fields=name,checkins,hours,location,engagement,is_verified,link,overall_star_rating,payment_options,price_range,restaurant_specialties&q=restaurants&center='+ jsonObject.LATITUDE + ',' +jsonObject.LONGITUDE +'&distance=2000&access_token=1837470493045321|SdcUiYX-RcYgghJWMtc07ph0O6I' }).
+                    $http({ method: 'GET', url: 'https://graph.facebook.com/search?type=place&fields=name,checkins,hours,location,engagement,is_verified,link,overall_star_rating,payment_options,price_range,restaurant_specialties&q=restaurants&center='+ jsonObject.latitude + ',' +jsonObject.longitude +'&distance=2000&access_token=1837470493045321|SdcUiYX-RcYgghJWMtc07ph0O6I' }).
                       success(function (data, status, headers, config) {
 
                         console.log("---Facebook Restaurants---:",data);
@@ -3222,6 +3307,16 @@ $scope.countryChange = function()
 
                   
 
+                }
+                else if(typeName == "MRT Stations")
+                {
+                    var service1 = new google.maps.places.PlacesService(map);
+                    service1.nearbySearch({
+                        location : storeLatLng,
+                        radius : 2000,
+                        //componentRestrictions: {'country': 'SG'},
+                        type : [ 'train_station']
+                    }, $scope.stationsCallback);   
                 }
                 else if(typeName == "Airport")
                 {
@@ -3363,6 +3458,10 @@ $scope.countryChange = function()
                     $scope.clearRestaurantsMarker();
                     restaurants = [];
                 }
+                else if(typeName == "MRT Stations")
+                {
+                    $scope.clearStationMarkers();
+                }
                 else if(typeName == "Airport")
                 {
                     $scope.clearAirportMarkers();
@@ -3443,6 +3542,7 @@ $scope.countryChange = function()
     {
         $scope.clearRestaurantsMarker();
         $scope.clearAirportMarkers();
+        $scope.clearStationMarkers();
         $scope.clearBarMarkers();
         $scope.clearBusstationMarkers();
         $scope.clearCafeMarkers();
@@ -3485,6 +3585,14 @@ $scope.countryChange = function()
         };
         //airportMarkers.length = 0;
        // airportMarkersCluster.clearMarkers();
+    }; 
+
+    $scope.clearStationMarkers = function()
+    {
+        for (var key in stationMarkers) 
+        {
+          stationMarkers[key].setMap(null);
+        };
     };
 
     $scope.clearBarMarkers = function()
@@ -3614,7 +3722,7 @@ $scope.countryChange = function()
     $scope.clearAllCategoryMarkers = function()
     {
         $scope.clearCategorySmallProvisionStoresMarker();
-        $scope.clearCategoryCaféMarker();
+        $scope.clearchineseMedicalHallSmallMarker();
         $scope.clearCategoryHypermarketMarker();
         $scope.clearCategoryOtherInstitutionalMarker();
         $scope.clearCategoryCateringMarker();
@@ -3626,6 +3734,7 @@ $scope.countryChange = function()
         $scope.clearCategoryPetShopMarker();
         $scope.clearCategoryMediumProvisionStoresMarker();
         $scope.clearCategoryChineseMedicalHallMarker();
+        $scope.clearCategoryChineseMedicalHallLargeMarker();
         $scope.clearCategoryOtherConvenienceStoresMarker();
         $scope.clearCategoryTraditionalPharmacyMarker();
         $scope.clearCategorySpecialistFoodDrinkMarker();
@@ -3665,11 +3774,11 @@ $scope.countryChange = function()
         };
     };
 
-    $scope.clearCategoryCaféMarker = function()
+    $scope.clearchineseMedicalHallSmallMarker = function()
     {
-        for (var key in categoryCaféMarker) 
+        for (var key in chineseMedicalHallSmallMarker) 
         {
-          categoryCaféMarker[key].setMap(null);
+          chineseMedicalHallSmallMarker[key].setMap(null);
         };
     };
 
@@ -3758,6 +3867,14 @@ $scope.countryChange = function()
         for (var key in categoryChineseMedicalHallMarker) 
         {
           categoryChineseMedicalHallMarker[key].setMap(null);
+        };
+    };
+
+    $scope.clearCategoryChineseMedicalHallLargeMarker = function()
+    {
+        for (var key in categoryChineseMedicalHallLargeMarker) 
+        {
+          categoryChineseMedicalHallLargeMarker[key].setMap(null);
         };
     };
 
@@ -4136,6 +4253,40 @@ $scope.countryChange = function()
         }
         // airportMarkersCluster = new MarkerClusterer(map, airportMarkers,
         // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.stationsCallback = function(results, status)
+    {
+        //var airportCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+          google.maps.places.type
+          for (var i = 0; i < results.length; i++) 
+          {
+            if( selectedRatingFilterArray.length == 2 )
+            {
+                $scope.createPlacesMarkerForStations(results[i]);
+            }
+            else if(selectedRatingFilterArray.length == 1 )
+            {
+                if( selectedRatingFilterArray[0] == 3 )
+                {
+                    if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+                    {
+                        $scope.createPlacesMarkerForStations(results[i]);
+                    }
+                }
+                else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+                {
+                    $scope.createPlacesMarkerForStations(results[i]);
+                }
+            }
+            else if(selectedRatingFilterArray.length == 0 )
+            {
+                $scope.createPlacesMarkerForStations(results[i]);
+            }
+          }
+        }
     };
 
     $scope.barCallback = function(results, status)
@@ -4855,6 +5006,31 @@ $scope.countryChange = function()
         airportMarkers.push(restaurantMarker); 
     };
 
+    $scope.createPlacesMarkerForStations = function(place)
+    {
+        $scope.clearInfoWindow();
+        var image = 'images/busstop.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        stationsMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+        google.maps.event.addListener(stationsMarker, 'click', function() {
+        infowindowplacesmarker.setContent( "Name     : " + place.name
+                                        + "<br>" + "Ratings     : " + place.rating);
+                                        //+ "<br>" + "Address     : " + place.formatted_address
+                                        //+ "<br>" + "Phone Number: " + place.formatted_phone_number);
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        stationMarkers.push(stationsMarker); 
+    };
+
 
     $scope.createPlacesMarkerForBusStop = function(place)
     {
@@ -5126,6 +5302,2320 @@ $scope.countryChange = function()
         });
         MealTakeAwayMarkers.push(restaurantMarker); 
     };
+
+    var newStores = [
+      {
+        "OUTLET_CODE": "AC519730",
+        "ADDRESS": "14, JALAN DATO ABDULLAH, RAUB,PAHANG D.M   27600", 
+        "geocodeaddress":"NO. 14, Jalan Dato Abdullah, Pahang, 27600 Raub District, Malaysia",
+        "latitude":3.793157,
+        "longitude":101.85628300000008,
+        "POSTAL_CODE": "27600",
+        "PLACE": "Raub",
+        "STATE": "Pahang",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "6/17/2016",
+        "INVOICE_END_DATE": "4/5/2018",
+        "MONTHS": "21",
+        "NO_OF_INVOICES": "25",
+        "TOTAL_INVOICE_AMOUNT": " 11,668 ",
+        "TOTAL_PRODUCT_LINES": "155",
+        "AVERAGE_PURCHASE_PER_MONTH": " 556 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 467 ",
+        "AVERAGE_LINES_PER_INVOICE": " 6.20 ",
+        "Beauty and Personal Care": " 423 ",
+        "Consumer Health": " 7,397 ",
+        "Health and Wellness": " 321 ",
+        "Home Care": " 264 ",
+        "Packaged Food": " 2,433 ",
+        "Soft Drinks": " 829 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC519868",
+        "ADDRESS": "LOT 2858,SIMPANG SONGSANG, TEMERLOH,PAHANG D.M. 28000",
+        "geocodeaddress":"5, Lot 5077, Simpang songsang, Mentakab,, Jalan Temerloh Jaya, Taman Temerloh Jaya, 28000 Temerloh, Pahang, Malaysia",
+        "latitude":3.4697601,
+        "longitude":102.38053939999998,
+        "POSTAL_CODE": "28000",
+        "PLACE": "Temerloh",
+        "STATE": "Pahang",
+        "CHANNEL_HIERARCHY": "Petrol Mart Station",
+        "INVOICE_START_DATE": "6/30/2016",
+        "INVOICE_END_DATE": "3/27/2018",
+        "MONTHS": "20",
+        "NO_OF_INVOICES": "14",
+        "TOTAL_INVOICE_AMOUNT": " 2,530 ",
+        "TOTAL_PRODUCT_LINES": "53",
+        "AVERAGE_PURCHASE_PER_MONTH": " 126 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 181 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.79 ",
+        "Beauty and Personal Care": " 209 ",
+        "Consumer Health": " 2,140 ",
+        "Health and Wellness": "",
+        "Home Care": " 181 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC519910",
+        "ADDRESS": "LOT 16773,MUKIM GALI,  RAUB, PAHANG DARUL MAKMUR.  27600",
+        "geocodeaddress":"Lot 16773, Jalan Air Putih, Mukim Gali, 26720, Raub, Pahang, 26720 Raub District, Malaysia",
+        "latitude":3.7967317,
+        "longitude":101.8631325,
+        "POSTAL_CODE": "27600",
+        "PLACE": "Raub",
+        "STATE": "Pahang",
+        "CHANNEL_HIERARCHY": "Supermarket",
+        "INVOICE_START_DATE": "6/23/2016",
+        "INVOICE_END_DATE": "4/5/2018",
+        "MONTHS": "21",
+        "NO_OF_INVOICES": "61",
+        "TOTAL_INVOICE_AMOUNT": " 124,528 ",
+        "TOTAL_PRODUCT_LINES": "670",
+        "AVERAGE_PURCHASE_PER_MONTH": " 5,930 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 2,041 ",
+        "AVERAGE_LINES_PER_INVOICE": " 10.98 ",
+        "Beauty and Personal Care": " 40,358 ",
+        "Consumer Health": " 11,579 ",
+        "Health and Wellness": "",
+        "Home Care": " 67,059 ",
+        "Packaged Food": " 405 ",
+        "Soft Drinks": " 5,126 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC521374",
+        "ADDRESS": "NO. 5, JALAN PERJIRANAN 10, PASIR GUDANG, JOHOR. NO. LESEN BERAS : 23229 JOHOR  -",
+        "geocodeaddress":"Pasir Gudang, Johor, Malaysia",
+        "latitude":1.470288,
+        "longitude":103.90296890000002,
+        "POSTAL_CODE": "(blank)",
+        "PLACE": "#N/A",
+        "STATE": "#N/A",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "6/24/2016",
+        "INVOICE_END_DATE": "3/6/2018",
+        "MONTHS": "20",
+        "NO_OF_INVOICES": "28",
+        "TOTAL_INVOICE_AMOUNT": " 29,379 ",
+        "TOTAL_PRODUCT_LINES": "538",
+        "AVERAGE_PURCHASE_PER_MONTH": " 1,469 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,049 ",
+        "AVERAGE_LINES_PER_INVOICE": " 19.21 ",
+        "Beauty and Personal Care": " 7,535 ",
+        "Consumer Health": " 10,956 ",
+        "Health and Wellness": " 36 ",
+        "Home Care": " 9,895 ",
+        "Packaged Food": " 660 ",
+        "Soft Drinks": " 297 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC521439",
+        "ADDRESS": "17, TAMAN SRI KULAI BARU 81000 KULAI JOHOR TEL:076633930 JOHOR  -",
+        "geocodeaddress":"12, Jalan Susur Kulai 4, Taman Sri Kulai Baru, 81000 Kulai, Johor, Malaysia",
+        "latitude":1.665957,
+        "longitude":103.59223199999997,
+        "POSTAL_CODE": "81000",
+        "PLACE": "Kulai",
+        "STATE": "Johor",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "5/26/2016",
+        "INVOICE_END_DATE": "3/29/2018",
+        "MONTHS": "22",
+        "NO_OF_INVOICES": "24",
+        "TOTAL_INVOICE_AMOUNT": " 3,471 ",
+        "TOTAL_PRODUCT_LINES": "79",
+        "AVERAGE_PURCHASE_PER_MONTH": " 158 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 145 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.29 ",
+        "Beauty and Personal Care": " 196 ",
+        "Consumer Health": " 3,077 ",
+        "Health and Wellness": " 89 ",
+        "Home Care": " 98 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 12 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC521565",
+        "ADDRESS": "( KIP MART TAMPOI ) LOT NO. F6, PTD 129842, JALAN SKUDAI LAMA, TAMPOI. JOHOR  -",
+        "geocodeaddress":"Jalan Skudai Lama, Taman Tampoi Indah, 81200 Johor Bahru, Johor, Malaysia",
+        "latitude":1.509139,
+        "longitude":103.687222,
+        "POSTAL_CODE": "(blank)",
+        "PLACE": "#N/A",
+        "STATE": "#N/A",
+        "CHANNEL_HIERARCHY": "Supermarket",
+        "INVOICE_START_DATE": "4/25/2016",
+        "INVOICE_END_DATE": "4/3/2018",
+        "MONTHS": "23",
+        "NO_OF_INVOICES": "212",
+        "TOTAL_INVOICE_AMOUNT": " 903,689 ",
+        "TOTAL_PRODUCT_LINES": "2280",
+        "AVERAGE_PURCHASE_PER_MONTH": " 39,291 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 4,263 ",
+        "AVERAGE_LINES_PER_INVOICE": " 10.75 ",
+        "Beauty and Personal Care": " 387,720 ",
+        "Consumer Health": " 26,958 ",
+        "Health and Wellness": " 120 ",
+        "Home Care": " 482,799 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 6,092 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC521666",
+        "ADDRESS": "17-24, PERJIRANAN 8, JALAN 10/17 81750, PASIR GUDANG , JOHOR. NO. LESEN BERAS : 19890 JOHOR  -",
+        "geocodeaddress":"8, Jalan 10/17, Taman Air Biru, 81700 Pasir Gudang, Johor, Malaysia",
+        "latitude":1.4601072,
+        "longitude":103.90752240000006,
+        "POSTAL_CODE": "81750",
+        "PLACE": "Masai",
+        "STATE": "Johor",
+        "CHANNEL_HIERARCHY": "Large Provision Stores",
+        "INVOICE_START_DATE": "4/23/2016",
+        "INVOICE_END_DATE": "2/27/2018",
+        "MONTHS": "22",
+        "NO_OF_INVOICES": "26",
+        "TOTAL_INVOICE_AMOUNT": " 39,697 ",
+        "TOTAL_PRODUCT_LINES": "581",
+        "AVERAGE_PURCHASE_PER_MONTH": " 1,804 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,527 ",
+        "AVERAGE_LINES_PER_INVOICE": " 22.35 ",
+        "Beauty and Personal Care": " 9,399 ",
+        "Consumer Health": " 1,292 ",
+        "Health and Wellness": " 92 ",
+        "Home Care": " 28,584 ",
+        "Packaged Food": " 167 ",
+        "Soft Drinks": " 164 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC521800",
+        "ADDRESS": "27,JALAN PEDADA, TAMAN KOTA JAYA, KOTA TINGGI, JOHOR.   TEL : 8832003 JOHOR  -",
+        "geocodeaddress":"27, Jalan Pedada, Taman Kota Jaya, 81900 Kota Tinggi, Johor, Malaysia",
+        "latitude":1.7381407,
+        "longitude":103.88986750000004,
+        "POSTAL_CODE": "(blank)",
+        "PLACE": "#N/A",
+        "STATE": "#N/A",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "5/25/2016",
+        "INVOICE_END_DATE": "2/25/2018",
+        "MONTHS": "21",
+        "NO_OF_INVOICES": "20",
+        "TOTAL_INVOICE_AMOUNT": " 10,762 ",
+        "TOTAL_PRODUCT_LINES": "363",
+        "AVERAGE_PURCHASE_PER_MONTH": " 512 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 538 ",
+        "AVERAGE_LINES_PER_INVOICE": " 18.15 ",
+        "Beauty and Personal Care": " 1,534 ",
+        "Consumer Health": " 2,625 ",
+        "Health and Wellness": " 15 ",
+        "Home Care": " 5,759 ",
+        "Packaged Food": " 238 ",
+        "Soft Drinks": " 590 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC521993",
+        "ADDRESS": "NO.88,JALAN IBRAHIM SULTAN , STULANG LAUT , 80300 JOHOR BAHRU ,JOHOR. TEL:07-22 JOHOR  -",
+        "geocodeaddress":"Berjaya Waterfront Sdn. Bhd., 88, Jalan Ibrahim Sultan, Duty Free Zone, 80300 Johor Bahru, Johor, Malaysia",
+        "latitude":1.4711281,
+        "longitude":103.78458899999998,
+        "POSTAL_CODE": "80300",
+        "PLACE": "Johor Bahru",
+        "STATE": "Johor",
+        "CHANNEL_HIERARCHY": "Convenience Store",
+        "INVOICE_START_DATE": "6/8/2016",
+        "INVOICE_END_DATE": "3/29/2018",
+        "MONTHS": "21",
+        "NO_OF_INVOICES": "31",
+        "TOTAL_INVOICE_AMOUNT": " 24,076 ",
+        "TOTAL_PRODUCT_LINES": "186",
+        "AVERAGE_PURCHASE_PER_MONTH": " 1,146 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 777 ",
+        "AVERAGE_LINES_PER_INVOICE": " 6.00 ",
+        "Beauty and Personal Care": " 5,684 ",
+        "Consumer Health": " 10,425 ",
+        "Health and Wellness": " 7,894 ",
+        "Home Care": " 72 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC521994",
+        "ADDRESS": "BLOCK 15, JALAN TANJUNG PUTERI, TAMAN PUTERI RESORT, PASIR GUDANG. JOHOR  817500",
+        "geocodeaddress":"Jalan Tanjong Puteri 1, Tanjong Puteri Resort, 81700 Pasir Gudang, Johor, Malaysia",
+        "latitude":1.447873,
+        "longitude":103.93906400000003,
+        "POSTAL_CODE": "(blank)",
+        "PLACE": "#N/A",
+        "STATE": "#N/A",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "4/30/2016",
+        "INVOICE_END_DATE": "3/20/2018",
+        "MONTHS": "22",
+        "NO_OF_INVOICES": "25",
+        "TOTAL_INVOICE_AMOUNT": " 15,931 ",
+        "TOTAL_PRODUCT_LINES": "362",
+        "AVERAGE_PURCHASE_PER_MONTH": " 724 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 637 ",
+        "AVERAGE_LINES_PER_INVOICE": " 14.48 ",
+        "Beauty and Personal Care": " 7,430 ",
+        "Consumer Health": " 1,292 ",
+        "Health and Wellness": " 10 ",
+        "Home Care": " 7,082 ",
+        "Packaged Food": " 24 ",
+        "Soft Drinks": " 94 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC522131",
+        "ADDRESS": "LOT 8065, JALAN LIMA KELAPA SAWIT 81030 KULAI,JOHOR TEL:07-6525260 JOHOR  -",
+        "geocodeaddress":"Kelapa Sawit, 81000 Kulai, Johor, Malaysia",
+        "latitude":1.679482,
+        "longitude":103.52587719999997,
+        "POSTAL_CODE": "(blank)",
+        "PLACE": "#N/A",
+        "STATE": "#N/A",
+        "CHANNEL_HIERARCHY": "Large Provision Stores",
+        "INVOICE_START_DATE": "6/23/2016",
+        "INVOICE_END_DATE": "3/29/2018",
+        "MONTHS": "21",
+        "NO_OF_INVOICES": "22",
+        "TOTAL_INVOICE_AMOUNT": " 15,566 ",
+        "TOTAL_PRODUCT_LINES": "445",
+        "AVERAGE_PURCHASE_PER_MONTH": " 741 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 708 ",
+        "AVERAGE_LINES_PER_INVOICE": " 20.23 ",
+        "Beauty and Personal Care": " 2,163 ",
+        "Consumer Health": " 6,238 ",
+        "Health and Wellness": " 119 ",
+        "Home Care": " 6,676 ",
+        "Packaged Food": " 125 ",
+        "Soft Drinks": " 246 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC522132",
+        "ADDRESS": "1738-1741, JALAN SRI PUTERI 4 TAMAN SRI PUTERI 81700 KULAI,JOHOR TEL:07-8621032 JOHOR  -",
+        "geocodeaddress":"No. 6, Jalan Emas 29, Taman Sri Puteri, 81300, Skudai, Johor, 81300, Malaysia",
+        "latitude":1.5437152,
+        "longitude":103.65535769999997,
+        "POSTAL_CODE": "81700",
+        "PLACE": "Pasir Gudang",
+        "STATE": "Johor",
+        "CHANNEL_HIERARCHY": "Supermarket",
+        "INVOICE_START_DATE": "4/25/2016",
+        "INVOICE_END_DATE": "3/22/2018",
+        "MONTHS": "22",
+        "NO_OF_INVOICES": "34",
+        "TOTAL_INVOICE_AMOUNT": " 75,699 ",
+        "TOTAL_PRODUCT_LINES": "922",
+        "AVERAGE_PURCHASE_PER_MONTH": " 3,441 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 2,226 ",
+        "AVERAGE_LINES_PER_INVOICE": " 27.12 ",
+        "Beauty and Personal Care": " 22,583 ",
+        "Consumer Health": " 17,250 ",
+        "Health and Wellness": " 164 ",
+        "Home Care": " 33,152 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 2,550 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC522366",
+        "ADDRESS": "74, JALAN UTARID U5/19 MAH SING INTEGRATED INDUSTRIAL PARK SECTION U5, 40150 SHAH ALAM SELANGOR   -",
+        "geocodeaddress":"No. 74, 76 & 78, Jalan Utarid U5/19,, Mah Sing Integrated Industrial Park, Subang U5, 40150 Shah Alam, Selangor, Malaysia",
+        "latitude":3.1747451,
+        "longitude":101.53383680000002,
+        "POSTAL_CODE": "40150",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "7/15/2016",
+        "INVOICE_END_DATE": "12/28/2017",
+        "MONTHS": "17",
+        "NO_OF_INVOICES": "6",
+        "TOTAL_INVOICE_AMOUNT": " 10,346 ",
+        "TOTAL_PRODUCT_LINES": "6",
+        "AVERAGE_PURCHASE_PER_MONTH": " 609 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,724 ",
+        "AVERAGE_LINES_PER_INVOICE": " 1.00 ",
+        "Beauty and Personal Care": "",
+        "Consumer Health": " 10,346 ",
+        "Health and Wellness": "",
+        "Home Care": "",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC523278",
+        "ADDRESS": "NO:3, JALAN BATU LAUT 28/5, TAMAN ALAM MEGAH, 40000 SHAH ALAM, SELANGOR DARUL EHSAN.  40000",
+        "geocodeaddress":"3, Jalan Batu Laut 28/5, Taman Alam Megah, 40400 Shah Alam, Selangor, Malaysia",
+        "latitude":3.0061401,
+        "longitude":101.56866349999996,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "12/29/2016",
+        "INVOICE_END_DATE": "3/30/2018",
+        "MONTHS": "15",
+        "NO_OF_INVOICES": "12",
+        "TOTAL_INVOICE_AMOUNT": " 1,858 ",
+        "TOTAL_PRODUCT_LINES": "48",
+        "AVERAGE_PURCHASE_PER_MONTH": " 124 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 155 ",
+        "AVERAGE_LINES_PER_INVOICE": " 4.00 ",
+        "Beauty and Personal Care": " 570 ",
+        "Consumer Health": " 480 ",
+        "Health and Wellness": " 20 ",
+        "Home Care": " 788 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC523288",
+        "ADDRESS": "LEBUHRAYA KL-KLANG LOT 711, SEKSYEN 16, LEBUHRAYA PERSEKUTUAN 2, 40000 SHAH ALAM, SELANGOR D.E.  40000",
+        "geocodeaddress":"2, Malaysia",
+        "latitude":3.0623652,
+        "longitude":101.5020303,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Petrol Mart Station",
+        "INVOICE_START_DATE": "11/23/2016",
+        "INVOICE_END_DATE": "3/23/2018",
+        "MONTHS": "16",
+        "NO_OF_INVOICES": "14",
+        "TOTAL_INVOICE_AMOUNT": " 2,528 ",
+        "TOTAL_PRODUCT_LINES": "51",
+        "AVERAGE_PURCHASE_PER_MONTH": " 158 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 181 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.64 ",
+        "Beauty and Personal Care": " 24 ",
+        "Consumer Health": " 1,942 ",
+        "Health and Wellness": " 558 ",
+        "Home Care": " 5 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC523337",
+        "ADDRESS": "NO:1, JALAN 6/1F, 40000 SHAH ALAM, SELANGOR DARUL EHSAN.   -",
+        "geocodeaddress":"1, Jalan 6, Taman Subang Baru, 40150 Shah Alam, Selangor, Malaysia",
+        "latitude":3.1541345,
+        "longitude":101.5284557,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "10/21/2016",
+        "INVOICE_END_DATE": "3/1/2018",
+        "MONTHS": "16",
+        "NO_OF_INVOICES": "14",
+        "TOTAL_INVOICE_AMOUNT": " 13,971 ",
+        "TOTAL_PRODUCT_LINES": "299",
+        "AVERAGE_PURCHASE_PER_MONTH": " 873 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 998 ",
+        "AVERAGE_LINES_PER_INVOICE": " 21.36 ",
+        "Beauty and Personal Care": " 2,129 ",
+        "Consumer Health": " 5,122 ",
+        "Health and Wellness": " 711 ",
+        "Home Care": " 5,638 ",
+        "Packaged Food": " 107 ",
+        "Soft Drinks": " 264 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC523748",
+        "ADDRESS": "NO:21, JALAN WAU A11/A, SEKSYEN 11, 40000 SHAH ALAM, SELANGOR DARUL EHSAN.  40000",
+        "geocodeaddress":"Seksyen 11, 40100 Shah Alam, Selangor, Malaysia",
+        "latitude":3.07411,
+        "longitude":101.52877999999998,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "11/15/2016",
+        "INVOICE_END_DATE": "4/6/2018",
+        "MONTHS": "16",
+        "NO_OF_INVOICES": "13",
+        "TOTAL_INVOICE_AMOUNT": " 8,723 ",
+        "TOTAL_PRODUCT_LINES": "193",
+        "AVERAGE_PURCHASE_PER_MONTH": " 545 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 671 ",
+        "AVERAGE_LINES_PER_INVOICE": " 14.85 ",
+        "Beauty and Personal Care": " 1,700 ",
+        "Consumer Health": " 2,520 ",
+        "Health and Wellness": " 171 ",
+        "Home Care": " 4,156 ",
+        "Packaged Food": " 36 ",
+        "Soft Drinks": " 141 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC523781",
+        "ADDRESS": "NO:14, LORONG BERLIAN 1, TAMAN BATU 3, 40000 SHAH ALAM, SELANGOR DARUL EHSAN.  40000",
+        "geocodeaddress":"14, Lorong Berlian 1, Taman Batu Tiga, 40150 Subang Jaya, Selangor, Malaysia",
+        "latitude":3.0743581,
+        "longitude":101.56213709999997,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "12/29/2016",
+        "INVOICE_END_DATE": "3/22/2018",
+        "MONTHS": "14",
+        "NO_OF_INVOICES": "12",
+        "TOTAL_INVOICE_AMOUNT": " 1,133 ",
+        "TOTAL_PRODUCT_LINES": "26",
+        "AVERAGE_PURCHASE_PER_MONTH": " 81 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 94 ",
+        "AVERAGE_LINES_PER_INVOICE": " 2.17 ",
+        "Beauty and Personal Care": " 54 ",
+        "Consumer Health": " 896 ",
+        "Health and Wellness": " 5 ",
+        "Home Care": " 75 ",
+        "Packaged Food": " 103 ",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC523895",
+        "ADDRESS": "NO. 15 & 17, JALAN 27/60, TAMAN ALAM MEGAH, 40000 SHAH ALAM, SELANGOR DARUL EHSAN.  40000",
+        "geocodeaddress":"Taman Alam Megah, 40400 Shah Alam, Selangor, Malaysia",
+        "latitude":3.003565,
+        "longitude":101.55995889999997,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "10/19/2016",
+        "INVOICE_END_DATE": "3/22/2018",
+        "MONTHS": "17",
+        "NO_OF_INVOICES": "20",
+        "TOTAL_INVOICE_AMOUNT": " 14,143 ",
+        "TOTAL_PRODUCT_LINES": "323",
+        "AVERAGE_PURCHASE_PER_MONTH": " 832 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 707 ",
+        "AVERAGE_LINES_PER_INVOICE": " 16.15 ",
+        "Beauty and Personal Care": " 2,201 ",
+        "Consumer Health": " 3,290 ",
+        "Health and Wellness": " 467 ",
+        "Home Care": " 7,429 ",
+        "Packaged Food": " 440 ",
+        "Soft Drinks": " 317 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC523961",
+        "ADDRESS": "LOT PT 8834, 3KM JALAN CHEROH,  RAUB, PAHANG DARUL MAKMUR.  27600",
+        "geocodeaddress":"Jalan Cheroh, 27600 Raub, Pahang, Malaysia",
+        "latitude":3.7949123,
+        "longitude":101.85642089999999,
+        "POSTAL_CODE": "27600",
+        "PLACE": "Raub",
+        "STATE": "Pahang",
+        "CHANNEL_HIERARCHY": "Petrol Mart Station",
+        "INVOICE_START_DATE": "7/14/2016",
+        "INVOICE_END_DATE": "4/6/2018",
+        "MONTHS": "20",
+        "NO_OF_INVOICES": "18",
+        "TOTAL_INVOICE_AMOUNT": " 6,261 ",
+        "TOTAL_PRODUCT_LINES": "74",
+        "AVERAGE_PURCHASE_PER_MONTH": " 313 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 348 ",
+        "AVERAGE_LINES_PER_INVOICE": " 4.11 ",
+        "Beauty and Personal Care": "",
+        "Consumer Health": " 6,261 ",
+        "Health and Wellness": "",
+        "Home Care": "",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC524012",
+        "ADDRESS": "2 KM, JALAN TRAS,  RAUB, PAHANG DARUL MAKMUR.  27600",
+        "geocodeaddress":"Lot 1460, Jalan Tras, Mukim Tras,, 27600 Raub District, Pahang, Malaysia",
+        "latitude":3.664257,
+        "longitude":101.84228800000005,
+        "POSTAL_CODE": "27600",
+        "PLACE": "Raub",
+        "STATE": "Pahang",
+        "CHANNEL_HIERARCHY": "Petrol Mart Station",
+        "INVOICE_START_DATE": "7/16/2016",
+        "INVOICE_END_DATE": "4/4/2018",
+        "MONTHS": "20",
+        "NO_OF_INVOICES": "20",
+        "TOTAL_INVOICE_AMOUNT": " 6,596 ",
+        "TOTAL_PRODUCT_LINES": "91",
+        "AVERAGE_PURCHASE_PER_MONTH": " 330 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 330 ",
+        "AVERAGE_LINES_PER_INVOICE": " 4.55 ",
+        "Beauty and Personal Care": " 26 ",
+        "Consumer Health": " 6,436 ",
+        "Health and Wellness": " 21 ",
+        "Home Care": " 113 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC524636",
+        "ADDRESS": "NO.5 , BLOK A, FELDA KERATONG 8 MUADZAM SHA  PAHANG  26700",
+        "geocodeaddress":"No.203,block 9, 9,, Felda Keratong, 26700 Muadzam Shah, Pahang, Malaysia",
+        "latitude":2.96087,
+        "longitude":102.98069299999997,
+        "POSTAL_CODE": "26700",
+        "PLACE": "Muadzam Shah",
+        "STATE": "Pahang",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "9/14/2016",
+        "INVOICE_END_DATE": "3/29/2018",
+        "MONTHS": "18",
+        "NO_OF_INVOICES": "20",
+        "TOTAL_INVOICE_AMOUNT": " 7,446 ",
+        "TOTAL_PRODUCT_LINES": "336",
+        "AVERAGE_PURCHASE_PER_MONTH": " 414 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 372 ",
+        "AVERAGE_LINES_PER_INVOICE": " 16.80 ",
+        "Beauty and Personal Care": " 1,892 ",
+        "Consumer Health": " 1,782 ",
+        "Health and Wellness": " 91 ",
+        "Home Care": " 3,505 ",
+        "Packaged Food": " 95 ",
+        "Soft Drinks": " 82 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC524771",
+        "ADDRESS": "KG. KOHIZAN 88200 PENAMPANG (NT 213193349) SABAH  88200",
+        "geocodeaddress":"Lorong Kohizan, 88200 Kota Kinabalu, Sabah, Malaysia",
+        "latitude":5.9272087,
+        "longitude":116.08084209999993,
+        "POSTAL_CODE": "88200",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "7/31/2017",
+        "INVOICE_END_DATE": "7/31/2017",
+        "MONTHS": "0",
+        "NO_OF_INVOICES": "4",
+        "TOTAL_INVOICE_AMOUNT": " 963 ",
+        "TOTAL_PRODUCT_LINES": "25",
+        "AVERAGE_PURCHASE_PER_MONTH": "#DIV/0!",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 241 ",
+        "AVERAGE_LINES_PER_INVOICE": " 6.25 ",
+        "Beauty and Personal Care": " 485 ",
+        "Consumer Health": " 108 ",
+        "Health and Wellness": "",
+        "Home Care": " 324 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 47 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC524832",
+        "ADDRESS": "c/o HARRISONS SARAWAK SDN BHD P.O.BOX 128 93700 KUCHING   93700",
+        "geocodeaddress":"Kuching, Sarawak, Malaysia",
+        "latitude":1.553504,
+        "longitude":110.35929269999997,
+        "POSTAL_CODE": "93700",
+        "PLACE": "Kuching",
+        "STATE": "Sarawak",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "2/28/2017",
+        "INVOICE_END_DATE": "2/28/2017",
+        "MONTHS": "0",
+        "NO_OF_INVOICES": "1",
+        "TOTAL_INVOICE_AMOUNT": " 28 ",
+        "TOTAL_PRODUCT_LINES": "2",
+        "AVERAGE_PURCHASE_PER_MONTH": "#DIV/0!",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 28 ",
+        "AVERAGE_LINES_PER_INVOICE": " 2.00 ",
+        "Beauty and Personal Care": " 28 ",
+        "Consumer Health": "",
+        "Health and Wellness": "",
+        "Home Care": "",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC525321",
+        "ADDRESS": "LOT 3569, BLK 217, KNLD, (S/L1) GF, NO.140, CARINA ESTATE JLN STAPOK UTAMA,  93250 KUCHING SARAWAK 93250",
+        "geocodeaddress":"140, Engsing TImur Lorong 12, 93250 Kuching, Sarawak, Malaysia",
+        "latitude":1.5246441,
+        "longitude":110.31213409999998,
+        "POSTAL_CODE": "93250",
+        "PLACE": "Kuching",
+        "STATE": "Sarawak",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "12/5/2016",
+        "INVOICE_END_DATE": "11/20/2017",
+        "MONTHS": "11",
+        "NO_OF_INVOICES": "8",
+        "TOTAL_INVOICE_AMOUNT": " 5,510 ",
+        "TOTAL_PRODUCT_LINES": "203",
+        "AVERAGE_PURCHASE_PER_MONTH": " 501 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 689 ",
+        "AVERAGE_LINES_PER_INVOICE": " 25.38 ",
+        "Beauty and Personal Care": " 913 ",
+        "Consumer Health": " 1,346 ",
+        "Health and Wellness": " 732 ",
+        "Home Care": " 2,498 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 21 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC525439",
+        "ADDRESS": "GRD FLR, LOT NO.42, NO. 30-0, BLK F, DAMAI PLAZA, PHASE IV, LUYANG, 88300 KOTA KINABALU, SABAH   88300",
+        "geocodeaddress":"Block E, Ground Floor, Lot 37, No.40-0, Damai Plaza 4, 88300 Kota Kinabalu, Sabah, Malaysia",
+        "latitude":5.9619239,
+        "longitude":116.09138129999997,
+        "POSTAL_CODE": "88300",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Convenience Store",
+        "INVOICE_START_DATE": "11/15/2016",
+        "INVOICE_END_DATE": "2/28/2018",
+        "MONTHS": "15",
+        "NO_OF_INVOICES": "13",
+        "TOTAL_INVOICE_AMOUNT": " 2,084 ",
+        "TOTAL_PRODUCT_LINES": "35",
+        "AVERAGE_PURCHASE_PER_MONTH": " 139 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 160 ",
+        "AVERAGE_LINES_PER_INVOICE": " 2.69 ",
+        "Beauty and Personal Care": "",
+        "Consumer Health": " 1,551 ",
+        "Health and Wellness": "",
+        "Home Care": " 399 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 135 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC526386",
+        "ADDRESS": "LORONG LOK BONU, JALAN RAMAYAH PUTATAN PENAMPANG, KOTA KINABALU SABAH  88200",
+        "geocodeaddress":"88200, Sabah, Malaysia",
+        "latitude":5.9123426,
+        "longitude":116.05616529999998,
+        "POSTAL_CODE": "88200",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "8/9/2017",
+        "INVOICE_END_DATE": "8/9/2017",
+        "MONTHS": "0",
+        "NO_OF_INVOICES": "7",
+        "TOTAL_INVOICE_AMOUNT": " 1,691 ",
+        "TOTAL_PRODUCT_LINES": "48",
+        "AVERAGE_PURCHASE_PER_MONTH": "#DIV/0!",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 242 ",
+        "AVERAGE_LINES_PER_INVOICE": " 6.86 ",
+        "Beauty and Personal Care": " 328 ",
+        "Consumer Health": " 713 ",
+        "Health and Wellness": "",
+        "Home Care": " 649 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC526447",
+        "ADDRESS": "B-G-16, VISTA ALAM, JALAN IKHTISAS, SEKSYEN 14, 40000 SHAH ALAM, SELANGOR DARUL EHSAN.  40000",
+        "geocodeaddress":"Jalan Ikhtisas, Seksyen 14/1, 40000 Shah Alam, Selangor, Malaysia",
+        "latitude":3.0707144,
+        "longitude":101.52422669999999,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "8/14/2017",
+        "INVOICE_END_DATE": "3/29/2018",
+        "MONTHS": "7",
+        "NO_OF_INVOICES": "8",
+        "TOTAL_INVOICE_AMOUNT": " 1,117 ",
+        "TOTAL_PRODUCT_LINES": "39",
+        "AVERAGE_PURCHASE_PER_MONTH": " 160 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 140 ",
+        "AVERAGE_LINES_PER_INVOICE": " 4.88 ",
+        "Beauty and Personal Care": " 247 ",
+        "Consumer Health": " 586 ",
+        "Health and Wellness": " 5 ",
+        "Home Care": " 279 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC526875",
+        "ADDRESS": "54,JALAN 8/38D , PLAZA SINAR TAMAN SRI SINAR   51200 KUALA LUMPUR",
+        "geocodeaddress":"Jalan 8/38d, Taman Sri Sinar, 51200 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.1894466,
+        "longitude":101.6533068,
+        "POSTAL_CODE": "51200",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "10/13/2017",
+        "INVOICE_END_DATE": "3/28/2018",
+        "MONTHS": "5",
+        "NO_OF_INVOICES": "2",
+        "TOTAL_INVOICE_AMOUNT": " 133 ",
+        "TOTAL_PRODUCT_LINES": "4",
+        "AVERAGE_PURCHASE_PER_MONTH": " 27 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 66 ",
+        "AVERAGE_LINES_PER_INVOICE": " 2.00 ",
+        "Beauty and Personal Care": " 37 ",
+        "Consumer Health": " 26 ",
+        "Health and Wellness": "",
+        "Home Care": "",
+        "Packaged Food": "",
+        "Soft Drinks": " 70 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC526900",
+        "ADDRESS": "3441 JALAN JINJANG AMAN 1 JINJANG UTARA   52000 KUALA LUMPUR",
+        "geocodeaddress":"Jalan Jinjang Aman 1, Jinjang Utara, 52000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.2115728,
+        "longitude":101.65824569999995,
+        "POSTAL_CODE": "52000",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "10/19/2017",
+        "INVOICE_END_DATE": "3/19/2018",
+        "MONTHS": "5",
+        "NO_OF_INVOICES": "5",
+        "TOTAL_INVOICE_AMOUNT": " 7,697 ",
+        "TOTAL_PRODUCT_LINES": "22",
+        "AVERAGE_PURCHASE_PER_MONTH": " 1,539 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,539 ",
+        "AVERAGE_LINES_PER_INVOICE": " 4.40 ",
+        "Beauty and Personal Care": "",
+        "Consumer Health": " 5,413 ",
+        "Health and Wellness": "",
+        "Home Care": "",
+        "Packaged Food": " 2,284 ",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC527044",
+        "ADDRESS": "NO.12, JALAN DATO ABDULLAH,  RAUB, PAHANG DARUL MAKMUR.  27600",
+        "geocodeaddress":"12, Jalan Dato Abdullah, 27600 Raub, Pahang, Malaysia",
+        "latitude":3.7930137,
+        "longitude":101.85624819999998,
+        "POSTAL_CODE": "27600",
+        "PLACE": "Raub",
+        "STATE": "Pahang",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "11/11/2017",
+        "INVOICE_END_DATE": "2/6/2018",
+        "MONTHS": "2",
+        "NO_OF_INVOICES": "3",
+        "TOTAL_INVOICE_AMOUNT": " 1,095 ",
+        "TOTAL_PRODUCT_LINES": "10",
+        "AVERAGE_PURCHASE_PER_MONTH": " 547 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 365 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.33 ",
+        "Beauty and Personal Care": " 312 ",
+        "Consumer Health": " 652 ",
+        "Health and Wellness": "",
+        "Home Care": " 70 ",
+        "Packaged Food": " 59 ",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC527053",
+        "ADDRESS": "NO.6, LOT 12, KKIP INDUSTRIAL ZONE 7 (IZ7), PHASE 1, LORONG 2A, KKIP TIMUR, 88450 KOTA KINABALU, SABAH.   88450",
+        "geocodeaddress":"88450 Kota Kinabalu Sabah Malaysia","latitude":5.977751,
+        "longitude":116.147781,
+        "POSTAL_CODE": "88450",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Large Provision Stores",
+        "INVOICE_START_DATE": "11/17/2017",
+        "INVOICE_END_DATE": "3/28/2018",
+        "MONTHS": "4",
+        "NO_OF_INVOICES": "28",
+        "TOTAL_INVOICE_AMOUNT": " 242,049 ",
+        "TOTAL_PRODUCT_LINES": "154",
+        "AVERAGE_PURCHASE_PER_MONTH": " 60,512 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 8,645 ",
+        "AVERAGE_LINES_PER_INVOICE": " 5.50 ",
+        "Beauty and Personal Care": " 78,586 ",
+        "Consumer Health": " 35,155 ",
+        "Health and Wellness": " 11,433 ",
+        "Home Care": " 91,439 ",
+        "Packaged Food": " 15,325 ",
+        "Soft Drinks": " 10,110 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC527343",
+        "ADDRESS": "R-15-G M-CITY AMPANG, NO .326,JALAN AMPANG KUALA LUMPUR   50450",
+        "geocodeaddress":"Jalan Ampang, Kampung Berembang, 55000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.1590631,
+        "longitude":101.74733330000004,
+        "POSTAL_CODE": "50450",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Supermarket",
+        "INVOICE_START_DATE": "2/13/2018",
+        "INVOICE_END_DATE": "3/26/2018",
+        "MONTHS": "1",
+        "NO_OF_INVOICES": "6",
+        "TOTAL_INVOICE_AMOUNT": " 21,637 ",
+        "TOTAL_PRODUCT_LINES": "166",
+        "AVERAGE_PURCHASE_PER_MONTH": " 21,637 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 3,606 ",
+        "AVERAGE_LINES_PER_INVOICE": " 27.67 ",
+        "Beauty and Personal Care": " 7,595 ",
+        "Consumer Health": " 2,835 ",
+        "Health and Wellness": " 2,519 ",
+        "Home Care": " 8,476 ",
+        "Packaged Food": " 71 ",
+        "Soft Drinks": " 141 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC527461",
+        "ADDRESS": "NO:5&7, JALAN LIKU D8/D, SEKSYEN 8, SHAH ALAM, SELANGOR DARUL EHSAN.  40000",
+        "geocodeaddress":"No. 9, Jalan Liku D 8/A, Seksyen 8, Selangor, 40000 Shah Alam, Malaysia",
+        "latitude":3.0913614,
+        "longitude":101.50874010000007,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "3/21/2018",
+        "INVOICE_END_DATE": "3/21/2018",
+        "MONTHS": "0",
+        "NO_OF_INVOICES": "1",
+        "TOTAL_INVOICE_AMOUNT": " 586 ",
+        "TOTAL_PRODUCT_LINES": "1",
+        "AVERAGE_PURCHASE_PER_MONTH": "#DIV/0!",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 586 ",
+        "AVERAGE_LINES_PER_INVOICE": " 1.00 ",
+        "Beauty and Personal Care": "",
+        "Consumer Health": "",
+        "Health and Wellness": "",
+        "Home Care": " 586 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC529139",
+        "ADDRESS": "525-F, PEKAN LAMA, 08000 SUNGAI PETANI, KEDAH D.A.   8000",
+        "geocodeaddress":"525 F, Jalan Kuala Ketil, 08000 Sungai Petani, Kedah, Malaysia",
+        "latitude":5.639479,
+        "longitude":100.49147800000003,
+        "POSTAL_CODE": "8000",
+        "PLACE": "Sungai Petani",
+        "STATE": "Kedah",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "12/16/2016",
+        "INVOICE_END_DATE": "3/30/2018",
+        "MONTHS": "15",
+        "NO_OF_INVOICES": "35",
+        "TOTAL_INVOICE_AMOUNT": " 84,639 ",
+        "TOTAL_PRODUCT_LINES": "119",
+        "AVERAGE_PURCHASE_PER_MONTH": " 5,643 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 2,418 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.40 ",
+        "Beauty and Personal Care": " 12,139 ",
+        "Consumer Health": " 57,201 ",
+        "Health and Wellness": " 726 ",
+        "Home Care": " 2,173 ",
+        "Packaged Food": " 8,335 ",
+        "Soft Drinks": " 4,066 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC529257",
+        "ADDRESS": "76, LORONG 2/A, TAMAN SRI WANG, 08000 SUNGAI PETANI, KEDAH.  8000",
+        "geocodeaddress":"Taman Sri Wang, 08000 Sungai Petani, Kedah, Malaysia",
+        "latitude":5.620051,
+        "longitude":100.50002999999992,
+        "POSTAL_CODE": "8000",
+        "PLACE": "Sungai Petani",
+        "STATE": "Kedah",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "11/24/2017",
+        "INVOICE_END_DATE": "11/24/2017",
+        "MONTHS": "0",
+        "NO_OF_INVOICES": "2",
+        "TOTAL_INVOICE_AMOUNT": " 3,468 ",
+        "TOTAL_PRODUCT_LINES": "8",
+        "AVERAGE_PURCHASE_PER_MONTH": "#DIV/0!",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,734 ",
+        "AVERAGE_LINES_PER_INVOICE": " 4.00 ",
+        "Beauty and Personal Care": " 2,804 ",
+        "Consumer Health": " 277 ",
+        "Health and Wellness": "",
+        "Home Care": " 388 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC529584",
+        "ADDRESS": "525A-E, JALAN KUALA KETIL, 08000 SUNGAI PETANI, KEDAH DARUL AMAN.  8000",
+        "geocodeaddress":"525 A-E, Jalan Kuala Ketil, 08000 Sungai Petani, Kedah, Malaysia",
+        "latitude":5.639336,
+        "longitude":100.49167890000001,
+        "POSTAL_CODE": "8000",
+        "PLACE": "Sungai Petani",
+        "STATE": "Kedah",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "6/7/2017",
+        "INVOICE_END_DATE": "3/13/2018",
+        "MONTHS": "9",
+        "NO_OF_INVOICES": "20",
+        "TOTAL_INVOICE_AMOUNT": " 23,357 ",
+        "TOTAL_PRODUCT_LINES": "226",
+        "AVERAGE_PURCHASE_PER_MONTH": " 2,595 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,168 ",
+        "AVERAGE_LINES_PER_INVOICE": " 11.30 ",
+        "Beauty and Personal Care": " 12,323 ",
+        "Consumer Health": " 913 ",
+        "Health and Wellness": "",
+        "Home Care": " 8,255 ",
+        "Packaged Food": " 856 ",
+        "Soft Drinks": " 1,010 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC529607",
+        "ADDRESS": "LOT 220, PEKAN LAMA, MUKIM PADANG MAT SIRAT, 07000 PULAU LANGKAWI, KEDAH DARUL AMAN.  7000",
+        "geocodeaddress":"Padang Mat Sirat, 07000 Langkawi, Kedah, Malaysia",
+        "latitude":6.4116364,
+        "longitude":99.68983159999993,
+        "POSTAL_CODE": "7000",
+        "PLACE": "Langkawi",
+        "STATE": "Kedah",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "3/11/2017",
+        "INVOICE_END_DATE": "3/13/2018",
+        "MONTHS": "12",
+        "NO_OF_INVOICES": "26",
+        "TOTAL_INVOICE_AMOUNT": " 33,222 ",
+        "TOTAL_PRODUCT_LINES": "385",
+        "AVERAGE_PURCHASE_PER_MONTH": " 2,768 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,278 ",
+        "AVERAGE_LINES_PER_INVOICE": " 14.81 ",
+        "Beauty and Personal Care": " 19,175 ",
+        "Consumer Health": " 3,667 ",
+        "Health and Wellness": " 2,003 ",
+        "Home Care": " 7,132 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 1,243 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC529683",
+        "ADDRESS": "712-A, JALAN KUALA KETIL, PEKAN LAMA, 08000 SUNGAI PETANI, KEDAH DARUL AMAN.  8000",
+        "geocodeaddress":"No. 712-A, Jalan Kuala Ketil, Pekan Lama, 08000 Sungai Petani, Kedah, Malaysia",
+        "latitude":5.636699,
+        "longitude":100.49638600000003,
+        "POSTAL_CODE": "8000",
+        "PLACE": "Sungai Petani",
+        "STATE": "Kedah",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "12/15/2016",
+        "INVOICE_END_DATE": "3/13/2018",
+        "MONTHS": "14",
+        "NO_OF_INVOICES": "18",
+        "TOTAL_INVOICE_AMOUNT": " 9,402 ",
+        "TOTAL_PRODUCT_LINES": "33",
+        "AVERAGE_PURCHASE_PER_MONTH": " 672 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 522 ",
+        "AVERAGE_LINES_PER_INVOICE": " 1.83 ",
+        "Beauty and Personal Care": " 399 ",
+        "Consumer Health": " 5,813 ",
+        "Health and Wellness": " 15 ",
+        "Home Care": "",
+        "Packaged Food": " 1,336 ",
+        "Soft Drinks": " 1,839 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC530409",
+        "ADDRESS": "NO. 399, A-7, TAMAN INTAN, 08000 SUNGAI PETANI, KEDAH DARUL AMAN.   8000",
+        "geocodeaddress":"399, 7, Taman Intan, 08000 Sungai Petani, Kedah, Malaysia",
+        "latitude":5.6297428,
+        "longitude":100.47105940000006,
+        "POSTAL_CODE": "8000",
+        "PLACE": "Sungai Petani",
+        "STATE": "Kedah",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "12/30/2016",
+        "INVOICE_END_DATE": "3/26/2018",
+        "MONTHS": "14",
+        "NO_OF_INVOICES": "15",
+        "TOTAL_INVOICE_AMOUNT": " 4,119 ",
+        "TOTAL_PRODUCT_LINES": "50",
+        "AVERAGE_PURCHASE_PER_MONTH": " 294 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 275 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.33 ",
+        "Beauty and Personal Care": " 462 ",
+        "Consumer Health": " 2,556 ",
+        "Health and Wellness": " 402 ",
+        "Home Care": " 52 ",
+        "Packaged Food": " 400 ",
+        "Soft Drinks": " 246 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC530512",
+        "ADDRESS": "7-11 STORE 2357 NO. 55A (GF), PERSIARAN BUNGA RAYA, JALAN KELIBANG, LANGKAWI MALL, 07000 LANGKAWI, KEDAH D.A.  7000",
+        "geocodeaddress":"Persiaran Bunga Raya, Kuah, 07000 Langkawi, Kedah, Malaysia",
+        "latitude":6.327210099999999,
+        "longitude":99.84198500000002,
+        "POSTAL_CODE": "7000",
+        "PLACE": "Langkawi",
+        "STATE": "Kedah",
+        "CHANNEL_HIERARCHY": "Convenience Store",
+        "INVOICE_START_DATE": "10/30/2017",
+        "INVOICE_END_DATE": "4/6/2018",
+        "MONTHS": "5",
+        "NO_OF_INVOICES": "5",
+        "TOTAL_INVOICE_AMOUNT": " 6,133 ",
+        "TOTAL_PRODUCT_LINES": "53",
+        "AVERAGE_PURCHASE_PER_MONTH": " 1,227 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,227 ",
+        "AVERAGE_LINES_PER_INVOICE": " 10.60 ",
+        "Beauty and Personal Care": " 1,091 ",
+        "Consumer Health": " 2,934 ",
+        "Health and Wellness": " 2,047 ",
+        "Home Care": " 61 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC530608",
+        "ADDRESS": "7-11 STORE 2482 NO. 7, (GF), PEKAN BARU PADANG MATSIRAT, PADANG MATSIRAT, 07100 LANGKAWI, KEDAH DARUL AMAN.  7100",
+        "geocodeaddress":"Pekanbaru, Pekanbaru City, Riau, Indonesia",
+        "latitude":0.5070677,
+        "longitude":101.44777929999998,
+        "POSTAL_CODE": "(blank)",
+        "PLACE": "#N/A",
+        "STATE": "#N/A",
+        "CHANNEL_HIERARCHY": "Convenience Store",
+        "INVOICE_START_DATE": "12/13/2017",
+        "INVOICE_END_DATE": "4/6/2018",
+        "MONTHS": "3",
+        "NO_OF_INVOICES": "8",
+        "TOTAL_INVOICE_AMOUNT": " 6,875 ",
+        "TOTAL_PRODUCT_LINES": "60",
+        "AVERAGE_PURCHASE_PER_MONTH": " 2,292 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 859 ",
+        "AVERAGE_LINES_PER_INVOICE": " 7.50 ",
+        "Beauty and Personal Care": " 354 ",
+        "Consumer Health": " 4,450 ",
+        "Health and Wellness": " 2,009 ",
+        "Home Care": " 61 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC530986",
+        "ADDRESS": "NO. 1 JALAN BINTANG U5/33, SYEKSYEN U5 SUBANG SURIA 40150 SHAH ALAM, SELANGOR.   40150",
+        "geocodeaddress":"Jalan Bintang U5/33, Subang Suria, 40150 Shah Alam, Selangor, Malaysia",
+        "latitude":3.18622,
+        "longitude":101.53487410000002,
+        "POSTAL_CODE": "40150",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "6/15/2016",
+        "INVOICE_END_DATE": "3/27/2018",
+        "MONTHS": "21",
+        "NO_OF_INVOICES": "19",
+        "TOTAL_INVOICE_AMOUNT": " 9,736 ",
+        "TOTAL_PRODUCT_LINES": "337",
+        "AVERAGE_PURCHASE_PER_MONTH": " 464 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 512 ",
+        "AVERAGE_LINES_PER_INVOICE": " 17.74 ",
+        "Beauty and Personal Care": " 2,844 ",
+        "Consumer Health": " 2,358 ",
+        "Health and Wellness": " 5 ",
+        "Home Care": " 4,337 ",
+        "Packaged Food": " 101 ",
+        "Soft Drinks": " 91 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC531178",
+        "ADDRESS": "5,JALAN SP 1/2,SEKSEN 1, TAMAN SUBANG PERDANA, 40000 SHAH ALAM,SELANGOR   -",
+        "geocodeaddress":"5, Jalan SP 1/2, Taman Subang Perdana, 40150 Shah Alam, Selangor, Malaysia",
+        "latitude":3.1552798,
+        "longitude":101.53829760000008,
+        "POSTAL_CODE": "40000",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "4/13/2016",
+        "INVOICE_END_DATE": "3/27/2018",
+        "MONTHS": "23",
+        "NO_OF_INVOICES": "24",
+        "TOTAL_INVOICE_AMOUNT": " 11,085 ",
+        "TOTAL_PRODUCT_LINES": "339",
+        "AVERAGE_PURCHASE_PER_MONTH": " 482 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 462 ",
+        "AVERAGE_LINES_PER_INVOICE": " 14.13 ",
+        "Beauty and Personal Care": " 2,444 ",
+        "Consumer Health": " 2,455 ",
+        "Health and Wellness": " 96 ",
+        "Home Care": " 6,091 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC531528",
+        "ADDRESS": "50 NANAS ROAD WEST 93400 KUCHING SARAWAK   -",
+        "geocodeaddress":"50, Jalan Nanas, 93400 Kuching, Sarawak, Malaysia",
+        "latitude":1.5492606,
+        "longitude":110.33330980000005,
+        "POSTAL_CODE": "93400",
+        "PLACE": "Kuching",
+        "STATE": "Sarawak",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "10/24/2016",
+        "INVOICE_END_DATE": "2/22/2018",
+        "MONTHS": "15",
+        "NO_OF_INVOICES": "9",
+        "TOTAL_INVOICE_AMOUNT": " 1,830 ",
+        "TOTAL_PRODUCT_LINES": "30",
+        "AVERAGE_PURCHASE_PER_MONTH": " 122 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 203 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.33 ",
+        "Beauty and Personal Care": " 70 ",
+        "Consumer Health": " 306 ",
+        "Health and Wellness": "",
+        "Home Care": " 1,393 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 62 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC531717",
+        "ADDRESS": "KUCHING SARAWAK   93450",
+        "geocodeaddress":"93450, Sarawak, Malaysia",
+        "latitude":1.3629577,
+        "longitude":110.29513640000005,
+        "POSTAL_CODE": "93450",
+        "PLACE": "Kuching",
+        "STATE": "Sarawak",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "9/8/2016",
+        "INVOICE_END_DATE": "4/3/2018",
+        "MONTHS": "18",
+        "NO_OF_INVOICES": "54",
+        "TOTAL_INVOICE_AMOUNT": " 44,854 ",
+        "TOTAL_PRODUCT_LINES": "343",
+        "AVERAGE_PURCHASE_PER_MONTH": " 2,492 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 831 ",
+        "AVERAGE_LINES_PER_INVOICE": " 6.35 ",
+        "Beauty and Personal Care": " 5,087 ",
+        "Consumer Health": " 8,959 ",
+        "Health and Wellness": " 2,959 ",
+        "Home Care": " 27,503 ",
+        "Packaged Food": " 32 ",
+        "Soft Drinks": " 313 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC531773",
+        "ADDRESS": "c/o HARRISONS SARAWAK SDN BHD P O BOX 128   93700",
+        "geocodeaddress":"Sarawak, Malaysia",
+        "latitude":1.5532783,
+        "longitude":110.35921269999994,
+        "POSTAL_CODE": "93700",
+        "PLACE": "Kuching",
+        "STATE": "Sarawak",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "10/19/2016",
+        "INVOICE_END_DATE": "3/20/2018",
+        "MONTHS": "17",
+        "NO_OF_INVOICES": "17",
+        "TOTAL_INVOICE_AMOUNT": " 2,587 ",
+        "TOTAL_PRODUCT_LINES": "29",
+        "AVERAGE_PURCHASE_PER_MONTH": " 152 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 152 ",
+        "AVERAGE_LINES_PER_INVOICE": " 1.71 ",
+        "Beauty and Personal Care": " 354 ",
+        "Consumer Health": " 861 ",
+        "Health and Wellness": "",
+        "Home Care": " 1,312 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 61 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC531876",
+        "ADDRESS": "NO.3-9,BLK 9,JALAN TAPANG,KCLD KOTA SENTOSA 93250 KUCHING SARAWAK   -",
+        "geocodeaddress":"Kota Sentosa, 93250 Kuching, Sarawak, Malaysia",
+        "latitude":1.469816,
+        "longitude":110.33159290000003,
+        "POSTAL_CODE": "93250",
+        "PLACE": "Kuching",
+        "STATE": "Sarawak",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "10/18/2016",
+        "INVOICE_END_DATE": "3/23/2018",
+        "MONTHS": "17",
+        "NO_OF_INVOICES": "17",
+        "TOTAL_INVOICE_AMOUNT": " 37,789 ",
+        "TOTAL_PRODUCT_LINES": "278",
+        "AVERAGE_PURCHASE_PER_MONTH": " 2,223 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 2,223 ",
+        "AVERAGE_LINES_PER_INVOICE": " 16.35 ",
+        "Beauty and Personal Care": " 22,253 ",
+        "Consumer Health": "",
+        "Health and Wellness": "",
+        "Home Care": " 15,535 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC531895",
+        "ADDRESS": "c/o HARRISONS SARAWAK SDN BHD P O BOX 128   93700",
+        "geocodeaddress":"Sarawak, Malaysia",
+        "latitude":1.5532783,
+        "longitude":110.35921269999994,
+        "POSTAL_CODE": "93700",
+        "PLACE": "Kuching",
+        "STATE": "Sarawak",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "10/6/2017",
+        "INVOICE_END_DATE": "10/6/2017",
+        "MONTHS": "0",
+        "NO_OF_INVOICES": "1",
+        "TOTAL_INVOICE_AMOUNT": " 27 ",
+        "TOTAL_PRODUCT_LINES": "1",
+        "AVERAGE_PURCHASE_PER_MONTH": "#DIV/0!",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 27 ",
+        "AVERAGE_LINES_PER_INVOICE": " 1.00 ",
+        "Beauty and Personal Care": "",
+        "Consumer Health": "",
+        "Health and Wellness": "",
+        "Home Care": " 27 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC532470",
+        "ADDRESS": "MENGGATAL   88450",
+        "geocodeaddress":"Batu 9 1/2, Jalan Tuaran, Menggatal, 88450, Kota Kinabalu, Sabah, 88450, Malaysia",
+        "latitude":5.9917555,
+        "longitude":116.11784929999999,
+        "POSTAL_CODE": "88450",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "9/15/2016",
+        "INVOICE_END_DATE": "3/16/2018",
+        "MONTHS": "18",
+        "NO_OF_INVOICES": "14",
+        "TOTAL_INVOICE_AMOUNT": " 2,129 ",
+        "TOTAL_PRODUCT_LINES": "49",
+        "AVERAGE_PURCHASE_PER_MONTH": " 118 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 152 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.50 ",
+        "Beauty and Personal Care": " 458 ",
+        "Consumer Health": "",
+        "Health and Wellness": "",
+        "Home Care": " 1,671 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC532547",
+        "ADDRESS": "LOT 4, BLOCK M, G/F SINSURAN COMPLEX 88100 KOTA KINABAU, SABAH   88100",
+        "geocodeaddress":"Lot 3 & 4, Block M, Sinsuran Kompleks, Jalan Sinsuran Pasar Malam, Sinsuran Kompleks, 88000 Kota Kinabalu, Sabah, Malaysia",
+        "latitude":5.980715,
+        "longitude":116.07182999999998,
+        "POSTAL_CODE": "88100",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "9/20/2016",
+        "INVOICE_END_DATE": "6/30/2017",
+        "MONTHS": "9",
+        "NO_OF_INVOICES": "14",
+        "TOTAL_INVOICE_AMOUNT": " 5,345 ",
+        "TOTAL_PRODUCT_LINES": "93",
+        "AVERAGE_PURCHASE_PER_MONTH": " 594 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 382 ",
+        "AVERAGE_LINES_PER_INVOICE": " 6.64 ",
+        "Beauty and Personal Care": " 1,710 ",
+        "Consumer Health": " 1,566 ",
+        "Health and Wellness": " 223 ",
+        "Home Care": " 1,745 ",
+        "Packaged Food": " 69 ",
+        "Soft Drinks": " 32 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC532658",
+        "ADDRESS": "LOT NO.5, PUTATAN BARU 88200 KOTA KINABALU SABAH   88200",
+        "geocodeaddress":"Lot No.5, Tingkat bawah, Tapak Kedai Baru Putatan, 88300, Kota Kinabalu, Sabah, Bandar Putatan, 88300 Penampang, Sabah, Malaysia",
+        "latitude":5.8932014,
+        "longitude":116.04823020000003,
+        "POSTAL_CODE": "88200",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "9/8/2016",
+        "INVOICE_END_DATE": "3/8/2018",
+        "MONTHS": "18",
+        "NO_OF_INVOICES": "48",
+        "TOTAL_INVOICE_AMOUNT": " 11,378 ",
+        "TOTAL_PRODUCT_LINES": "242",
+        "AVERAGE_PURCHASE_PER_MONTH": " 632 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 237 ",
+        "AVERAGE_LINES_PER_INVOICE": " 5.04 ",
+        "Beauty and Personal Care": " 1,384 ",
+        "Consumer Health": " 4,678 ",
+        "Health and Wellness": "",
+        "Home Care": " 4,832 ",
+        "Packaged Food": " 280 ",
+        "Soft Drinks": " 204 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC532748",
+        "ADDRESS": "(CGS) TMN GOLF VIEW JLN BUNDUSAN,88200 PENAMPANG P.O.BOX 1,89507 PENAMPANG SABAH  88200",
+        "geocodeaddress":"Jalan Bundusan, 88200 Kota Kinabalu, Sabah, Malaysia",
+        "latitude":5.9289315,
+        "longitude":116.09578540000007,
+        "POSTAL_CODE": "88200",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Supermarket",
+        "INVOICE_START_DATE": "9/27/2016",
+        "INVOICE_END_DATE": "3/19/2018",
+        "MONTHS": "17",
+        "NO_OF_INVOICES": "306",
+        "TOTAL_INVOICE_AMOUNT": " 243,976 ",
+        "TOTAL_PRODUCT_LINES": "1671",
+        "AVERAGE_PURCHASE_PER_MONTH": " 14,352 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 797 ",
+        "AVERAGE_LINES_PER_INVOICE": " 5.46 ",
+        "Beauty and Personal Care": " 73,786 ",
+        "Consumer Health": " 26,052 ",
+        "Health and Wellness": " 7,118 ",
+        "Home Care": " 133,251 ",
+        "Packaged Food": " 1,239 ",
+        "Soft Drinks": " 2,531 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC532817",
+        "ADDRESS": "GCH RETAIL (M) S/B (1087) G/F, KOSAN COMPLEX LIKAS ML 4,TUARAN RD, K.K SABAH  88400",
+        "geocodeaddress":"Kosan Complex Likas, Jalan Tuaran, 88400 Kota Kinabalu, Sabah, 88400, Malaysia",
+        "latitude":5.99013,
+        "longitude":116.10766000000001,
+        "POSTAL_CODE": "88400",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Supermarket",
+        "INVOICE_START_DATE": "9/8/2016",
+        "INVOICE_END_DATE": "4/5/2018",
+        "MONTHS": "18",
+        "NO_OF_INVOICES": "118",
+        "TOTAL_INVOICE_AMOUNT": " 60,338 ",
+        "TOTAL_PRODUCT_LINES": "457",
+        "AVERAGE_PURCHASE_PER_MONTH": " 3,352 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 511 ",
+        "AVERAGE_LINES_PER_INVOICE": " 3.87 ",
+        "Beauty and Personal Care": " 17,874 ",
+        "Consumer Health": " 4,513 ",
+        "Health and Wellness": " 672 ",
+        "Home Care": " 36,442 ",
+        "Packaged Food": " 274 ",
+        "Soft Drinks": " 563 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      }, 
+      {
+        "OUTLET_CODE": "AC533105",
+        "ADDRESS": "LOT NO:A7 & 8-0, BLOCK A GROUND FLOOR, BEVERLY HILL APARTMENTS,PHASE 1, JALAN BUNDUSAN,KOTA KINABALU, SABAH  88300",
+        "geocodeaddress":"BLOCK A GROUND FLOOR, 1, Jalan Bundusan, 88300 Kota Kinabalu, Sabah, Malaysia",
+        "latitude":5.933497699999999,
+        "longitude":116.09928549999995,
+        "POSTAL_CODE": "88300",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "10/28/2016",
+        "INVOICE_END_DATE": "3/29/2018",
+        "MONTHS": "17",
+        "NO_OF_INVOICES": "15",
+        "TOTAL_INVOICE_AMOUNT": " 91,997 ",
+        "TOTAL_PRODUCT_LINES": "32",
+        "AVERAGE_PURCHASE_PER_MONTH": " 5,412 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 6,133 ",
+        "AVERAGE_LINES_PER_INVOICE": " 2.13 ",
+        "Beauty and Personal Care": "",
+        "Consumer Health": " 49,908 ",
+        "Health and Wellness": "",
+        "Home Care": "",
+        "Packaged Food": " 42,089 ",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC533149",
+        "ADDRESS": "NO. 10, LOT 33, GROUND FLOOR, PHASE 2, KEPAYAN RIDGE COMMERCIAL CENTRE,   SABAH 88100",
+        "geocodeaddress":"33, GROUND FLOOR, PHASE, 2, Jalan Kepayan, 88100 Kota Kinabalu, Sabah, Malaysia",
+        "latitude":5.9495385,
+        "longitude":116.05990750000001,
+        "POSTAL_CODE": "88100",
+        "PLACE": "Kota Kinabalu",
+        "STATE": "Sabah",
+        "CHANNEL_HIERARCHY": "Supermarket",
+        "INVOICE_START_DATE": "10/17/2016",
+        "INVOICE_END_DATE": "3/16/2018",
+        "MONTHS": "16",
+        "NO_OF_INVOICES": "163",
+        "TOTAL_INVOICE_AMOUNT": " 194,460 ",
+        "TOTAL_PRODUCT_LINES": "1057",
+        "AVERAGE_PURCHASE_PER_MONTH": " 12,154 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,193 ",
+        "AVERAGE_LINES_PER_INVOICE": " 6.48 ",
+        "Beauty and Personal Care": " 56,670 ",
+        "Consumer Health": " 29,350 ",
+        "Health and Wellness": " 6,720 ",
+        "Home Care": " 95,514 ",
+        "Packaged Food": " 1,975 ",
+        "Soft Drinks": " 4,232 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC533237",
+        "ADDRESS": "LOT 1050 ,PRIVATE MARKET JLN CHANGKAT ASA, 35900 ULU BERNAM SELANGOR  35900",
+        "geocodeaddress":"Ulu Bernam, 35900 Kerling, Selangor, Malaysia",
+        "latitude":3.674364,
+        "longitude":101.5225481,
+        "POSTAL_CODE": "35900",
+        "PLACE": "Tanjong Malim",
+        "STATE": "Perak",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "4/13/2016",
+        "INVOICE_END_DATE": "3/22/2018",
+        "MONTHS": "23",
+        "NO_OF_INVOICES": "21",
+        "TOTAL_INVOICE_AMOUNT": " 1,843 ",
+        "TOTAL_PRODUCT_LINES": "60",
+        "AVERAGE_PURCHASE_PER_MONTH": " 80 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 88 ",
+        "AVERAGE_LINES_PER_INVOICE": " 2.86 ",
+        "Beauty and Personal Care": " 1,135 ",
+        "Consumer Health": " 298 ",
+        "Health and Wellness": " 40 ",
+        "Home Care": " 370 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC535285",
+        "ADDRESS": "LOT 3916, JALAN 1D, KAMPUNG BARU SUBANG 40150 SHAH ALAM, SELANGOR.   40150",
+        "geocodeaddress":"Lot 515, No 22, Jalan TUDM, Kampung Baru Subang, Seksyen U6, 40150 Shah Alam, Selangor Darul Ehsan., Malaysia",
+        "latitude":3.137381,
+        "longitude":101.54161120000003,
+        "POSTAL_CODE": "40150",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "5/13/2016",
+        "INVOICE_END_DATE": "4/5/2018",
+        "MONTHS": "22",
+        "NO_OF_INVOICES": "22",
+        "TOTAL_INVOICE_AMOUNT": " 7,850 ",
+        "TOTAL_PRODUCT_LINES": "119",
+        "AVERAGE_PURCHASE_PER_MONTH": " 357 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 357 ",
+        "AVERAGE_LINES_PER_INVOICE": " 5.41 ",
+        "Beauty and Personal Care": " 1,567 ",
+        "Consumer Health": " 689 ",
+        "Health and Wellness": " 1,039 ",
+        "Home Care": " 4,555 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC535824",
+        "ADDRESS": "NO. 23 & 25, JLN DINAR D U3/D SEK U3, 40150 SHAH ALAM SELANGOR DARUL EHSAN   -",
+        "geocodeaddress":"Lot 10, Malaysia International Aerospace Centre, Helicopter Centre, 21-1, Jalan Dinar D U3/D & Seksyen 43, Taman Subang Perdana, 40150 Shah Alam, Selangor, Malaysia",
+        "latitude":3.148754,
+        "longitude":101.54539399999999,
+        "POSTAL_CODE": "40150",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "4/22/2016",
+        "INVOICE_END_DATE": "4/4/2018",
+        "MONTHS": "23",
+        "NO_OF_INVOICES": "18",
+        "TOTAL_INVOICE_AMOUNT": " 15,627 ",
+        "TOTAL_PRODUCT_LINES": "161",
+        "AVERAGE_PURCHASE_PER_MONTH": " 679 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 868 ",
+        "AVERAGE_LINES_PER_INVOICE": " 8.94 ",
+        "Beauty and Personal Care": " 5,962 ",
+        "Consumer Health": " 1,612 ",
+        "Health and Wellness": "",
+        "Home Care": " 8,053 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC535843",
+        "ADDRESS": "NO 10 JALAN UTARID U5/D 40150 BANDAR PINGGIRAN SUBANG SHAH ALAM SELANGOR  40150",
+        "geocodeaddress":"Jalan Utarid U5/D, Taman Mutiara Subang, 40150 Shah Alam, Selangor, Malaysia",
+        "latitude":3.1780196,
+        "longitude":101.53818869999998,
+        "POSTAL_CODE": "40150",
+        "PLACE": "Shah Alam",
+        "STATE": "Selangor",
+        "CHANNEL_HIERARCHY": "Small Provision Stores",
+        "INVOICE_START_DATE": "4/7/2016",
+        "INVOICE_END_DATE": "3/23/2018",
+        "MONTHS": "23",
+        "NO_OF_INVOICES": "133",
+        "TOTAL_INVOICE_AMOUNT": " 123,213 ",
+        "TOTAL_PRODUCT_LINES": "2199",
+        "AVERAGE_PURCHASE_PER_MONTH": " 5,357 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 926 ",
+        "AVERAGE_LINES_PER_INVOICE": " 16.53 ",
+        "Beauty and Personal Care": " 31,821 ",
+        "Consumer Health": " 30,480 ",
+        "Health and Wellness": " 1,674 ",
+        "Home Care": " 57,469 ",
+        "Packaged Food": " 462 ",
+        "Soft Drinks": " 1,306 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC537087",
+        "ADDRESS": "LOT LG 01 GLOMAC MALL JALAN DAMANSARA KUALA LUMPUR   50490",
+        "geocodeaddress":"699, Jalan Damansara, Taman Tun Dr Ismail, 60000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.1338524,
+        "longitude":101.62989629999993,
+        "POSTAL_CODE": "50490",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "12/8/2017",
+        "INVOICE_END_DATE": "3/28/2018",
+        "MONTHS": "3",
+        "NO_OF_INVOICES": "10",
+        "TOTAL_INVOICE_AMOUNT": " 27,220 ",
+        "TOTAL_PRODUCT_LINES": "176",
+        "AVERAGE_PURCHASE_PER_MONTH": " 9,073 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 2,722 ",
+        "AVERAGE_LINES_PER_INVOICE": " 17.60 ",
+        "Beauty and Personal Care": " 4,230 ",
+        "Consumer Health": " 5,054 ",
+        "Health and Wellness": " 514 ",
+        "Home Care": " 17,421 ",
+        "Packaged Food": "",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC537090",
+        "ADDRESS": "46&48 JALAN 5/40 TAMAN PUSAT KEPONG KUALA LUMPUR.   52100",
+        "geocodeaddress":"46, 48, Jalan 5/40, Taman Pusat Kepong, 52000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.2025263,
+        "longitude":101.65619960000004,
+        "POSTAL_CODE": "52100",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Medium Provision Stores",
+        "INVOICE_START_DATE": "11/7/2017",
+        "INVOICE_END_DATE": "3/22/2018",
+        "MONTHS": "4",
+        "NO_OF_INVOICES": "9",
+        "TOTAL_INVOICE_AMOUNT": " 25,410 ",
+        "TOTAL_PRODUCT_LINES": "161",
+        "AVERAGE_PURCHASE_PER_MONTH": " 6,352 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 2,823 ",
+        "AVERAGE_LINES_PER_INVOICE": " 17.89 ",
+        "Beauty and Personal Care": " 2,832 ",
+        "Consumer Health": " 2,305 ",
+        "Health and Wellness": " 718 ",
+        "Home Care": " 18,987 ",
+        "Packaged Food": " 357 ",
+        "Soft Drinks": " 211 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC537162",
+        "ADDRESS": "NO 1-34 JALAN DESA 1/5 DESA AMAN PURI KEPONG KUALA LUMPUR   52100",
+        "geocodeaddress":"1, Jalan Desa 1/5, Desa Aman Puri, 52100 Kuala Lumpur, Selangor, Malaysia",
+        "latitude":3.212179,
+        "longitude":101.61610199999996,
+        "POSTAL_CODE": "52100",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Small",
+        "INVOICE_START_DATE": "10/31/2017",
+        "INVOICE_END_DATE": "3/20/2018",
+        "MONTHS": "4",
+        "NO_OF_INVOICES": "8",
+        "TOTAL_INVOICE_AMOUNT": " 10,364 ",
+        "TOTAL_PRODUCT_LINES": "92",
+        "AVERAGE_PURCHASE_PER_MONTH": " 2,591 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,296 ",
+        "AVERAGE_LINES_PER_INVOICE": " 11.50 ",
+        "Beauty and Personal Care": " 1,696 ",
+        "Consumer Health": " 1,670 ",
+        "Health and Wellness": " 446 ",
+        "Home Care": " 3,698 ",
+        "Packaged Food": " 2,854 ",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC537195",
+        "ADDRESS": "NO 8 JALAN LANG KUNING(JLN133) KEPONG BARU KUALA LUMPUR   52100",
+        "geocodeaddress":"50, Jalan Lang Kuning, Kepong Baru, 52100 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.1907775,
+        "longitude":101.64447859999996,
+        "POSTAL_CODE": "52100",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Large",
+        "INVOICE_START_DATE": "1/26/2018",
+        "INVOICE_END_DATE": "3/28/2018",
+        "MONTHS": "2",
+        "NO_OF_INVOICES": "5",
+        "TOTAL_INVOICE_AMOUNT": " 6,826 ",
+        "TOTAL_PRODUCT_LINES": "71",
+        "AVERAGE_PURCHASE_PER_MONTH": " 3,413 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 1,365 ",
+        "AVERAGE_LINES_PER_INVOICE": " 14.20 ",
+        "Beauty and Personal Care": " 316 ",
+        "Consumer Health": " 2,890 ",
+        "Health and Wellness": "",
+        "Home Care": " 2,910 ",
+        "Packaged Food": " 428 ",
+        "Soft Drinks": " 281 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC537215",
+        "ADDRESS": "NO 12 - 14 JALAN DAYA 12 TAMAN DAYA KEPONG KUALA LUMPUR   51200",
+        "geocodeaddress":"12, 14, Jalan Daya 12, Taman Daya, 52100 Kuala Lumpur, Selangor, Malaysia",
+        "latitude":3.221816,
+        "longitude":101.63688939999997,
+        "POSTAL_CODE": "51200",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall",
+        "INVOICE_START_DATE": "1/17/2018",
+        "INVOICE_END_DATE": "3/22/2018",
+        "MONTHS": "2",
+        "NO_OF_INVOICES": "3",
+        "TOTAL_INVOICE_AMOUNT": " 1,939 ",
+        "TOTAL_PRODUCT_LINES": "31",
+        "AVERAGE_PURCHASE_PER_MONTH": " 969 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 646 ",
+        "AVERAGE_LINES_PER_INVOICE": " 10.33 ",
+        "Beauty and Personal Care": " 324 ",
+        "Consumer Health": " 657 ",
+        "Health and Wellness": "",
+        "Home Care": " 897 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 62 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC537270",
+        "ADDRESS": "9 TENGKAT TONG SHIN GROUD FLOOR KUALA LUMPUR   50200",
+        "geocodeaddress":"9, Tengkat Tong Shin, 50200 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.145393,
+        "longitude":101.70704999999998,
+        "POSTAL_CODE": "50200",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall",
+        "INVOICE_START_DATE": "10/30/2017",
+        "INVOICE_END_DATE": "3/14/2018",
+        "MONTHS": "4",
+        "NO_OF_INVOICES": "9",
+        "TOTAL_INVOICE_AMOUNT": " 5,293 ",
+        "TOTAL_PRODUCT_LINES": "86",
+        "AVERAGE_PURCHASE_PER_MONTH": " 1,323 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 588 ",
+        "AVERAGE_LINES_PER_INVOICE": " 9.56 ",
+        "Beauty and Personal Care": " 1,447 ",
+        "Consumer Health": " 345 ",
+        "Health and Wellness": " 493 ",
+        "Home Care": " 2,897 ",
+        "Packaged Food": "",
+        "Soft Drinks": " 111 ",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC537501",
+        "ADDRESS": "NO 32 JALAN LANG KUNING 133 TAMAN SRI KEPONG BARU KEPONG KUALA LUMPUR   52100",
+        "geocodeaddress":"Jalan Lang Kuning, Kepong Baru, 52100 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.1924263,
+        "longitude":101.64479559999995,
+        "POSTAL_CODE": "52100",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall",
+        "INVOICE_START_DATE": "2/28/2018",
+        "INVOICE_END_DATE": "4/5/2018",
+        "MONTHS": "1",
+        "NO_OF_INVOICES": "3",
+        "TOTAL_INVOICE_AMOUNT": " 442 ",
+        "TOTAL_PRODUCT_LINES": "8",
+        "AVERAGE_PURCHASE_PER_MONTH": " 442 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 147 ",
+        "AVERAGE_LINES_PER_INVOICE": " 2.67 ",
+        "Beauty and Personal Care": " 37 ",
+        "Consumer Health": " 369 ",
+        "Health and Wellness": "",
+        "Home Care": "",
+        "Packaged Food": " 36 ",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      },
+      {
+        "OUTLET_CODE": "AC537507",
+        "ADDRESS": "LOT 2/5 JLN UDANG SIAR 2 TAMAN SRI SEGAMBUT KUALA LUMPUR   52000",
+        "geocodeaddress":"9, Jalan Udang Siar 2, Taman Sri Segambut, 52000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia",
+        "latitude":3.198079,
+        "longitude":101.65717100000006,
+        "POSTAL_CODE": "52000",
+        "PLACE": "Kuala Lumpur",
+        "STATE": "Kuala Lumpur",
+        "CHANNEL_HIERARCHY": "Chinese Medical Hall - Large",
+        "INVOICE_START_DATE": "11/6/2017",
+        "INVOICE_END_DATE": "4/5/2018",
+        "MONTHS": "4",
+        "NO_OF_INVOICES": "4",
+        "TOTAL_INVOICE_AMOUNT": " 3,091 ",
+        "TOTAL_PRODUCT_LINES": "51",
+        "AVERAGE_PURCHASE_PER_MONTH": " 773 ",
+        "AVERAGE_PURCHASE_PER_INVOICE": " 773 ",
+        "AVERAGE_LINES_PER_INVOICE": " 12.75 ",
+        "Beauty and Personal Care": " 1,217 ",
+        "Consumer Health": " 427 ",
+        "Health and Wellness": "",
+        "Home Care": " 1,304 ",
+        "Packaged Food": " 143 ",
+        "Soft Drinks": "",
+        "FIELD22": "",
+        "FIELD23": "",
+        "FIELD24": "",
+        "FIELD25": "",
+        "FIELD26": "",
+        "FIELD27": "",
+        "FIELD28": "",
+        "FIELD29": ""
+      }
+     ];
 
     var storeJSON = [
       {
