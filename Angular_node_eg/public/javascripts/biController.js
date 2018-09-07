@@ -5,6 +5,8 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($ro
     var infoWindow;
     var markers = []; 
     var restaurantsMarkers = [];
+    var zomatoRestaurantsMarkers = [];
+    var facebookRestaurantsMarkers = [];
     var airportMarkers = [];
     var barMarkers = [];
     var busstationMarkers = [];
@@ -53,21 +55,37 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($ro
     $scope.countries =
     [
         //{"name":"", "selected":true},
-        {"name":"India", "selected":false},
+        //{"name":"India", "selected":false},
         {"name":"Singapore", "selected":false}
     ]
 
-    $scope.cities =
-    [
-        {"name":"Delhi", "selected":false},
-        {"name":"Mumbai", "selected":false},
-        {"name":"Bengaluru", "selected":false},
-        {"name":"Kolkata", "selected":false},
-        {"name":"Chennai", "selected":false},
-        {"name":"Indore", "selected":false},
-        {"name":"Ahmedabad", "selected":false},
-        {"name":"Pune", "selected":false}
-    ]
+    // $scope.cities =
+    // [
+    //     {"name":"Delhi", "selected":false},
+    //     {"name":"Mumbai", "selected":false},
+    //     {"name":"Bengaluru", "selected":false},
+    //     {"name":"Kolkata", "selected":false},
+    //     {"name":"Chennai", "selected":false},
+    //     {"name":"Indore", "selected":false},
+    //     {"name":"Ahmedabad", "selected":false},
+    //     {"name":"Pune", "selected":false}
+    // ]
+
+    
+$scope.cities =
+[
+    {"name":"Lim Chu Kang", "selected":false},
+    {"name":"Mandai", "selected":false},
+    {"name":"Sembawang", "selected":false},
+    {"name":"Jurong West", "selected":false},
+    {"name":"Woodlands", "selected":false},
+    {"name":"Queenstown", "selected":false},
+    {"name":"Bukit Merah", "selected":false},
+    {"name":"Kallang", "selected":false},
+    {"name":"Geylang", "selected":false},
+    {"name":"Bedok", "selected":false},
+    {"name":"Tampines", "selected":false}
+]
 
     $scope.regions =
     [
@@ -79,7 +97,9 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($ro
 
     $scope.placetypes = 
     [
-        {"name":"Restaurants", "checked":false},
+        {"name":"Google - Restaurants", "checked":false},
+        {"name":"Facebook - Restaurants", "checked":false},
+        {"name":"Zomato - Restaurants", "checked":false},
         {"name":"Bar", "checked":false},
         {"name":"Cafe", "checked":false},
         {"name":"Casino", "checked":false},
@@ -170,8 +190,8 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($ro
 
     $scope.marketingTypes =
     [
-        {"name":"Indoor", "checked":false},
-        {"name":"Digital", "checked":false}
+        {"name":"Indoor", "checked":false}
+        //
     ]
 
     var arrdirectionsDisplay = [];
@@ -215,10 +235,39 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($ro
     $scope.initMap = function ()
     {
         map = new google.maps.Map(document.getElementById("mymap"), {
-            center: new google.maps.LatLng(23.492690, 78.680398),
-            zoom: 5,
+            //center: new google.maps.LatLng(23.492690, 78.680398),
+            center: new google.maps.LatLng(1.328178, 103.845055),
+            zoom: 11,
             mapTypeId: google.maps.MapTypeId.ROADMAP
             });
+
+            map.data.loadGeoJson(
+                'https://www.jasonbase.com/things/Lzkb');
+
+                //https://www.jasonbase.com/things/z0wx
+                //https://www.jasonbase.com/things/Lzkb
+                //https://api.myjson.com/bins/fngwg
+
+
+            map.data.setStyle(function(feature) {
+                var NAME = feature.getProperty('ST_NAME');
+                var scolor = "grey";
+                // if (NAME == "ANDAMAN AND NICOBAR ISLANDS") {
+                //     color = "green";
+                // }
+                // else if (NAME == "Andhra Pradesh") {
+                //     color = "blue";
+                // }
+                // else if (NAME == "Arunachal Pradesh") {
+                //     color = "violet";
+                //     }
+
+                return {
+                    fillColor: "#d39e17", //#8ac601 , #adbfff , #d39e17
+                    strokeWeight: 1.5,
+                strokeColor:scolor,
+                }
+                });
 
         trafficLayer = new google.maps.TrafficLayer();
 
@@ -2224,7 +2273,7 @@ $scope.countryChange = function()
                     latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
                     
                     map.setCenter({lat:1.328178,lng: 103.845055});
-                    map.setZoom(8);
+                    map.setZoom(11);
                     map.setMapTypeId('roadmap');
             
                     // Creating a marker and putting it on the map
@@ -2307,6 +2356,8 @@ $scope.countryChange = function()
     $scope.clearAllPlacesMarkers = function()
     {
         $scope.clearRestaurantsMarker();
+        $scope.clearFacebookRestaurantsMarker();
+        $scope.clearZomatoRestaurantsMarker();
         $scope.clearAirportMarkers();
         $scope.clearBarMarkers();
         $scope.clearBusstationMarkers();
@@ -2340,6 +2391,24 @@ $scope.countryChange = function()
 
         //if (countryMarkerCluster!=null)
         //countryMarkerCluster.clearMarkers();
+    };
+
+    $scope.clearFacebookRestaurantsMarker = function()
+    {
+        for (var key in facebookRestaurantsMarkers) 
+        {
+            facebookRestaurantsMarkers[key].setMap(null);
+        };
+        //restaurantsMarkers.length = 0;
+    };
+
+    $scope.clearZomatoRestaurantsMarker = function()
+    {
+        for (var key in zomatoRestaurantsMarkers) 
+        {
+            zomatoRestaurantsMarkers[key].setMap(null);
+        };
+        //restaurantsMarkers.length = 0;
     };
 
     $scope.clearAirportMarkers = function()
@@ -2960,6 +3029,97 @@ $scope.countryChange = function()
         restaurantsMarkers.push(restaurantMarker); 
     };
 
+    $scope.createPlacesMarkerForFacebookRestaurant = function(place)
+    {
+        $scope.clearInfoWindow();
+        locationLatLng = new google.maps.LatLng(place.location.latitude, place.location.longitude); 
+        var image = 'images/blue.png';
+        
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : locationLatLng
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+          infowindowplacesmarker.setContent( "Name     : " + place.name
+                                          + "<br>" + "Ratings  : " + place.overall_star_rating
+                                          + "<br>" + "Checkins : " + place.checkins
+                                          + "<br>" + "Address  : " + place.location.street
+                                      );
+          infowindowplacesmarker.open(map, this);
+          infowindowsCollection.push(infowindowplacesmarker);
+          });
+          facebookRestaurantsMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForZomatoRestaurant = function(place)
+    {
+        $scope.clearInfoWindow();
+        locationLatLng = new google.maps.LatLng(place.location.latitude, place.location.longitude); 
+        var image = 'images/green.png';
+        
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : locationLatLng
+        });
+
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+
+            var reviewText = "";
+            $http({
+                method: 'GET',
+                url: 'https://developers.zomato.com/api/v2.1/reviews?',
+                headers: {'user-key' : '1b6ddcb47426d068e923e86a6046a39b'},
+                params: {
+                  res_id: place.id, 
+                  start: 0,
+                  count : 5
+                }
+            }).success(function(data) {
+              //console.log("---success---:",data);
+              for (var i = 0; i < data.user_reviews.length; i++) 
+              {
+                //console.log("---Review Text---: ",data.user_reviews[i].review.review_text);
+                //console.log("---Ratings-------: ",data.user_reviews[i].review.rating);
+                if( data.user_reviews.length == 1)
+                {
+                  reviewText = "<br>" + (i+1) + ". " + data.user_reviews[i].review.review_text;
+                }
+                else
+                {
+                  reviewText = reviewText + "<br>" + (i+1) + ". " + data.user_reviews[i].review.review_text;
+                }
+                
+              }
+              //console.log("---Final Text -------: ",reviewText);
+              infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.user_rating.aggregate_rating
+                                            + "<br>" + "Address     : " + place.location.address
+                                            + "<br>" + "City        : " + place.location.city
+                                            + "<br>" + "Locality    : " + place.location.locality
+                                            + "<br>" + "Reviews     : " + reviewText
+                                            // + "<br>" + "Website     : " + place.website
+                                            // + "<br>" + "International Number: " + place.international_phone_number
+                                            // + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            // + "<br>" + "Place Id    : " + place.place_id
+                                            // //+ "<br>" + "Reviews    : " + place.reviews[0].text
+                                        );
+            }).error(function(error) {
+              console.log("---error---:",error);
+            });
+
+            infowindowplacesmarker.open(map, this);
+            infowindowsCollection.push(infowindowplacesmarker);
+            });
+            zomatoRestaurantsMarkers.push(restaurantMarker); 
+    };
+
     $scope.createPlacesMarkerForPark = function(place)
     {
         $scope.clearInfoWindow();
@@ -3414,11 +3574,12 @@ $scope.countryChange = function()
 
         if( $scope.selectedRegion == "East" )
         {
-            map.setCenter({lat:22.551296,lng: 88.385557});
-            map.setZoom(10);
+            //map.setCenter({lat:22.551296,lng: 88.385557});
+            map.setCenter({lat:1.360177,lng: 103.931237});
+            map.setZoom(13);
             
             heatmapEast = new google.maps.visualization.HeatmapLayer({
-            data: $scope.getEastPoints(),
+            data: $scope.getEastPointsForSingapore(),
             map: map
             });
 
@@ -3426,33 +3587,36 @@ $scope.countryChange = function()
         }
         else if( $scope.selectedRegion == "West" )
         {   	
-            map.setCenter({lat:19.070517,lng: 72.877055});
-            map.setZoom(10);
-            
+           // map.setCenter({lat:19.070517,lng: 72.877055});
+            map.setCenter({lat:1.346351,lng: 103.737608});
+            map.setZoom(13);
+
             heatmapWest = new google.maps.visualization.HeatmapLayer({
-            data: $scope.getWestPoints(),
+            data: $scope.getWestPointsForSingapore(),
             map: map
             });
             heatmapWest.set('radius', heatmapWest.get('radius') ? null : 20);
         } 
         else if( $scope.selectedRegion == "South" )
         {
-            map.setCenter({lat:12.973054,lng: 77.584958});
-            map.setZoom(10);
+            //map.setCenter({lat:12.973054,lng: 77.584958});
+            map.setCenter({lat:1.284098,lng: 103.805952});
+            map.setZoom(13);
             
             heatmapSouth = new google.maps.visualization.HeatmapLayer({
-            data: $scope.getSouthPoints(),
+            data: $scope.getSouthPointsForSingapore(),
             map: map
             });
             heatmapSouth.set('radius', heatmapSouth.get('radius') ? null : 20);
         } 
         else if( $scope.selectedRegion == "North" )
         {
-            map.setCenter({lat:28.624982,lng: 77.185231});
-            map.setZoom(8);
+            //map.setCenter({lat:28.624982,lng: 77.185231});
+            map.setCenter({lat:1.423004,lng: 103.795870});
+            map.setZoom(13);
             
             heatmapNorth = new google.maps.visualization.HeatmapLayer({
-            data: $scope.getNorthPoints(),
+            data: $scope.getNorthPointsForSingapore(),
             map: map
             });
             heatmapNorth.set('radius', heatmapNorth.get('radius') ? null : 20);
@@ -3473,13 +3637,16 @@ $scope.countryChange = function()
         
         //$scope.clearAllHeatMaps();
 
-        if ( value == 0 )
+        
+
+    if ( value == 0 )
         {
-            if( $scope.selectedCity == "Delhi" )
+            if( $scope.selectedCity == "Lim Chu Kang" )
             {
-                latLng = new google.maps.LatLng(28.624982, 77.185231); 
+                //12.973054	77.584958
+                latLng = new google.maps.LatLng(1.432428, 103.716847); 
                 	  
-                map.setCenter({lat:28.624982,lng: 77.185231});
+                map.setCenter({lat:1.432428,lng: 103.716847});
                 map.setZoom(11);
                 map.setMapTypeId('roadmap');
         
@@ -3487,7 +3654,7 @@ $scope.countryChange = function()
                 var marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
-                title: "Delhi",
+                title: "Lim Chu Kang",
                 icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
@@ -3496,162 +3663,195 @@ $scope.countryChange = function()
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/1.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
                 infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Mandai" )
+            {
+                //19.070517	72.877055
+                latLng = new google.maps.LatLng(1.428433, 103.826689); 
+                	  
+                map.setCenter({lat:1.428433,lng: 103.826689});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Mandai",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Sembawang" )
+            {
+                //13.066886	80.19252 
+                latLng = new google.maps.LatLng(1.455161, 103.812711); 
+                	  
+                map.setCenter({lat:1.455161,lng: 103.812711});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Sembawang",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                //infoWindow.setContent("<div><img src='images/4.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Woodlands" )
+            {
+                //18.517116	73.859531
+                latLng = new google.maps.LatLng(1.439104, 103.788475); 
+                	  
+                map.setCenter({lat:1.439104,lng: 103.788475});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Woodlands",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                //infoWindow.setContent("<div><img src='images/5.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Jurong West" )
+            {
+                //	
+                latLng = new google.maps.LatLng(1.340108, 103.708511); 
+                	  
+                map.setCenter({lat:1.340108,lng: 103.708511});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Jurong West",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                //infoWindow.setContent("<div><img src='images/6.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Queenstown" )
+            {	
+                latLng = new google.maps.LatLng(1.298289, 103.790768); 
+                	  
+                map.setCenter({lat:1.298289,lng: 103.790768});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Queenstown",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                //infoWindow.setContent("<div><img src='images/8.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCity == "Bukit Merah" )
+            {	
+                latLng = new google.maps.LatLng(1.280749, 103.823730); 	
+                	  
+                map.setCenter({lat:1.280749,lng: 103.823730});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Bukit Merah",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                //infoWindow.setContent("<div><img src='images/7.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
                 });
                 cityAndRegionMarkers.push(marker);
                 })(marker);
             }
-            else if( $scope.selectedCity == "Bengaluru" )
-            {
-                //12.973054	77.584958
-                latLng = new google.maps.LatLng(12.973054, 77.584958); 
-                	  
-                map.setCenter({lat:12.973054,lng: 77.584958});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div class='info-window1'><img src='images/2.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Mumbai" )
-            {
-                //19.070517	72.877055
-                latLng = new google.maps.LatLng(19.070517, 72.877055); 
-                	  
-                map.setCenter({lat:19.070517,lng: 72.877055});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/3.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Chennai" )
-            {
-                //13.066886	80.19252
-                latLng = new google.maps.LatLng(13.066886, 80.19252); 
-                	  
-                map.setCenter({lat:13.066886,lng: 80.19252});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/4.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Pune" )
-            {
-                //18.517116	73.859531
-                latLng = new google.maps.LatLng(18.517116, 73.859531); 
-                	  
-                map.setCenter({lat:18.517116,lng: 73.859531});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/5.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Indore" )
-            {
-                //	
-                latLng = new google.maps.LatLng(22.716753, 75.856801); 
-                	  
-                map.setCenter({lat:22.716753,lng: 75.856801});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/6.png'></div>");
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCity == "Ahmedabad" )
+            else if( $scope.selectedCity == "Kallang" )
             {	
-                latLng = new google.maps.LatLng(23.049881, 72.605137); 
+                latLng = new google.maps.LatLng(1.314328, 103.863643); 	
                 	  
-                map.setCenter({lat:23.049881,lng: 72.605137});
+                map.setCenter({lat:1.314328,lng: 103.863643});
                 map.setZoom(11);
                 map.setMapTypeId('roadmap');
         
@@ -3659,7 +3859,7 @@ $scope.countryChange = function()
                 var marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
-                title: "Delhi",
+                title: "Kallang",
                 icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
@@ -3668,18 +3868,19 @@ $scope.countryChange = function()
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/8.png'></div>");
+                //infoWindow.setContent("<div><img src='images/7.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
                 infoWindow.open(map, marker);
                 
                 });
                 cityAndRegionMarkers.push(marker);
                 })(marker);
-            } 
-            else if( $scope.selectedCity == "Kolkata" )
+            }
+            else if( $scope.selectedCity == "Geylang" )
             {	
-                latLng = new google.maps.LatLng(22.657698, 88.348537); 	
+                latLng = new google.maps.LatLng(1.322450, 103.888951); 	
                 	  
-                map.setCenter({lat:22.657698,lng: 88.348537});
+                map.setCenter({lat:1.322450,lng: 103.888951});
                 map.setZoom(11);
                 map.setMapTypeId('roadmap');
         
@@ -3687,7 +3888,7 @@ $scope.countryChange = function()
                 var marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
-                title: "Kolkata",
+                title: "Geylang",
                 icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
@@ -3696,29 +3897,88 @@ $scope.countryChange = function()
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/7.png'></div>");
+                //infoWindow.setContent("<div><img src='images/7.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            }
+            else if( $scope.selectedCity == "Bedok" )
+            {	
+                latLng = new google.maps.LatLng(1.330831, 103.920720); 	
+                	  
+                map.setCenter({lat:1.330831,lng: 103.920720});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Bedok",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                //infoWindow.setContent("<div><img src='images/7.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
                 infoWindow.open(map, marker);
                 
                 });
                 cityAndRegionMarkers.push(marker);
                 })(marker);
             } 
+            else if( $scope.selectedCity == "Tampines" )
+            {	
+                latLng = new google.maps.LatLng(1.352334, 103.945484); 	
+                	  
+                map.setCenter({lat:1.352334,lng: 103.945484});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Tampines",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                //infoWindow.setContent("<div><img src='images/7.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            }
         }
         else if( value == 1 )
         {
-            if( $scope.selectedCityForSales == "Delhi" )
+            if( $scope.selectedCityForSales == "Lim Chu Kang" )
             {
-                latLng = new google.maps.LatLng(28.624982, 77.185231); 
+                latLng = new google.maps.LatLng(1.432428, 103.716847); 
                 	  
-                map.setCenter({lat:28.624982,lng: 77.185231});
+                map.setCenter({lat:1.432428,lng: 103.716847});
                 map.setZoom(11);
                 map.setMapTypeId('roadmap');
-
+        
                 // Creating a marker and putting it on the map
                 var marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
-                title: "Delhi",
+                title: "Lim Chu Kang",
                 icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
@@ -3727,170 +3987,202 @@ $scope.countryChange = function()
                 (function(marker) {
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/sales-delhi.png'></div><div style='float:right;'><img src='images/total-sales-delhi.png'></div>");
+                //infoWindow.setContent("<div><img src='images/sales-bengaluru.png'></div><div style='float:right;'><img src='images/total-sales-bengaluru.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Mandai" )
+            {
+                //19.070517	72.877055
+                latLng = new google.maps.LatLng(1.428433, 103.826689); 
+                	  
+                map.setCenter({lat:1.428433,lng: 103.826689});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Mandai",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                //infoWindow.setContent("<div><img src='images/sales-mumbai.png'></div><div style='float:right;'><img src='images/total-sales-mumbai.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Sembawang" )
+            {
+                //13.066886	80.19252 
+                latLng = new google.maps.LatLng(1.455161, 103.812711); 
+                	  
+                map.setCenter({lat:1.455161,lng: 103.812711});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Sembawang",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                
+                    //infoWindow.setContent("<div><img src='images/sales-chennai.png'></div><div style='float:right;'><img src='images/total-sales-chennai.png'></div>");
+                    infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Woodlands" )
+            {
+                //18.517116	73.859531
+                latLng = new google.maps.LatLng(1.439104, 103.788475); 
+                	  
+                map.setCenter({lat:1.439104,lng: 103.788475});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Woodlands",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                
+                //infoWindow.setContent("<div><img src='images/sales-pune.png'></div><div style='float:right;'><img src='images/total-sales-pune.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Jurong West" )
+            {
+                //	
+                latLng = new google.maps.LatLng(1.340108, 103.708511); 
+                	  
+                map.setCenter({lat:1.340108,lng: 103.708511});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Jurong West",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                
+               // infoWindow.setContent("<div><img src='images/sales-indore.png'></div><div style='float:right;'><img src='images/total-sales-indore.png'></div>");
+               infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Queenstown" )
+            {	
+                latLng = new google.maps.LatLng(1.298289, 103.790768); 
+                	  
+                map.setCenter({lat:1.298289,lng: 103.790768});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Queenstown",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                    
+                //infoWindow.setContent("<div><img src='images/sales-ahmedabad.png'></div><div style='float:right;'><img src='images/total-sales-ahmedabad.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Bukit Merah" )
+            {	
+                latLng = new google.maps.LatLng(1.280749, 103.823730); 	
+                	  
+                map.setCenter({lat:1.280749,lng: 103.823730});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Bukit Merah",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                    
+                //infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
                 infoWindow.open(map, marker);
                 
                 });
                 cityAndRegionMarkers.push(marker);
                 })(marker);
             }
-            else if( $scope.selectedCityForSales == "Bengaluru" )
-            {
-                latLng = new google.maps.LatLng(12.973054, 77.584958); 
-                	  
-                map.setCenter({lat:12.973054,lng: 77.584958});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent("<div><img src='images/sales-bengaluru.png'></div><div style='float:right;'><img src='images/total-sales-bengaluru.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Mumbai" )
-            {
-                //19.070517	72.877055
-                latLng = new google.maps.LatLng(19.070517, 72.877055); 
-                	  
-                map.setCenter({lat:19.070517,lng: 72.877055});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent("<div><img src='images/sales-mumbai.png'></div><div style='float:right;'><img src='images/total-sales-mumbai.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Chennai" )
-            {
-                //13.066886	80.19252
-                latLng = new google.maps.LatLng(13.066886, 80.19252); 
-                	  
-                map.setCenter({lat:13.066886,lng: 80.19252});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                
-                    infoWindow.setContent("<div><img src='images/sales-chennai.png'></div><div style='float:right;'><img src='images/total-sales-chennai.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Pune" )
-            {
-                //18.517116	73.859531
-                latLng = new google.maps.LatLng(18.517116, 73.859531); 
-                	  
-                map.setCenter({lat:18.517116,lng: 73.859531});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                
-                infoWindow.setContent("<div><img src='images/sales-pune.png'></div><div style='float:right;'><img src='images/total-sales-pune.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Indore" )
-            {
-                //	
-                latLng = new google.maps.LatLng(22.716753, 75.856801); 
-                	  
-                map.setCenter({lat:22.716753,lng: 75.856801});
-                map.setZoom(11);
-                map.setMapTypeId('roadmap');
-        
-                // Creating a marker and putting it on the map
-                var marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                title: "Delhi",
-                icon: 'images/purple.png',
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
-                });
-
-                infoWindow = new google.maps.InfoWindow();
-                (function(marker) {
-                // Attaching a click event to the current marker
-                google.maps.event.addListener(marker, "click", function(e) {
-                
-                infoWindow.setContent("<div><img src='images/sales-indore.png'></div><div style='float:right;'><img src='images/total-sales-indore.png'></div>");
-
-                infoWindow.open(map, marker);
-                
-                });
-                cityAndRegionMarkers.push(marker);
-                })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Ahmedabad" )
+            else if( $scope.selectedCityForSales == "Kallang" )
             {	
-                latLng = new google.maps.LatLng(23.049881, 72.605137); 
+                latLng = new google.maps.LatLng(1.314328, 103.863643); 	
                 	  
-                map.setCenter({lat:23.049881,lng: 72.605137});
+                map.setCenter({lat:1.314328,lng: 103.863643});
                 map.setZoom(11);
                 map.setMapTypeId('roadmap');
         
@@ -3898,7 +4190,7 @@ $scope.countryChange = function()
                 var marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
-                title: "Delhi",
+                title: "Kallang",
                 icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
@@ -3908,19 +4200,19 @@ $scope.countryChange = function()
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
                     
-                infoWindow.setContent("<div><img src='images/sales-ahmedabad.png'></div><div style='float:right;'><img src='images/total-sales-ahmedabad.png'></div>");
-
+                //infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
                 infoWindow.open(map, marker);
                 
                 });
                 cityAndRegionMarkers.push(marker);
                 })(marker);
-            } 
-            else if( $scope.selectedCityForSales == "Kolkata" )
+            }
+            else if( $scope.selectedCityForSales == "Geylang" )
             {	
-                latLng = new google.maps.LatLng(22.657698, 88.348537); 	
+                latLng = new google.maps.LatLng(1.322450, 103.888951); 	
                 	  
-                map.setCenter({lat:22.657698,lng: 88.348537});
+                map.setCenter({lat:1.322450,lng: 103.888951});
                 map.setZoom(11);
                 map.setMapTypeId('roadmap');
         
@@ -3928,7 +4220,7 @@ $scope.countryChange = function()
                 var marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
-                title: "Kolkata",
+                title: "Geylang",
                 icon: 'images/purple.png',
                 mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
                 });
@@ -3938,8 +4230,68 @@ $scope.countryChange = function()
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
                     
-                infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+                //infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            }
+            else if( $scope.selectedCityForSales == "Bedok" )
+            {	
+                latLng = new google.maps.LatLng(1.330831, 103.920720); 	
+                	  
+                map.setCenter({lat:1.330831,lng: 103.920720});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Bedok",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
 
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                    
+                //infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
+                infoWindow.open(map, marker);
+                
+                });
+                cityAndRegionMarkers.push(marker);
+                })(marker);
+            } 
+            else if( $scope.selectedCityForSales == "Tampines" )
+            {	
+                latLng = new google.maps.LatLng(1.352334, 103.945484); 	
+                	  
+                map.setCenter({lat:1.352334,lng: 103.945484});
+                map.setZoom(11);
+                map.setMapTypeId('roadmap');
+        
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: "Tampines",
+                icon: 'images/purple.png',
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                });
+
+                infoWindow = new google.maps.InfoWindow();
+                (function(marker) {
+                // Attaching a click event to the current marker
+                google.maps.event.addListener(marker, "click", function(e) {
+                    
+                //infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+                infoWindow.setContent('<div><iframe width="400" height="420" src="https://datastudio.google.com/embed/reporting/1se-9ZRSukdgQUiRqYTSjT8nFLTV0v8Uq/page/y5MR" frameborder="0" style="border:0" allowfullscreen=""></iframe></div>');
                 infoWindow.open(map, marker);
                 
                 });
@@ -3948,6 +4300,482 @@ $scope.countryChange = function()
             } 
             
         }
+
+        // if ( value == 0 )
+        // {
+        //     if( $scope.selectedCity == "Delhi" )
+        //     {
+        //         latLng = new google.maps.LatLng(28.624982, 77.185231); 
+                	  
+        //         map.setCenter({lat:28.624982,lng: 77.185231});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/1.png'></div>");
+        //         infoWindow.open(map, marker);
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     }
+        //     else if( $scope.selectedCity == "Bengaluru" )
+        //     {
+        //         //12.973054	77.584958
+        //         latLng = new google.maps.LatLng(12.973054, 77.584958); 
+                	  
+        //         map.setCenter({lat:12.973054,lng: 77.584958});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div class='info-window1'><img src='images/2.png'></div>");
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCity == "Mumbai" )
+        //     {
+        //         //19.070517	72.877055
+        //         latLng = new google.maps.LatLng(19.070517, 72.877055); 
+                	  
+        //         map.setCenter({lat:19.070517,lng: 72.877055});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/3.png'></div>");
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCity == "Chennai" )
+        //     {
+        //         //13.066886	80.19252
+        //         latLng = new google.maps.LatLng(13.066886, 80.19252); 
+                	  
+        //         map.setCenter({lat:13.066886,lng: 80.19252});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/4.png'></div>");
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCity == "Pune" )
+        //     {
+        //         //18.517116	73.859531
+        //         latLng = new google.maps.LatLng(18.517116, 73.859531); 
+                	  
+        //         map.setCenter({lat:18.517116,lng: 73.859531});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/5.png'></div>");
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCity == "Indore" )
+        //     {
+        //         //	
+        //         latLng = new google.maps.LatLng(22.716753, 75.856801); 
+                	  
+        //         map.setCenter({lat:22.716753,lng: 75.856801});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/6.png'></div>");
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCity == "Ahmedabad" )
+        //     {	
+        //         latLng = new google.maps.LatLng(23.049881, 72.605137); 
+                	  
+        //         map.setCenter({lat:23.049881,lng: 72.605137});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/8.png'></div>");
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCity == "Kolkata" )
+        //     {	
+        //         latLng = new google.maps.LatLng(22.657698, 88.348537); 	
+                	  
+        //         map.setCenter({lat:22.657698,lng: 88.348537});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Kolkata",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/7.png'></div>");
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        // }
+        // else if( value == 1 )
+        // {
+        //     if( $scope.selectedCityForSales == "Delhi" )
+        //     {
+        //         latLng = new google.maps.LatLng(28.624982, 77.185231); 
+                	  
+        //         map.setCenter({lat:28.624982,lng: 77.185231});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/sales-delhi.png'></div><div style='float:right;'><img src='images/total-sales-delhi.png'></div>");
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     }
+        //     else if( $scope.selectedCityForSales == "Bengaluru" )
+        //     {
+        //         latLng = new google.maps.LatLng(12.973054, 77.584958); 
+                	  
+        //         map.setCenter({lat:12.973054,lng: 77.584958});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //         infoWindow.setContent("<div><img src='images/sales-bengaluru.png'></div><div style='float:right;'><img src='images/total-sales-bengaluru.png'></div>");
+
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCityForSales == "Mumbai" )
+        //     {
+        //         //19.070517	72.877055
+        //         latLng = new google.maps.LatLng(19.070517, 72.877055); 
+                	  
+        //         map.setCenter({lat:19.070517,lng: 72.877055});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+        //             infoWindow.setContent("<div><img src='images/sales-mumbai.png'></div><div style='float:right;'><img src='images/total-sales-mumbai.png'></div>");
+
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCityForSales == "Chennai" )
+        //     {
+        //         //13.066886	80.19252
+        //         latLng = new google.maps.LatLng(13.066886, 80.19252); 
+                	  
+        //         map.setCenter({lat:13.066886,lng: 80.19252});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+                
+        //             infoWindow.setContent("<div><img src='images/sales-chennai.png'></div><div style='float:right;'><img src='images/total-sales-chennai.png'></div>");
+
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCityForSales == "Pune" )
+        //     {
+        //         //18.517116	73.859531
+        //         latLng = new google.maps.LatLng(18.517116, 73.859531); 
+                	  
+        //         map.setCenter({lat:18.517116,lng: 73.859531});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+                
+        //         infoWindow.setContent("<div><img src='images/sales-pune.png'></div><div style='float:right;'><img src='images/total-sales-pune.png'></div>");
+
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCityForSales == "Indore" )
+        //     {
+        //         //	
+        //         latLng = new google.maps.LatLng(22.716753, 75.856801); 
+                	  
+        //         map.setCenter({lat:22.716753,lng: 75.856801});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+                
+        //         infoWindow.setContent("<div><img src='images/sales-indore.png'></div><div style='float:right;'><img src='images/total-sales-indore.png'></div>");
+
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCityForSales == "Ahmedabad" )
+        //     {	
+        //         latLng = new google.maps.LatLng(23.049881, 72.605137); 
+                	  
+        //         map.setCenter({lat:23.049881,lng: 72.605137});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Delhi",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+                    
+        //         infoWindow.setContent("<div><img src='images/sales-ahmedabad.png'></div><div style='float:right;'><img src='images/total-sales-ahmedabad.png'></div>");
+
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+        //     else if( $scope.selectedCityForSales == "Kolkata" )
+        //     {	
+        //         latLng = new google.maps.LatLng(22.657698, 88.348537); 	
+                	  
+        //         map.setCenter({lat:22.657698,lng: 88.348537});
+        //         map.setZoom(11);
+        //         map.setMapTypeId('roadmap');
+        
+        //         // Creating a marker and putting it on the map
+        //         var marker = new google.maps.Marker({
+        //         position: latLng,
+        //         map: map,
+        //         title: "Kolkata",
+        //         icon: 'images/purple.png',
+        //         mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        //         });
+
+        //         infoWindow = new google.maps.InfoWindow();
+        //         (function(marker) {
+        //         // Attaching a click event to the current marker
+        //         google.maps.event.addListener(marker, "click", function(e) {
+                    
+        //         infoWindow.setContent("<div><img src='images/sales-kolkata.png'></div><div style='float:right;'><img src='images/total-sales-kolkata.png'></div>");
+
+        //         infoWindow.open(map, marker);
+                
+        //         });
+        //         cityAndRegionMarkers.push(marker);
+        //         })(marker);
+        //     } 
+            
+        // }
     };
 
     $scope.getMarketingData = function(event,index){
@@ -4207,7 +5035,7 @@ $scope.countryChange = function()
             if($scope.placetypes[i].checked)
             {
                 var typeName = $scope.placetypes[i].name;
-                if( typeName == "Restaurants" )
+                if( typeName == "Google - Restaurants" )
                 {
                     var service = new google.maps.places.PlacesService(map);
                     service.nearbySearch({
@@ -4217,6 +5045,58 @@ $scope.countryChange = function()
                         componentRestrictions: {'country': 'SG'},
                         type : [ 'restaurant']
                     },$scope.restaurantCallback);
+                }
+                if( typeName == "Facebook - Restaurants" )
+                {
+                    $http({ method: 'GET', url: 'https://graph.facebook.com/search?type=place&fields=name,checkins,hours,location,engagement,is_verified,link,overall_star_rating,payment_options,price_range,restaurant_specialties&q=restaurants&center='+ jsonObject.latitude + ',' +jsonObject.longitude +'&distance=2000&access_token=1837470493045321|SdcUiYX-RcYgghJWMtc07ph0O6I' }).
+                    success(function (data, status, headers, config) {
+
+                      console.log("---Facebook Restaurants---:",data);
+                      console.log("---Facebook Restaurants length---:",data.data.length);
+
+                      for (var i = 0; i < data.data.length; i++) 
+                      {
+                        var place = data.data[i];
+                        var object = {
+                                    "Name": place.name,
+                                    "Rating": place.overall_star_rating,
+                                    "Address": place.location.street,
+                                    "Latitude": place.location.latitude,
+                                    "Longitude": place.location.longitude,
+                        };
+                        //restaurants.push(object);
+
+                        $scope.createPlacesMarkerForFacebookRestaurant(place);
+                      }
+                      
+                    }).
+                    error(function (data, status, headers, config) {
+                        console.log("---Error---:",status);
+                });
+                }
+                if( typeName == "Zomato - Restaurants" )
+                {
+                    $http({
+                        method: 'GET',
+                        url: 'https://developers.zomato.com/api/v2.1/geocode?',
+                        headers: {'user-key' : '1b6ddcb47426d068e923e86a6046a39b'},
+                        params: {
+                            lat: jsonObject.latitude, 
+                            lon: jsonObject.longitude
+                        }
+                    }).success(function(data) {
+
+                      //console.log("---success---:",data);
+                      console.log("---data.nearby_restaurants.length---:",data.nearby_restaurants.length);
+                      for (var i = 0; i < data.nearby_restaurants.length; i++) 
+                      {
+                        var place = data.nearby_restaurants[i].restaurant;
+                        $scope.createPlacesMarkerForZomatoRestaurant(place);
+                      }
+                  
+                    }).error(function(error) {
+                      console.log("---error---:",error);
+                    });
                 }
                 else if(typeName == "Airport")
                 {
@@ -4353,9 +5233,17 @@ $scope.countryChange = function()
             else
             {
                 var typeName = $scope.placetypes[i].name;
-                if( typeName == "Restaurants" )
+                if( typeName == "Google - Restaurants" )
                 {
                     $scope.clearRestaurantsMarker();
+                }
+                if( typeName == "Facebook - Restaurants" )
+                {
+                    $scope.clearFacebookRestaurantsMarker();
+                }
+                if( typeName == "Zomato - Restaurants" )
+                {
+                    $scope.clearZomatoRestaurantsMarker();
                 }
                 else if(typeName == "Airport")
                 {
@@ -4412,13 +5300,31 @@ $scope.countryChange = function()
             }
         }
     };
+    
+    $scope.getSouthPointsForSingapore = function()
+    {
+        return [new google.maps.LatLng(1.29408,103.83171), new google.maps.LatLng(1.29260,103.84364), new google.maps.LatLng(1.29145,103.83423), new google.maps.LatLng(1.30443,103.84643), new google.maps.LatLng(1.30338,103.85167), new google.maps.LatLng(1.28981,103.85766), new google.maps.LatLng(1.29071,103.84551), new google.maps.LatLng(1.30178,103.83657), new google.maps.LatLng(1.28829,103.84330), new google.maps.LatLng(1.30557,103.86284), new google.maps.LatLng(1.29961,103.84379), new google.maps.LatLng(1.28480,103.83667), new google.maps.LatLng(1.28570,103.85200), new google.maps.LatLng(1.30402,103.83937), new google.maps.LatLng(1.28790,103.85247), new google.maps.LatLng(1.28759,103.84292), new google.maps.LatLng(1.30253,103.84460), new google.maps.LatLng(1.28617,103.83931), new google.maps.LatLng(1.29366,103.84499), new google.maps.LatLng(1.30060,103.83131), new google.maps.LatLng(1.28244,103.84086), new google.maps.LatLng(1.30223,103.84321), new google.maps.LatLng(1.30774,103.83880), new google.maps.LatLng(1.28658,103.86119), new google.maps.LatLng(1.30542,103.84020), new google.maps.LatLng(1.29194,103.83782), new google.maps.LatLng(1.30810,103.85948), new google.maps.LatLng(1.29059,103.83337), new google.maps.LatLng(1.29893,103.84232), new google.maps.LatLng(1.29235,103.83712), new google.maps.LatLng(1.30614,103.85030), new google.maps.LatLng(1.28294,103.85387), new google.maps.LatLng(1.29635,103.84312), new google.maps.LatLng(1.29167,103.83981), new google.maps.LatLng(1.28447,103.85692), new google.maps.LatLng(1.29001,103.85705), new google.maps.LatLng(1.30560,103.83407), new google.maps.LatLng(1.29716,103.83424), new google.maps.LatLng(1.28627,103.84570), new google.maps.LatLng(1.28996,103.83853), new google.maps.LatLng(1.30491,103.84246), new google.maps.LatLng(1.28145,103.84069), new google.maps.LatLng(1.29430,103.83079), new google.maps.LatLng(1.29628,103.85381), new google.maps.LatLng(1.29096,103.86434), new google.maps.LatLng(1.29408,103.85766), new google.maps.LatLng(1.30365,103.84351), new google.maps.LatLng(1.29674,103.86451), new google.maps.LatLng(1.28446,103.85436), new google.maps.LatLng(1.30460,103.83602), new google.maps.LatLng(1.30377,103.86119), new google.maps.LatLng(1.28564,103.84160), new google.maps.LatLng(1.29563,103.85501), new google.maps.LatLng(1.28012,103.84420), new google.maps.LatLng(1.28933,103.83229), new google.maps.LatLng(1.30075,103.83964), new google.maps.LatLng(1.29660,103.83401), new google.maps.LatLng(1.29946,103.83293), new google.maps.LatLng(1.29239,103.83833), new google.maps.LatLng(1.29673,103.84389), new google.maps.LatLng(1.31311,103.85494), new google.maps.LatLng(1.29463,103.84082), new google.maps.LatLng(1.30100,103.86108), new google.maps.LatLng(1.30199,103.83945), new google.maps.LatLng(1.28991,103.84228), new google.maps.LatLng(1.29243,103.85610), new google.maps.LatLng(1.29281,103.85332), new google.maps.LatLng(1.29280,103.83907), new google.maps.LatLng(1.29755,103.85778), new google.maps.LatLng(1.30501,103.83930), new google.maps.LatLng(1.29831,103.85667), new google.maps.LatLng(1.29607,103.83521), new google.maps.LatLng(1.30286,103.84525), new google.maps.LatLng(1.29047,103.84773), new google.maps.LatLng(1.29784,103.85309), new google.maps.LatLng(1.29840,103.83516), new google.maps.LatLng(1.31200,103.84006), new google.maps.LatLng(1.29383,103.85440), new google.maps.LatLng(1.30207,103.83207), new google.maps.LatLng(1.30004,103.83134), new google.maps.LatLng(1.28514,103.83284), new google.maps.LatLng(1.28030,103.83888), new google.maps.LatLng(1.29020,103.80951), new google.maps.LatLng(1.29254,103.82599), new google.maps.LatLng(1.28244,103.82134), new google.maps.LatLng(1.28826,103.81486), new google.maps.LatLng(1.29035,103.83295), new google.maps.LatLng(1.29564,103.81794), new google.maps.LatLng(1.26906,103.82623), new google.maps.LatLng(1.28932,103.81879), new google.maps.LatLng(1.28494,103.82103), new google.maps.LatLng(1.26823,103.83218), new google.maps.LatLng(1.27806,103.82932), new google.maps.LatLng(1.28367,103.82722), new google.maps.LatLng(1.29201,103.81886), new google.maps.LatLng(1.27960,103.81712), new google.maps.LatLng(1.28840,103.82901), new google.maps.LatLng(1.27406,103.82552), new google.maps.LatLng(1.28906,103.81543), new google.maps.LatLng(1.29573,103.82297), new google.maps.LatLng(1.27540,103.81379), new google.maps.LatLng(1.28313,103.82635), new google.maps.LatLng(1.27472,103.82105), new google.maps.LatLng(1.29311,103.83793), new google.maps.LatLng(1.30047,103.82800), new google.maps.LatLng(1.29410,103.83733), new google.maps.LatLng(1.29295,103.83692), new google.maps.LatLng(1.29237,103.82173), new google.maps.LatLng(1.27206,103.83040), new google.maps.LatLng(1.30080,103.81896), new google.maps.LatLng(1.28842,103.81106), new google.maps.LatLng(1.28120,103.80895), new google.maps.LatLng(1.27380,103.82250), new google.maps.LatLng(1.27511,103.83493), new google.maps.LatLng(1.27818,103.83016), new google.maps.LatLng(1.27168,103.81476), new google.maps.LatLng(1.28482,103.82259), new google.maps.LatLng(1.29237,103.82728), new google.maps.LatLng(1.29513,103.82979), new google.maps.LatLng(1.28852,103.81069), new google.maps.LatLng(1.30108,103.82973), new google.maps.LatLng(1.27189,103.83461), new google.maps.LatLng(1.26815,103.82681), new google.maps.LatLng(1.27150,103.81478), new google.maps.LatLng(1.27791,103.82914), new google.maps.LatLng(1.27717,103.82474), new google.maps.LatLng(1.28902,103.82924), new google.maps.LatLng(1.27179,103.83579), new google.maps.LatLng(1.28092,103.81134), new google.maps.LatLng(1.27866,103.81777), new google.maps.LatLng(1.26845,103.81716), new google.maps.LatLng(1.28404,103.81125), new google.maps.LatLng(1.27913,103.81339), new google.maps.LatLng(1.27030,103.82486), new google.maps.LatLng(1.29284,103.83025), new google.maps.LatLng(1.28370,103.83668), new google.maps.LatLng(1.27508,103.82150), new google.maps.LatLng(1.29598,103.81540), new google.maps.LatLng(1.27498,103.82005), new google.maps.LatLng(1.29255,103.81921), new google.maps.LatLng(1.29391,103.83154), new google.maps.LatLng(1.27256,103.81640), new google.maps.LatLng(1.29154,103.81865), new google.maps.LatLng(1.27405,103.81961), new google.maps.LatLng(1.28016,103.82123), new google.maps.LatLng(1.27033,103.82435), new google.maps.LatLng(1.27615,103.83071), new google.maps.LatLng(1.29794,103.82766), new google.maps.LatLng(1.27773,103.84085), new google.maps.LatLng(1.29274,103.81518), new google.maps.LatLng(1.28688,103.82851), new google.maps.LatLng(1.26759,103.82456), new google.maps.LatLng(1.27164,103.81783), new google.maps.LatLng(1.27469,103.81497), new google.maps.LatLng(1.29093,103.82983), new google.maps.LatLng(1.28880,103.82033), new google.maps.LatLng(1.29199,103.81486), new google.maps.LatLng(1.27179,103.82003), new google.maps.LatLng(1.27793,103.83134), new google.maps.LatLng(1.27046,103.83060), new google.maps.LatLng(1.30625,103.79408), new google.maps.LatLng(1.28693,103.78976), new google.maps.LatLng(1.29909,103.80216), new google.maps.LatLng(1.30835,103.78858), new google.maps.LatLng(1.31250,103.79131), new google.maps.LatLng(1.29345,103.81240), new google.maps.LatLng(1.30173,103.78742), new google.maps.LatLng(1.28058,103.80110), new google.maps.LatLng(1.28620,103.79341), new google.maps.LatLng(1.31090,103.80952), new google.maps.LatLng(1.28668,103.79993), new google.maps.LatLng(1.28873,103.80550), new google.maps.LatLng(1.30087,103.80964), new google.maps.LatLng(1.28909,103.80048), new google.maps.LatLng(1.31012,103.79335), new google.maps.LatLng(1.29948,103.81067), new google.maps.LatLng(1.28909,103.80077), new google.maps.LatLng(1.29513,103.81061), new google.maps.LatLng(1.28093,103.79289), new google.maps.LatLng(1.28740,103.79181), new google.maps.LatLng(1.29893,103.81447), new google.maps.LatLng(1.30230,103.80971), new google.maps.LatLng(1.30595,103.81227), new google.maps.LatLng(1.30435,103.78793), new google.maps.LatLng(1.28325,103.80647), new google.maps.LatLng(1.30779,103.79953), new google.maps.LatLng(1.28728,103.78630), new google.maps.LatLng(1.29720,103.80645), new google.maps.LatLng(1.30109,103.80519), new google.maps.LatLng(1.30739,103.81283), new google.maps.LatLng(1.28664,103.78616), new google.maps.LatLng(1.29293,103.80554), new google.maps.LatLng(1.29250,103.78751), new google.maps.LatLng(1.28373,103.80576), new google.maps.LatLng(1.30430,103.79394), new google.maps.LatLng(1.30909,103.78745), new google.maps.LatLng(1.28947,103.80806), new google.maps.LatLng(1.30622,103.80589), new google.maps.LatLng(1.29000,103.79793), new google.maps.LatLng(1.30595,103.79797), new google.maps.LatLng(1.30084,103.80861), new google.maps.LatLng(1.30508,103.79335), new google.maps.LatLng(1.28731,103.80553), new google.maps.LatLng(1.28970,103.80000), new google.maps.LatLng(1.30687,103.78902), new google.maps.LatLng(1.29005,103.80736), new google.maps.LatLng(1.30507,103.78632), new google.maps.LatLng(1.30629,103.79172), new google.maps.LatLng(1.28886,103.79284), new google.maps.LatLng(1.29518,103.80418), new google.maps.LatLng(1.30913,103.78463), new google.maps.LatLng(1.28678,103.80794), new google.maps.LatLng(1.31411,103.80129), new google.maps.LatLng(1.29630,103.81079), new google.maps.LatLng(1.28546,103.78751), new google.maps.LatLng(1.29613,103.79513), new google.maps.LatLng(1.29897,103.80140), new google.maps.LatLng(1.29544,103.78741), new google.maps.LatLng(1.28690,103.78712), new google.maps.LatLng(1.30956,103.80951), new google.maps.LatLng(1.29091,103.80064), new google.maps.LatLng(1.30693,103.80803), new google.maps.LatLng(1.28285,103.79092), new google.maps.LatLng(1.28293,103.80322), new google.maps.LatLng(1.29181,103.78583), new google.maps.LatLng(1.29664,103.78440), new google.maps.LatLng(1.29730,103.79422), new google.maps.LatLng(1.31239,103.79113), new google.maps.LatLng(1.28349,103.78968), new google.maps.LatLng(1.29934,103.81359), new google.maps.LatLng(1.30863,103.80857), new google.maps.LatLng(1.30680,103.79280), new google.maps.LatLng(1.30174,103.79415), new google.maps.LatLng(1.29720,103.78792), new google.maps.LatLng(1.31431,103.79971), new google.maps.LatLng(1.30317,103.80880), new google.maps.LatLng(1.28607,103.80443), new google.maps.LatLng(1.30635,103.80729), new google.maps.LatLng(1.28968,103.78991), new google.maps.LatLng(1.31467,103.79826), new google.maps.LatLng(1.30060,103.78496), new google.maps.LatLng(1.30817,103.75939), new google.maps.LatLng(1.31166,103.78690), new google.maps.LatLng(1.29324,103.78505), new google.maps.LatLng(1.31883,103.77770), new google.maps.LatLng(1.29498,103.77133), new google.maps.LatLng(1.31289,103.76209), new google.maps.LatLng(1.31761,103.78546), new google.maps.LatLng(1.29696,103.77809), new google.maps.LatLng(1.28902,103.77035), new google.maps.LatLng(1.31405,103.78774), new google.maps.LatLng(1.30575,103.76692), new google.maps.LatLng(1.28919,103.77312), new google.maps.LatLng(1.31557,103.78698), new google.maps.LatLng(1.28883,103.78013), new google.maps.LatLng(1.30480,103.76632), new google.maps.LatLng(1.29378,103.77998), new google.maps.LatLng(1.30525,103.77558), new google.maps.LatLng(1.31372,103.77732), new google.maps.LatLng(1.31276,103.76153), new google.maps.LatLng(1.31505,103.78830), new google.maps.LatLng(1.31750,103.77477), new google.maps.LatLng(1.29582,103.77933), new google.maps.LatLng(1.29983,103.76617), new google.maps.LatLng(1.30119,103.77713), new google.maps.LatLng(1.29581,103.76776), new google.maps.LatLng(1.30379,103.76153), new google.maps.LatLng(1.31197,103.78815), new google.maps.LatLng(1.32152,103.77164), new google.maps.LatLng(1.29575,103.77719), new google.maps.LatLng(1.31745,103.77588), new google.maps.LatLng(1.30839,103.77402), new google.maps.LatLng(1.29054,103.78144), new google.maps.LatLng(1.31876,103.77194), new google.maps.LatLng(1.31489,103.77879), new google.maps.LatLng(1.31337,103.77170), new google.maps.LatLng(1.30979,103.76207), new google.maps.LatLng(1.29465,103.77409), new google.maps.LatLng(1.31621,103.78582), new google.maps.LatLng(1.30585,103.76693), new google.maps.LatLng(1.31181,103.79182), new google.maps.LatLng(1.30954,103.78086), new google.maps.LatLng(1.29529,103.77823), new google.maps.LatLng(1.29937,103.78601), new google.maps.LatLng(1.30499,103.75965), new google.maps.LatLng(1.31301,103.79145), new google.maps.LatLng(1.28990,103.78020), new google.maps.LatLng(1.30552,103.77012), new google.maps.LatLng(1.29316,103.78043), new google.maps.LatLng(1.29590,103.77531), new google.maps.LatLng(1.30875,103.77292), new google.maps.LatLng(1.30387,103.75996), new google.maps.LatLng(1.29224,103.78231), new google.maps.LatLng(1.28834,103.77642), new google.maps.LatLng(1.32183,103.77536), new google.maps.LatLng(1.29975,103.76591), new google.maps.LatLng(1.29307,103.76825), new google.maps.LatLng(1.31582,103.77771), new google.maps.LatLng(1.29343,103.76244), new google.maps.LatLng(1.30970,103.78701), new google.maps.LatLng(1.28912,103.77568), new google.maps.LatLng(1.30349,103.77876), new google.maps.LatLng(1.30274,103.75947), new google.maps.LatLng(1.29155,103.76418), new google.maps.LatLng(1.31220,103.78883), new google.maps.LatLng(1.29407,103.78467), new google.maps.LatLng(1.31412,103.77253), new google.maps.LatLng(1.28982,103.78055), new google.maps.LatLng(1.30246,103.78973), new google.maps.LatLng(1.31543,103.79049), new google.maps.LatLng(1.30319,103.75944), new google.maps.LatLng(1.30128,103.76030), new google.maps.LatLng(1.29045,103.76709), new google.maps.LatLng(1.30855,103.76382), new google.maps.LatLng(1.29897,103.78904), new google.maps.LatLng(1.30975,103.78490), new google.maps.LatLng(1.30467,103.76295), new google.maps.LatLng(1.29164,103.76895), new google.maps.LatLng(1.29195,103.78434), new google.maps.LatLng(1.30291,103.77987)]
+    };
+    
+    $scope.getWestPointsForSingapore = function()
+    {
+        return [new google.maps.LatLng(1.38745,103.68923), new google.maps.LatLng(1.39048,103.70796), new google.maps.LatLng(1.37877,103.68876), new google.maps.LatLng(1.38128,103.69183), new google.maps.LatLng(1.39018,103.71158), new google.maps.LatLng(1.38187,103.68268), new google.maps.LatLng(1.38054,103.70631), new google.maps.LatLng(1.39954,103.69691), new google.maps.LatLng(1.38002,103.71536), new google.maps.LatLng(1.38299,103.69629), new google.maps.LatLng(1.38952,103.69940), new google.maps.LatLng(1.40324,103.69895), new google.maps.LatLng(1.38278,103.69383), new google.maps.LatLng(1.39399,103.70629), new google.maps.LatLng(1.39086,103.70311), new google.maps.LatLng(1.37108,103.69126), new google.maps.LatLng(1.38944,103.69023), new google.maps.LatLng(1.40073,103.69842), new google.maps.LatLng(1.38210,103.68517), new google.maps.LatLng(1.37764,103.70265), new google.maps.LatLng(1.39246,103.69929), new google.maps.LatLng(1.38942,103.70329), new google.maps.LatLng(1.37774,103.69391), new google.maps.LatLng(1.39589,103.69247), new google.maps.LatLng(1.37449,103.68757), new google.maps.LatLng(1.38750,103.69577), new google.maps.LatLng(1.38729,103.70698), new google.maps.LatLng(1.39805,103.70117), new google.maps.LatLng(1.38494,103.70911), new google.maps.LatLng(1.38515,103.68577), new google.maps.LatLng(1.38860,103.70926), new google.maps.LatLng(1.38839,103.70868), new google.maps.LatLng(1.38768,103.68654), new google.maps.LatLng(1.39355,103.69636), new google.maps.LatLng(1.38744,103.70635), new google.maps.LatLng(1.39356,103.68305), new google.maps.LatLng(1.37657,103.68915), new google.maps.LatLng(1.38141,103.69259), new google.maps.LatLng(1.38866,103.68398), new google.maps.LatLng(1.37278,103.69627), new google.maps.LatLng(1.39014,103.70040), new google.maps.LatLng(1.37419,103.68712), new google.maps.LatLng(1.39758,103.68768), new google.maps.LatLng(1.37294,103.70721), new google.maps.LatLng(1.39311,103.69279), new google.maps.LatLng(1.38302,103.69859), new google.maps.LatLng(1.38661,103.70173), new google.maps.LatLng(1.37561,103.68762), new google.maps.LatLng(1.39609,103.70633), new google.maps.LatLng(1.39826,103.69503), new google.maps.LatLng(1.37240,103.69593), new google.maps.LatLng(1.38212,103.70229), new google.maps.LatLng(1.38090,103.68490), new google.maps.LatLng(1.38151,103.69802), new google.maps.LatLng(1.39478,103.69472), new google.maps.LatLng(1.38111,103.70958), new google.maps.LatLng(1.39327,103.71177), new google.maps.LatLng(1.40030,103.69260), new google.maps.LatLng(1.39946,103.68783), new google.maps.LatLng(1.39966,103.71110), new google.maps.LatLng(1.39111,103.70180), new google.maps.LatLng(1.37773,103.69803), new google.maps.LatLng(1.37694,103.71179), new google.maps.LatLng(1.38481,103.70070), new google.maps.LatLng(1.37047,103.69303), new google.maps.LatLng(1.40227,103.70432), new google.maps.LatLng(1.36969,103.69881), new google.maps.LatLng(1.38948,103.68132), new google.maps.LatLng(1.39214,103.70768), new google.maps.LatLng(1.38362,103.69710), new google.maps.LatLng(1.38107,103.71467), new google.maps.LatLng(1.37437,103.70395), new google.maps.LatLng(1.38973,103.68368), new google.maps.LatLng(1.37272,103.69919), new google.maps.LatLng(1.38666,103.70186), new google.maps.LatLng(1.37013,103.70117), new google.maps.LatLng(1.38205,103.69003), new google.maps.LatLng(1.39085,103.70319), new google.maps.LatLng(1.38530,103.71252), new google.maps.LatLng(1.38504,103.69250), new google.maps.LatLng(1.35230,103.71093), new google.maps.LatLng(1.32888,103.70943), new google.maps.LatLng(1.34797,103.71273), new google.maps.LatLng(1.33873,103.69974), new google.maps.LatLng(1.34523,103.72413), new google.maps.LatLng(1.35239,103.71713), new google.maps.LatLng(1.33774,103.71052), new google.maps.LatLng(1.33024,103.71630), new google.maps.LatLng(1.34755,103.70085), new google.maps.LatLng(1.35836,103.71041), new google.maps.LatLng(1.35042,103.70800), new google.maps.LatLng(1.34715,103.72509), new google.maps.LatLng(1.33828,103.71610), new google.maps.LatLng(1.34848,103.72463), new google.maps.LatLng(1.35331,103.70736), new google.maps.LatLng(1.33638,103.70287), new google.maps.LatLng(1.34371,103.71355), new google.maps.LatLng(1.32374,103.71188), new google.maps.LatLng(1.32861,103.71365), new google.maps.LatLng(1.32460,103.70941), new google.maps.LatLng(1.33268,103.71673), new google.maps.LatLng(1.35126,103.69618), new google.maps.LatLng(1.35002,103.71644), new google.maps.LatLng(1.33383,103.71206), new google.maps.LatLng(1.34866,103.72248), new google.maps.LatLng(1.32786,103.69901), new google.maps.LatLng(1.34949,103.72001), new google.maps.LatLng(1.34963,103.71787), new google.maps.LatLng(1.34030,103.69312), new google.maps.LatLng(1.34037,103.72419), new google.maps.LatLng(1.35772,103.70491), new google.maps.LatLng(1.34675,103.69577), new google.maps.LatLng(1.33565,103.70854), new google.maps.LatLng(1.34424,103.69310), new google.maps.LatLng(1.34951,103.71380), new google.maps.LatLng(1.33641,103.70765), new google.maps.LatLng(1.35255,103.70430), new google.maps.LatLng(1.33458,103.69349), new google.maps.LatLng(1.35005,103.70671), new google.maps.LatLng(1.34682,103.69454), new google.maps.LatLng(1.34246,103.70822), new google.maps.LatLng(1.32853,103.71855), new google.maps.LatLng(1.33280,103.71047), new google.maps.LatLng(1.34876,103.69659), new google.maps.LatLng(1.33644,103.70801), new google.maps.LatLng(1.35524,103.71353), new google.maps.LatLng(1.33829,103.70490), new google.maps.LatLng(1.33186,103.71216), new google.maps.LatLng(1.34013,103.72197), new google.maps.LatLng(1.33113,103.69987), new google.maps.LatLng(1.34585,103.72503), new google.maps.LatLng(1.34489,103.70153), new google.maps.LatLng(1.34071,103.72476), new google.maps.LatLng(1.32989,103.71088), new google.maps.LatLng(1.34703,103.71551), new google.maps.LatLng(1.32983,103.70598), new google.maps.LatLng(1.34410,103.71627), new google.maps.LatLng(1.32843,103.70319), new google.maps.LatLng(1.33604,103.70904), new google.maps.LatLng(1.34685,103.72268), new google.maps.LatLng(1.35421,103.70460), new google.maps.LatLng(1.33624,103.71122), new google.maps.LatLng(1.34581,103.69661), new google.maps.LatLng(1.33404,103.71016), new google.maps.LatLng(1.33097,103.71503), new google.maps.LatLng(1.32537,103.71578), new google.maps.LatLng(1.34787,103.69831), new google.maps.LatLng(1.32922,103.71800), new google.maps.LatLng(1.35382,103.70518), new google.maps.LatLng(1.34227,103.72395), new google.maps.LatLng(1.34764,103.69421), new google.maps.LatLng(1.33572,103.71106), new google.maps.LatLng(1.32929,103.70764), new google.maps.LatLng(1.33914,103.69273), new google.maps.LatLng(1.35137,103.69779), new google.maps.LatLng(1.32570,103.71340), new google.maps.LatLng(1.32701,103.71539), new google.maps.LatLng(1.32729,103.70696), new google.maps.LatLng(1.34321,103.71479), new google.maps.LatLng(1.33857,103.70614), new google.maps.LatLng(1.33222,103.77341), new google.maps.LatLng(1.36286,103.76175), new google.maps.LatLng(1.35576,103.76692), new google.maps.LatLng(1.35148,103.77016), new google.maps.LatLng(1.34152,103.75090), new google.maps.LatLng(1.33067,103.76081), new google.maps.LatLng(1.34960,103.76824), new google.maps.LatLng(1.33597,103.77780), new google.maps.LatLng(1.34489,103.75296), new google.maps.LatLng(1.33055,103.77206), new google.maps.LatLng(1.33050,103.76075), new google.maps.LatLng(1.34595,103.75788), new google.maps.LatLng(1.33468,103.75990), new google.maps.LatLng(1.33476,103.76594), new google.maps.LatLng(1.35015,103.74948), new google.maps.LatLng(1.35489,103.76823), new google.maps.LatLng(1.36163,103.76578), new google.maps.LatLng(1.36359,103.76356), new google.maps.LatLng(1.33372,103.76752), new google.maps.LatLng(1.35002,103.75526), new google.maps.LatLng(1.34062,103.75629), new google.maps.LatLng(1.35264,103.77862), new google.maps.LatLng(1.33494,103.77373), new google.maps.LatLng(1.35058,103.76500), new google.maps.LatLng(1.32930,103.76571), new google.maps.LatLng(1.35468,103.77905), new google.maps.LatLng(1.34674,103.77462), new google.maps.LatLng(1.34351,103.76640), new google.maps.LatLng(1.33980,103.75284), new google.maps.LatLng(1.32883,103.76488), new google.maps.LatLng(1.35088,103.74946), new google.maps.LatLng(1.33538,103.76373), new google.maps.LatLng(1.33759,103.76366), new google.maps.LatLng(1.34203,103.76497), new google.maps.LatLng(1.35939,103.75783), new google.maps.LatLng(1.35761,103.76229), new google.maps.LatLng(1.33842,103.75737), new google.maps.LatLng(1.34432,103.77528), new google.maps.LatLng(1.35040,103.75177), new google.maps.LatLng(1.35117,103.77323), new google.maps.LatLng(1.34853,103.75562), new google.maps.LatLng(1.36085,103.77281), new google.maps.LatLng(1.33551,103.75225), new google.maps.LatLng(1.35130,103.76562), new google.maps.LatLng(1.35033,103.75951), new google.maps.LatLng(1.33458,103.76882), new google.maps.LatLng(1.35413,103.75710), new google.maps.LatLng(1.34398,103.77126), new google.maps.LatLng(1.34618,103.77933), new google.maps.LatLng(1.33899,103.76005), new google.maps.LatLng(1.36056,103.76642), new google.maps.LatLng(1.35478,103.75187), new google.maps.LatLng(1.35328,103.77570), new google.maps.LatLng(1.34977,103.76680), new google.maps.LatLng(1.35236,103.76107), new google.maps.LatLng(1.33279,103.76364), new google.maps.LatLng(1.34825,103.78163), new google.maps.LatLng(1.35246,103.77461), new google.maps.LatLng(1.35334,103.74835), new google.maps.LatLng(1.35018,103.76479), new google.maps.LatLng(1.33627,103.77672), new google.maps.LatLng(1.35040,103.77933), new google.maps.LatLng(1.34411,103.77308), new google.maps.LatLng(1.34468,103.77964), new google.maps.LatLng(1.35058,103.74787), new google.maps.LatLng(1.35351,103.75356), new google.maps.LatLng(1.33650,103.77110), new google.maps.LatLng(1.34589,103.76148), new google.maps.LatLng(1.36127,103.75551), new google.maps.LatLng(1.35905,103.75712), new google.maps.LatLng(1.35982,103.76349), new google.maps.LatLng(1.35068,103.76677), new google.maps.LatLng(1.34678,103.74695), new google.maps.LatLng(1.33639,103.75657), new google.maps.LatLng(1.33693,103.75033), new google.maps.LatLng(1.33081,103.77035), new google.maps.LatLng(1.34868,103.76935), new google.maps.LatLng(1.35286,103.76748), new google.maps.LatLng(1.36016,103.76162), new google.maps.LatLng(1.34212,103.77691), new google.maps.LatLng(1.36696,103.70456), new google.maps.LatLng(1.37012,103.70400), new google.maps.LatLng(1.38283,103.69592), new google.maps.LatLng(1.36882,103.69777), new google.maps.LatLng(1.37968,103.69704), new google.maps.LatLng(1.38472,103.71029), new google.maps.LatLng(1.37293,103.71116), new google.maps.LatLng(1.37340,103.68778), new google.maps.LatLng(1.39516,103.69172), new google.maps.LatLng(1.36709,103.69643), new google.maps.LatLng(1.38651,103.70798), new google.maps.LatLng(1.38887,103.71401), new google.maps.LatLng(1.37689,103.68593), new google.maps.LatLng(1.37561,103.69349), new google.maps.LatLng(1.37092,103.71377), new google.maps.LatLng(1.39499,103.69377), new google.maps.LatLng(1.36950,103.68740), new google.maps.LatLng(1.36248,103.69637), new google.maps.LatLng(1.36787,103.70393), new google.maps.LatLng(1.36793,103.70013), new google.maps.LatLng(1.36769,103.69099), new google.maps.LatLng(1.38426,103.69905), new google.maps.LatLng(1.36630,103.70921), new google.maps.LatLng(1.37451,103.68462), new google.maps.LatLng(1.37580,103.70246), new google.maps.LatLng(1.36986,103.71123), new google.maps.LatLng(1.37599,103.69443), new google.maps.LatLng(1.37419,103.71519), new google.maps.LatLng(1.37424,103.69707), new google.maps.LatLng(1.38826,103.68774), new google.maps.LatLng(1.37036,103.69418), new google.maps.LatLng(1.38784,103.68889), new google.maps.LatLng(1.39158,103.69460), new google.maps.LatLng(1.36433,103.69341), new google.maps.LatLng(1.37538,103.69726), new google.maps.LatLng(1.37379,103.70143), new google.maps.LatLng(1.39423,103.70852), new google.maps.LatLng(1.37941,103.71614), new google.maps.LatLng(1.38131,103.71580), new google.maps.LatLng(1.39572,103.69501), new google.maps.LatLng(1.37314,103.69156), new google.maps.LatLng(1.38028,103.71324), new google.maps.LatLng(1.38254,103.71599), new google.maps.LatLng(1.37934,103.68959), new google.maps.LatLng(1.38067,103.69384), new google.maps.LatLng(1.36452,103.69315), new google.maps.LatLng(1.38485,103.70912), new google.maps.LatLng(1.38717,103.71473), new google.maps.LatLng(1.37690,103.68478), new google.maps.LatLng(1.38985,103.70079), new google.maps.LatLng(1.36982,103.69904), new google.maps.LatLng(1.38499,103.71434), new google.maps.LatLng(1.39531,103.70793), new google.maps.LatLng(1.39646,103.69483), new google.maps.LatLng(1.38006,103.70749), new google.maps.LatLng(1.39066,103.69177), new google.maps.LatLng(1.38562,103.71394), new google.maps.LatLng(1.38711,103.71496), new google.maps.LatLng(1.36656,103.70046), new google.maps.LatLng(1.37861,103.69740), new google.maps.LatLng(1.37676,103.69389), new google.maps.LatLng(1.38359,103.69798), new google.maps.LatLng(1.39124,103.69749), new google.maps.LatLng(1.39112,103.71211), new google.maps.LatLng(1.37770,103.68954), new google.maps.LatLng(1.38764,103.70982), new google.maps.LatLng(1.38219,103.68202), new google.maps.LatLng(1.37591,103.70025), new google.maps.LatLng(1.39589,103.69922), new google.maps.LatLng(1.38958,103.70751), new google.maps.LatLng(1.38109,103.68843), new google.maps.LatLng(1.36839,103.69687), new google.maps.LatLng(1.39500,103.70584), new google.maps.LatLng(1.36330,103.70255), new google.maps.LatLng(1.38510,103.68750), new google.maps.LatLng(1.36232,103.70018), new google.maps.LatLng(1.37820,103.68641), new google.maps.LatLng(1.36282,103.69505), new google.maps.LatLng(1.36958,103.69911), new google.maps.LatLng(1.37022,103.69392), new google.maps.LatLng(1.37465,103.68401), new google.maps.LatLng(1.36147,103.67505), new google.maps.LatLng(1.36225,103.68365), new google.maps.LatLng(1.36836,103.67531), new google.maps.LatLng(1.35581,103.66937), new google.maps.LatLng(1.34697,103.66835), new google.maps.LatLng(1.35396,103.69141), new google.maps.LatLng(1.36021,103.67591), new google.maps.LatLng(1.34420,103.68690), new google.maps.LatLng(1.36412,103.69438), new google.maps.LatLng(1.35806,103.67525), new google.maps.LatLng(1.37281,103.67913), new google.maps.LatLng(1.36677,103.66623), new google.maps.LatLng(1.35333,103.68266), new google.maps.LatLng(1.34631,103.67409), new google.maps.LatLng(1.36444,103.67053), new google.maps.LatLng(1.36671,103.66974), new google.maps.LatLng(1.35099,103.68305), new google.maps.LatLng(1.37332,103.67709), new google.maps.LatLng(1.36984,103.67142), new google.maps.LatLng(1.35329,103.66799), new google.maps.LatLng(1.36925,103.66755), new google.maps.LatLng(1.35920,103.69462), new google.maps.LatLng(1.35154,103.67369), new google.maps.LatLng(1.36039,103.67070), new google.maps.LatLng(1.35015,103.69061), new google.maps.LatLng(1.36774,103.68238), new google.maps.LatLng(1.37370,103.68817), new google.maps.LatLng(1.36402,103.68959), new google.maps.LatLng(1.34338,103.68901), new google.maps.LatLng(1.35221,103.66877), new google.maps.LatLng(1.35904,103.69358), new google.maps.LatLng(1.36037,103.68664), new google.maps.LatLng(1.35051,103.67496), new google.maps.LatLng(1.37230,103.68279), new google.maps.LatLng(1.34854,103.67009), new google.maps.LatLng(1.36882,103.67047), new google.maps.LatLng(1.34941,103.67504), new google.maps.LatLng(1.34626,103.68187), new google.maps.LatLng(1.34895,103.68808), new google.maps.LatLng(1.36856,103.67586), new google.maps.LatLng(1.37512,103.67715), new google.maps.LatLng(1.36763,103.68348), new google.maps.LatLng(1.34214,103.67822), new google.maps.LatLng(1.35996,103.68172), new google.maps.LatLng(1.35257,103.69185), new google.maps.LatLng(1.34927,103.67013), new google.maps.LatLng(1.35128,103.67820), new google.maps.LatLng(1.37234,103.69036), new google.maps.LatLng(1.34864,103.66675), new google.maps.LatLng(1.36650,103.69012), new google.maps.LatLng(1.34333,103.68388), new google.maps.LatLng(1.34163,103.67378), new google.maps.LatLng(1.35736,103.68760), new google.maps.LatLng(1.37107,103.69011), new google.maps.LatLng(1.36385,103.68437), new google.maps.LatLng(1.35331,103.68078), new google.maps.LatLng(1.37079,103.67327), new google.maps.LatLng(1.35477,103.68127), new google.maps.LatLng(1.36944,103.69001), new google.maps.LatLng(1.35276,103.69446), new google.maps.LatLng(1.36312,103.68484), new google.maps.LatLng(1.36289,103.69528), new google.maps.LatLng(1.36447,103.66863), new google.maps.LatLng(1.35232,103.67155), new google.maps.LatLng(1.34413,103.68055), new google.maps.LatLng(1.35687,103.69601), new google.maps.LatLng(1.34317,103.67947), new google.maps.LatLng(1.36264,103.67651), new google.maps.LatLng(1.36402,103.66747), new google.maps.LatLng(1.34483,103.67906), new google.maps.LatLng(1.35307,103.67260), new google.maps.LatLng(1.35978,103.67285), new google.maps.LatLng(1.36451,103.69433), new google.maps.LatLng(1.37471,103.68186), new google.maps.LatLng(1.35426,103.67296), new google.maps.LatLng(1.35968,103.68649), new google.maps.LatLng(1.36837,103.67665), new google.maps.LatLng(1.36305,103.67324), new google.maps.LatLng(1.36477,103.66675)]
+    };
+    
+    $scope.getEastPointsForSingapore = function()
+    {
+        return [new google.maps.LatLng(1.31512,103.90543), new google.maps.LatLng(1.32056,103.89270), new google.maps.LatLng(1.32411,103.91013), new google.maps.LatLng(1.32794,103.90001), new google.maps.LatLng(1.31405,103.89824), new google.maps.LatLng(1.31506,103.89354), new google.maps.LatLng(1.31709,103.90240), new google.maps.LatLng(1.31552,103.89031), new google.maps.LatLng(1.31573,103.91700), new google.maps.LatLng(1.33324,103.90777), new google.maps.LatLng(1.33280,103.89445), new google.maps.LatLng(1.32035,103.92010), new google.maps.LatLng(1.30587,103.89350), new google.maps.LatLng(1.31002,103.91404), new google.maps.LatLng(1.32581,103.91570), new google.maps.LatLng(1.31707,103.90821), new google.maps.LatLng(1.31058,103.90874), new google.maps.LatLng(1.32049,103.89752), new google.maps.LatLng(1.33014,103.89470), new google.maps.LatLng(1.31838,103.89359), new google.maps.LatLng(1.33287,103.90804), new google.maps.LatLng(1.32868,103.89805), new google.maps.LatLng(1.30846,103.89324), new google.maps.LatLng(1.33101,103.90871), new google.maps.LatLng(1.33115,103.90029), new google.maps.LatLng(1.32031,103.88910), new google.maps.LatLng(1.30398,103.91155), new google.maps.LatLng(1.31585,103.88897), new google.maps.LatLng(1.31136,103.89158), new google.maps.LatLng(1.31144,103.90527), new google.maps.LatLng(1.33670,103.90555), new google.maps.LatLng(1.33135,103.91064), new google.maps.LatLng(1.31968,103.89249), new google.maps.LatLng(1.32031,103.91679), new google.maps.LatLng(1.31110,103.90995), new google.maps.LatLng(1.31130,103.89454), new google.maps.LatLng(1.30794,103.89098), new google.maps.LatLng(1.33488,103.91330), new google.maps.LatLng(1.30991,103.91615), new google.maps.LatLng(1.31381,103.88778), new google.maps.LatLng(1.33147,103.91434), new google.maps.LatLng(1.32143,103.92084), new google.maps.LatLng(1.32916,103.88902), new google.maps.LatLng(1.30579,103.90987), new google.maps.LatLng(1.30507,103.91000), new google.maps.LatLng(1.30570,103.89979), new google.maps.LatLng(1.33693,103.90610), new google.maps.LatLng(1.32940,103.91328), new google.maps.LatLng(1.31855,103.90927), new google.maps.LatLng(1.33276,103.89984), new google.maps.LatLng(1.32523,103.91165), new google.maps.LatLng(1.31274,103.89569), new google.maps.LatLng(1.31033,103.90551), new google.maps.LatLng(1.31776,103.91877), new google.maps.LatLng(1.32524,103.89103), new google.maps.LatLng(1.31337,103.91170), new google.maps.LatLng(1.32424,103.90634), new google.maps.LatLng(1.32731,103.90251), new google.maps.LatLng(1.32532,103.91758), new google.maps.LatLng(1.31498,103.89252), new google.maps.LatLng(1.32066,103.90327), new google.maps.LatLng(1.30514,103.89630), new google.maps.LatLng(1.32092,103.90410), new google.maps.LatLng(1.32187,103.89959), new google.maps.LatLng(1.31725,103.91182), new google.maps.LatLng(1.32701,103.89820), new google.maps.LatLng(1.30743,103.89283), new google.maps.LatLng(1.30825,103.89620), new google.maps.LatLng(1.31104,103.91800), new google.maps.LatLng(1.32155,103.89155), new google.maps.LatLng(1.32209,103.92115), new google.maps.LatLng(1.31261,103.89750), new google.maps.LatLng(1.32441,103.91438), new google.maps.LatLng(1.32962,103.90747), new google.maps.LatLng(1.30595,103.91431), new google.maps.LatLng(1.31190,103.91537), new google.maps.LatLng(1.31760,103.90046), new google.maps.LatLng(1.31333,103.91136), new google.maps.LatLng(1.33720,103.89952), new google.maps.LatLng(1.32281,103.91982), new google.maps.LatLng(1.31554,103.93684), new google.maps.LatLng(1.31559,103.94263), new google.maps.LatLng(1.32351,103.93845), new google.maps.LatLng(1.33240,103.94110), new google.maps.LatLng(1.34139,103.95115), new google.maps.LatLng(1.32599,103.93641), new google.maps.LatLng(1.32329,103.95419), new google.maps.LatLng(1.32987,103.93572), new google.maps.LatLng(1.33835,103.95202), new google.maps.LatLng(1.32247,103.94162), new google.maps.LatLng(1.31808,103.95261), new google.maps.LatLng(1.31584,103.94407), new google.maps.LatLng(1.33390,103.95385), new google.maps.LatLng(1.31641,103.94167), new google.maps.LatLng(1.32747,103.95225), new google.maps.LatLng(1.32377,103.94330), new google.maps.LatLng(1.34232,103.93829), new google.maps.LatLng(1.31737,103.95332), new google.maps.LatLng(1.32933,103.93038), new google.maps.LatLng(1.32457,103.94770), new google.maps.LatLng(1.31424,103.93634), new google.maps.LatLng(1.32970,103.95865), new google.maps.LatLng(1.34247,103.93226), new google.maps.LatLng(1.32190,103.93400), new google.maps.LatLng(1.33057,103.94840), new google.maps.LatLng(1.33161,103.95581), new google.maps.LatLng(1.32276,103.96107), new google.maps.LatLng(1.32650,103.94294), new google.maps.LatLng(1.31219,103.94255), new google.maps.LatLng(1.32325,103.95527), new google.maps.LatLng(1.32814,103.94477), new google.maps.LatLng(1.34505,103.94502), new google.maps.LatLng(1.34531,103.94624), new google.maps.LatLng(1.33718,103.93039), new google.maps.LatLng(1.32554,103.94333), new google.maps.LatLng(1.33253,103.93867), new google.maps.LatLng(1.33488,103.94368), new google.maps.LatLng(1.32029,103.94140), new google.maps.LatLng(1.31984,103.93490), new google.maps.LatLng(1.32357,103.95753), new google.maps.LatLng(1.34161,103.93934), new google.maps.LatLng(1.33744,103.92985), new google.maps.LatLng(1.33346,103.93060), new google.maps.LatLng(1.32985,103.96114), new google.maps.LatLng(1.31707,103.94724), new google.maps.LatLng(1.31478,103.94220), new google.maps.LatLng(1.33797,103.95202), new google.maps.LatLng(1.32147,103.93302), new google.maps.LatLng(1.33132,103.95302), new google.maps.LatLng(1.33966,103.95145), new google.maps.LatLng(1.33504,103.95997), new google.maps.LatLng(1.32130,103.95993), new google.maps.LatLng(1.33178,103.93171), new google.maps.LatLng(1.33339,103.92946), new google.maps.LatLng(1.32257,103.94726), new google.maps.LatLng(1.34327,103.93991), new google.maps.LatLng(1.31349,103.94551), new google.maps.LatLng(1.33015,103.95213), new google.maps.LatLng(1.32654,103.94291), new google.maps.LatLng(1.33133,103.93638), new google.maps.LatLng(1.33446,103.94909), new google.maps.LatLng(1.31859,103.94397), new google.maps.LatLng(1.34184,103.94442), new google.maps.LatLng(1.32322,103.95371), new google.maps.LatLng(1.34586,103.94249), new google.maps.LatLng(1.32651,103.92790), new google.maps.LatLng(1.34554,103.93692), new google.maps.LatLng(1.32018,103.93719), new google.maps.LatLng(1.34520,103.95151), new google.maps.LatLng(1.32825,103.93655), new google.maps.LatLng(1.33857,103.94665), new google.maps.LatLng(1.32017,103.94436), new google.maps.LatLng(1.33384,103.95808), new google.maps.LatLng(1.33347,103.93923), new google.maps.LatLng(1.33265,103.94984), new google.maps.LatLng(1.34564,103.94848), new google.maps.LatLng(1.33726,103.94805), new google.maps.LatLng(1.34216,103.95484), new google.maps.LatLng(1.31826,103.94322), new google.maps.LatLng(1.33012,103.94049), new google.maps.LatLng(1.35738,103.94131), new google.maps.LatLng(1.35945,103.95111), new google.maps.LatLng(1.35945,103.95858), new google.maps.LatLng(1.36406,103.94442), new google.maps.LatLng(1.36761,103.94316), new google.maps.LatLng(1.35848,103.94697), new google.maps.LatLng(1.35163,103.95615), new google.maps.LatLng(1.34825,103.94879), new google.maps.LatLng(1.34655,103.94939), new google.maps.LatLng(1.36966,103.96121), new google.maps.LatLng(1.35527,103.95911), new google.maps.LatLng(1.36286,103.94378), new google.maps.LatLng(1.36464,103.95100), new google.maps.LatLng(1.35407,103.95882), new google.maps.LatLng(1.37103,103.95019), new google.maps.LatLng(1.35084,103.94220), new google.maps.LatLng(1.36254,103.93791), new google.maps.LatLng(1.36308,103.96434), new google.maps.LatLng(1.34980,103.95853), new google.maps.LatLng(1.36399,103.95130), new google.maps.LatLng(1.36114,103.94417), new google.maps.LatLng(1.34324,103.95858), new google.maps.LatLng(1.35139,103.96452), new google.maps.LatLng(1.35914,103.94101), new google.maps.LatLng(1.37173,103.94788), new google.maps.LatLng(1.36799,103.94550), new google.maps.LatLng(1.34705,103.95823), new google.maps.LatLng(1.36373,103.94775), new google.maps.LatLng(1.36564,103.93857), new google.maps.LatLng(1.36772,103.95242), new google.maps.LatLng(1.36629,103.95276), new google.maps.LatLng(1.36668,103.95822), new google.maps.LatLng(1.36272,103.94287), new google.maps.LatLng(1.35358,103.96712), new google.maps.LatLng(1.35524,103.95307), new google.maps.LatLng(1.34067,103.95011), new google.maps.LatLng(1.35301,103.94706), new google.maps.LatLng(1.34662,103.93912), new google.maps.LatLng(1.36352,103.93660), new google.maps.LatLng(1.34440,103.93853), new google.maps.LatLng(1.35437,103.94328), new google.maps.LatLng(1.36442,103.96227), new google.maps.LatLng(1.36256,103.96495), new google.maps.LatLng(1.34615,103.94544), new google.maps.LatLng(1.34560,103.95740), new google.maps.LatLng(1.36531,103.94239), new google.maps.LatLng(1.34944,103.95807), new google.maps.LatLng(1.35243,103.93687), new google.maps.LatLng(1.37087,103.95688), new google.maps.LatLng(1.35893,103.94764), new google.maps.LatLng(1.35561,103.94525), new google.maps.LatLng(1.35145,103.94603), new google.maps.LatLng(1.36518,103.96051), new google.maps.LatLng(1.34336,103.96044), new google.maps.LatLng(1.35580,103.93824), new google.maps.LatLng(1.35869,103.96400), new google.maps.LatLng(1.36692,103.93846), new google.maps.LatLng(1.36787,103.95807), new google.maps.LatLng(1.34972,103.96110), new google.maps.LatLng(1.35837,103.93667), new google.maps.LatLng(1.36399,103.93450), new google.maps.LatLng(1.36637,103.94115), new google.maps.LatLng(1.36192,103.96281), new google.maps.LatLng(1.35941,103.96056), new google.maps.LatLng(1.35996,103.93326), new google.maps.LatLng(1.34942,103.93723), new google.maps.LatLng(1.35891,103.93879), new google.maps.LatLng(1.35230,103.95472), new google.maps.LatLng(1.36257,103.94440), new google.maps.LatLng(1.35039,103.94206), new google.maps.LatLng(1.35508,103.95368), new google.maps.LatLng(1.35901,103.94185), new google.maps.LatLng(1.35994,103.96429), new google.maps.LatLng(1.34518,103.93994), new google.maps.LatLng(1.36225,103.96121), new google.maps.LatLng(1.36937,103.95849), new google.maps.LatLng(1.35091,103.95417), new google.maps.LatLng(1.37107,103.94136), new google.maps.LatLng(1.35260,103.96598), new google.maps.LatLng(1.36035,103.94227), new google.maps.LatLng(1.38269,103.94120), new google.maps.LatLng(1.37674,103.93139), new google.maps.LatLng(1.38002,103.93239), new google.maps.LatLng(1.37919,103.91851), new google.maps.LatLng(1.38168,103.91220), new google.maps.LatLng(1.37887,103.92649), new google.maps.LatLng(1.38334,103.93623), new google.maps.LatLng(1.36921,103.91499), new google.maps.LatLng(1.37735,103.92285), new google.maps.LatLng(1.36474,103.92836), new google.maps.LatLng(1.38155,103.94616), new google.maps.LatLng(1.38337,103.91814), new google.maps.LatLng(1.36981,103.91545), new google.maps.LatLng(1.37612,103.92749), new google.maps.LatLng(1.37978,103.93914), new google.maps.LatLng(1.36546,103.92955), new google.maps.LatLng(1.36714,103.91774), new google.maps.LatLng(1.38436,103.91984), new google.maps.LatLng(1.37981,103.91335), new google.maps.LatLng(1.37659,103.92588), new google.maps.LatLng(1.36715,103.93700), new google.maps.LatLng(1.39514,103.92335), new google.maps.LatLng(1.38384,103.91574), new google.maps.LatLng(1.38032,103.92759), new google.maps.LatLng(1.37130,103.93608), new google.maps.LatLng(1.36930,103.93858), new google.maps.LatLng(1.39158,103.92346), new google.maps.LatLng(1.37270,103.93439), new google.maps.LatLng(1.37945,103.94135), new google.maps.LatLng(1.38755,103.91559), new google.maps.LatLng(1.37776,103.91160), new google.maps.LatLng(1.39044,103.92105), new google.maps.LatLng(1.37663,103.92789), new google.maps.LatLng(1.39266,103.93458), new google.maps.LatLng(1.36606,103.92654), new google.maps.LatLng(1.37970,103.92592), new google.maps.LatLng(1.38771,103.94167), new google.maps.LatLng(1.38825,103.91873), new google.maps.LatLng(1.37570,103.94265), new google.maps.LatLng(1.38724,103.92269), new google.maps.LatLng(1.39512,103.93245), new google.maps.LatLng(1.37841,103.94472), new google.maps.LatLng(1.37299,103.91602), new google.maps.LatLng(1.38277,103.94320), new google.maps.LatLng(1.37480,103.93293), new google.maps.LatLng(1.37523,103.93571), new google.maps.LatLng(1.38532,103.93722), new google.maps.LatLng(1.38707,103.91745), new google.maps.LatLng(1.38212,103.93154), new google.maps.LatLng(1.38592,103.93835), new google.maps.LatLng(1.38943,103.93075), new google.maps.LatLng(1.37601,103.94425), new google.maps.LatLng(1.36868,103.93307), new google.maps.LatLng(1.38911,103.92751), new google.maps.LatLng(1.37806,103.91345), new google.maps.LatLng(1.38828,103.94317), new google.maps.LatLng(1.39078,103.93987), new google.maps.LatLng(1.37494,103.93526), new google.maps.LatLng(1.36838,103.92919), new google.maps.LatLng(1.36855,103.91900), new google.maps.LatLng(1.36887,103.92358), new google.maps.LatLng(1.37025,103.92613), new google.maps.LatLng(1.36848,103.93026), new google.maps.LatLng(1.39026,103.91596), new google.maps.LatLng(1.38650,103.92749), new google.maps.LatLng(1.39317,103.93162), new google.maps.LatLng(1.37343,103.92221), new google.maps.LatLng(1.38753,103.92357), new google.maps.LatLng(1.39688,103.93069), new google.maps.LatLng(1.39067,103.93774), new google.maps.LatLng(1.39277,103.91802), new google.maps.LatLng(1.39277,103.91715), new google.maps.LatLng(1.37563,103.94176), new google.maps.LatLng(1.37280,103.91541), new google.maps.LatLng(1.38096,103.92701), new google.maps.LatLng(1.38867,103.91778), new google.maps.LatLng(1.39254,103.93994), new google.maps.LatLng(1.38081,103.91278), new google.maps.LatLng(1.39624,103.92696), new google.maps.LatLng(1.36735,103.92947), new google.maps.LatLng(1.36655,103.97411), new google.maps.LatLng(1.36534,103.98146), new google.maps.LatLng(1.35231,103.97687), new google.maps.LatLng(1.36485,103.98254), new google.maps.LatLng(1.36129,103.95878), new google.maps.LatLng(1.36421,103.95590), new google.maps.LatLng(1.35944,103.96212), new google.maps.LatLng(1.36885,103.98033), new google.maps.LatLng(1.34483,103.98156), new google.maps.LatLng(1.34020,103.96762), new google.maps.LatLng(1.37027,103.97151), new google.maps.LatLng(1.35152,103.95539), new google.maps.LatLng(1.36181,103.97596), new google.maps.LatLng(1.34251,103.97743), new google.maps.LatLng(1.35530,103.98593), new google.maps.LatLng(1.35858,103.96733), new google.maps.LatLng(1.34727,103.96168), new google.maps.LatLng(1.34309,103.97624), new google.maps.LatLng(1.36730,103.96960), new google.maps.LatLng(1.34748,103.97879), new google.maps.LatLng(1.35399,103.95896), new google.maps.LatLng(1.34085,103.96761), new google.maps.LatLng(1.34849,103.98545), new google.maps.LatLng(1.35052,103.96726), new google.maps.LatLng(1.36823,103.97030), new google.maps.LatLng(1.34133,103.96795), new google.maps.LatLng(1.37184,103.97523), new google.maps.LatLng(1.36522,103.97549), new google.maps.LatLng(1.35168,103.97189), new google.maps.LatLng(1.37061,103.98142), new google.maps.LatLng(1.36197,103.98024), new google.maps.LatLng(1.35009,103.98334), new google.maps.LatLng(1.36486,103.96153), new google.maps.LatLng(1.36257,103.98446), new google.maps.LatLng(1.35329,103.96568), new google.maps.LatLng(1.34714,103.97340), new google.maps.LatLng(1.34201,103.96898), new google.maps.LatLng(1.35498,103.97905), new google.maps.LatLng(1.36118,103.98656), new google.maps.LatLng(1.35225,103.96942), new google.maps.LatLng(1.37189,103.97567), new google.maps.LatLng(1.34210,103.97233), new google.maps.LatLng(1.34476,103.96999), new google.maps.LatLng(1.35426,103.96068), new google.maps.LatLng(1.36841,103.97020), new google.maps.LatLng(1.34647,103.98229), new google.maps.LatLng(1.35138,103.97003), new google.maps.LatLng(1.35440,103.98659), new google.maps.LatLng(1.35866,103.98531), new google.maps.LatLng(1.36253,103.96229), new google.maps.LatLng(1.36070,103.96136), new google.maps.LatLng(1.36814,103.96286), new google.maps.LatLng(1.34894,103.98241), new google.maps.LatLng(1.35264,103.98334), new google.maps.LatLng(1.35965,103.97769), new google.maps.LatLng(1.34915,103.97806), new google.maps.LatLng(1.34579,103.97296), new google.maps.LatLng(1.35754,103.98785), new google.maps.LatLng(1.35290,103.95958), new google.maps.LatLng(1.34566,103.96878), new google.maps.LatLng(1.35156,103.97306), new google.maps.LatLng(1.35583,103.96807), new google.maps.LatLng(1.34741,103.97757), new google.maps.LatLng(1.36323,103.98523), new google.maps.LatLng(1.36358,103.96041), new google.maps.LatLng(1.34657,103.97073), new google.maps.LatLng(1.36352,103.95468), new google.maps.LatLng(1.34906,103.98055), new google.maps.LatLng(1.35774,103.97900), new google.maps.LatLng(1.36742,103.98547), new google.maps.LatLng(1.36114,103.97450), new google.maps.LatLng(1.35476,103.95872), new google.maps.LatLng(1.37053,103.97027), new google.maps.LatLng(1.34837,103.95744), new google.maps.LatLng(1.36855,103.97479), new google.maps.LatLng(1.35146,103.96749), new google.maps.LatLng(1.35604,103.98184), new google.maps.LatLng(1.36187,103.95904), new google.maps.LatLng(1.35182,103.97856), new google.maps.LatLng(1.37118,103.96963)];
+    };
 
+    $scope.getNorthPointsForSingapore = function()
+    {
+        return [new google.maps.LatLng(1.41296,103.75703), new google.maps.LatLng(1.43111,103.77150), new google.maps.LatLng(1.40716,103.75709), new google.maps.LatLng(1.41119,103.75372), new google.maps.LatLng(1.41746,103.74401), new google.maps.LatLng(1.40479,103.75316), new google.maps.LatLng(1.42103,103.74409), new google.maps.LatLng(1.42472,103.77458), new google.maps.LatLng(1.43267,103.75142), new google.maps.LatLng(1.40803,103.75357), new google.maps.LatLng(1.40765,103.76009), new google.maps.LatLng(1.41942,103.77081), new google.maps.LatLng(1.41903,103.75541), new google.maps.LatLng(1.40131,103.76298), new google.maps.LatLng(1.43238,103.76024), new google.maps.LatLng(1.41666,103.77820), new google.maps.LatLng(1.40722,103.75021), new google.maps.LatLng(1.41971,103.75558), new google.maps.LatLng(1.41207,103.77356), new google.maps.LatLng(1.42716,103.75738), new google.maps.LatLng(1.42218,103.76440), new google.maps.LatLng(1.42431,103.76352), new google.maps.LatLng(1.42760,103.75451), new google.maps.LatLng(1.40250,103.76628), new google.maps.LatLng(1.40696,103.75603), new google.maps.LatLng(1.40766,103.76675), new google.maps.LatLng(1.42153,103.74789), new google.maps.LatLng(1.43355,103.75375), new google.maps.LatLng(1.41522,103.76215), new google.maps.LatLng(1.42551,103.77351), new google.maps.LatLng(1.42785,103.76464), new google.maps.LatLng(1.41583,103.75463), new google.maps.LatLng(1.41361,103.77360), new google.maps.LatLng(1.42235,103.74980), new google.maps.LatLng(1.42256,103.77509), new google.maps.LatLng(1.43602,103.75698), new google.maps.LatLng(1.42282,103.76383), new google.maps.LatLng(1.42602,103.77351), new google.maps.LatLng(1.42593,103.75090), new google.maps.LatLng(1.42268,103.75094), new google.maps.LatLng(1.41711,103.76406), new google.maps.LatLng(1.42677,103.77381), new google.maps.LatLng(1.40349,103.76286), new google.maps.LatLng(1.42341,103.77193), new google.maps.LatLng(1.40598,103.75053), new google.maps.LatLng(1.41581,103.76010), new google.maps.LatLng(1.41804,103.74496), new google.maps.LatLng(1.41832,103.74456), new google.maps.LatLng(1.42587,103.77113), new google.maps.LatLng(1.41430,103.75298), new google.maps.LatLng(1.41557,103.74785), new google.maps.LatLng(1.43315,103.75272), new google.maps.LatLng(1.42983,103.75257), new google.maps.LatLng(1.42130,103.77065), new google.maps.LatLng(1.42683,103.77421), new google.maps.LatLng(1.41886,103.76843), new google.maps.LatLng(1.42270,103.76613), new google.maps.LatLng(1.41201,103.76317), new google.maps.LatLng(1.40693,103.75177), new google.maps.LatLng(1.42749,103.75625), new google.maps.LatLng(1.42920,103.77134), new google.maps.LatLng(1.42117,103.77198), new google.maps.LatLng(1.42659,103.77192), new google.maps.LatLng(1.41060,103.76636), new google.maps.LatLng(1.41954,103.77304), new google.maps.LatLng(1.40521,103.75422), new google.maps.LatLng(1.40548,103.76813), new google.maps.LatLng(1.43322,103.75079), new google.maps.LatLng(1.41695,103.74861), new google.maps.LatLng(1.42972,103.77025), new google.maps.LatLng(1.42725,103.74976), new google.maps.LatLng(1.42300,103.77688), new google.maps.LatLng(1.40883,103.77079), new google.maps.LatLng(1.41216,103.76435), new google.maps.LatLng(1.41646,103.76086), new google.maps.LatLng(1.41971,103.75000), new google.maps.LatLng(1.43022,103.75260), new google.maps.LatLng(1.43480,103.76085), new google.maps.LatLng(1.40940,103.74980), new google.maps.LatLng(1.41922,103.75458), new google.maps.LatLng(1.43643,103.81909), new google.maps.LatLng(1.45038,103.81728), new google.maps.LatLng(1.45567,103.82154), new google.maps.LatLng(1.43095,103.81524), new google.maps.LatLng(1.45327,103.81790), new google.maps.LatLng(1.45126,103.80612), new google.maps.LatLng(1.44237,103.80383), new google.maps.LatLng(1.45184,103.81614), new google.maps.LatLng(1.43326,103.81406), new google.maps.LatLng(1.45613,103.82637), new google.maps.LatLng(1.43800,103.81327), new google.maps.LatLng(1.44096,103.80229), new google.maps.LatLng(1.44170,103.83251), new google.maps.LatLng(1.44164,103.82096), new google.maps.LatLng(1.43042,103.81161), new google.maps.LatLng(1.42834,103.82051), new google.maps.LatLng(1.45369,103.82387), new google.maps.LatLng(1.44501,103.81056), new google.maps.LatLng(1.43828,103.80533), new google.maps.LatLng(1.46120,103.82118), new google.maps.LatLng(1.42981,103.82565), new google.maps.LatLng(1.44516,103.80751), new google.maps.LatLng(1.43793,103.82839), new google.maps.LatLng(1.46043,103.82190), new google.maps.LatLng(1.45829,103.81384), new google.maps.LatLng(1.43299,103.80407), new google.maps.LatLng(1.44206,103.81540), new google.maps.LatLng(1.43945,103.79937), new google.maps.LatLng(1.43074,103.80458), new google.maps.LatLng(1.43877,103.80643), new google.maps.LatLng(1.43592,103.80851), new google.maps.LatLng(1.44014,103.82862), new google.maps.LatLng(1.46161,103.81408), new google.maps.LatLng(1.45173,103.82284), new google.maps.LatLng(1.45000,103.82475), new google.maps.LatLng(1.44912,103.82328), new google.maps.LatLng(1.43632,103.82895), new google.maps.LatLng(1.44607,103.81776), new google.maps.LatLng(1.44222,103.80816), new google.maps.LatLng(1.44953,103.80786), new google.maps.LatLng(1.44671,103.82941), new google.maps.LatLng(1.43572,103.82431), new google.maps.LatLng(1.44456,103.80260), new google.maps.LatLng(1.45493,103.82465), new google.maps.LatLng(1.46062,103.82196), new google.maps.LatLng(1.43444,103.81340), new google.maps.LatLng(1.44766,103.80051), new google.maps.LatLng(1.45532,103.82090), new google.maps.LatLng(1.45745,103.80452), new google.maps.LatLng(1.42681,103.81196), new google.maps.LatLng(1.45058,103.80719), new google.maps.LatLng(1.43887,103.82501), new google.maps.LatLng(1.45041,103.80841), new google.maps.LatLng(1.43602,103.81449), new google.maps.LatLng(1.45220,103.81076), new google.maps.LatLng(1.45755,103.80861), new google.maps.LatLng(1.42789,103.82063), new google.maps.LatLng(1.43586,103.80435), new google.maps.LatLng(1.44165,103.80783), new google.maps.LatLng(1.45176,103.81273), new google.maps.LatLng(1.44698,103.80785), new google.maps.LatLng(1.43135,103.82405), new google.maps.LatLng(1.45652,103.81101), new google.maps.LatLng(1.43240,103.80327), new google.maps.LatLng(1.44588,103.82935), new google.maps.LatLng(1.44488,103.82604), new google.maps.LatLng(1.44065,103.83063), new google.maps.LatLng(1.44235,103.80471), new google.maps.LatLng(1.46026,103.81319), new google.maps.LatLng(1.43624,103.81147), new google.maps.LatLng(1.44225,103.80994), new google.maps.LatLng(1.43652,103.81416), new google.maps.LatLng(1.45197,103.81518), new google.maps.LatLng(1.44894,103.81476), new google.maps.LatLng(1.43547,103.80760), new google.maps.LatLng(1.44080,103.82242), new google.maps.LatLng(1.43496,103.80312), new google.maps.LatLng(1.43653,103.80652), new google.maps.LatLng(1.44318,103.80109), new google.maps.LatLng(1.44272,103.81427), new google.maps.LatLng(1.42448,103.81984), new google.maps.LatLng(1.44122,103.82793), new google.maps.LatLng(1.42422,103.82415), new google.maps.LatLng(1.43857,103.84656), new google.maps.LatLng(1.44175,103.84463), new google.maps.LatLng(1.43026,103.85199), new google.maps.LatLng(1.42013,103.84014), new google.maps.LatLng(1.44217,103.81944), new google.maps.LatLng(1.42283,103.82648), new google.maps.LatLng(1.42746,103.81803), new google.maps.LatLng(1.44286,103.82734), new google.maps.LatLng(1.44071,103.83007), new google.maps.LatLng(1.42549,103.81870), new google.maps.LatLng(1.41502,103.83810), new google.maps.LatLng(1.42576,103.83798), new google.maps.LatLng(1.41826,103.83265), new google.maps.LatLng(1.43322,103.82451), new google.maps.LatLng(1.44765,103.82751), new google.maps.LatLng(1.42492,103.84483), new google.maps.LatLng(1.44284,103.82532), new google.maps.LatLng(1.43561,103.83791), new google.maps.LatLng(1.44657,103.84365), new google.maps.LatLng(1.41788,103.82462), new google.maps.LatLng(1.44117,103.83059), new google.maps.LatLng(1.43082,103.84428), new google.maps.LatLng(1.44574,103.83296), new google.maps.LatLng(1.41677,103.83186), new google.maps.LatLng(1.43356,103.84757), new google.maps.LatLng(1.41956,103.82607), new google.maps.LatLng(1.42038,103.84772), new google.maps.LatLng(1.41848,103.83978), new google.maps.LatLng(1.41958,103.84690), new google.maps.LatLng(1.43836,103.82229), new google.maps.LatLng(1.44049,103.83911), new google.maps.LatLng(1.44241,103.82198), new google.maps.LatLng(1.44742,103.83600), new google.maps.LatLng(1.44407,103.83597), new google.maps.LatLng(1.44276,103.82555), new google.maps.LatLng(1.44802,103.84009), new google.maps.LatLng(1.42496,103.82961), new google.maps.LatLng(1.41985,103.82191), new google.maps.LatLng(1.43731,103.82129), new google.maps.LatLng(1.44405,103.82958), new google.maps.LatLng(1.41849,103.84457), new google.maps.LatLng(1.42494,103.82473), new google.maps.LatLng(1.43965,103.82490), new google.maps.LatLng(1.44078,103.84850), new google.maps.LatLng(1.44281,103.83545), new google.maps.LatLng(1.44517,103.83096), new google.maps.LatLng(1.42228,103.84740), new google.maps.LatLng(1.43394,103.82000), new google.maps.LatLng(1.43021,103.82907), new google.maps.LatLng(1.42842,103.82034), new google.maps.LatLng(1.43991,103.84877), new google.maps.LatLng(1.43064,103.84806), new google.maps.LatLng(1.43687,103.85069), new google.maps.LatLng(1.42522,103.84532), new google.maps.LatLng(1.41846,103.82583), new google.maps.LatLng(1.42541,103.81822), new google.maps.LatLng(1.41698,103.83252), new google.maps.LatLng(1.42787,103.84099), new google.maps.LatLng(1.44068,103.82762), new google.maps.LatLng(1.44777,103.83883), new google.maps.LatLng(1.41866,103.83957), new google.maps.LatLng(1.43095,103.83834), new google.maps.LatLng(1.43201,103.82054), new google.maps.LatLng(1.41741,103.82986), new google.maps.LatLng(1.43460,103.81823), new google.maps.LatLng(1.44633,103.84232), new google.maps.LatLng(1.43828,103.84368), new google.maps.LatLng(1.42439,103.83375), new google.maps.LatLng(1.43719,103.84504), new google.maps.LatLng(1.44375,103.84079), new google.maps.LatLng(1.42439,103.82727), new google.maps.LatLng(1.43597,103.84517), new google.maps.LatLng(1.44012,103.83681), new google.maps.LatLng(1.44036,103.83187), new google.maps.LatLng(1.44736,103.82669), new google.maps.LatLng(1.42367,103.82787), new google.maps.LatLng(1.44154,103.82041), new google.maps.LatLng(1.42902,103.79737), new google.maps.LatLng(1.44645,103.81407), new google.maps.LatLng(1.42818,103.79187), new google.maps.LatLng(1.42839,103.80384), new google.maps.LatLng(1.43832,103.81345), new google.maps.LatLng(1.44521,103.80081), new google.maps.LatLng(1.44374,103.81956), new google.maps.LatLng(1.42764,103.79540), new google.maps.LatLng(1.43797,103.81667), new google.maps.LatLng(1.43091,103.80344), new google.maps.LatLng(1.42233,103.81421), new google.maps.LatLng(1.44006,103.81251), new google.maps.LatLng(1.43913,103.81533), new google.maps.LatLng(1.41843,103.79886), new google.maps.LatLng(1.41878,103.79645), new google.maps.LatLng(1.43743,103.79657), new google.maps.LatLng(1.41903,103.81413), new google.maps.LatLng(1.41928,103.79743), new google.maps.LatLng(1.41982,103.81517), new google.maps.LatLng(1.44626,103.80142), new google.maps.LatLng(1.42991,103.79964), new google.maps.LatLng(1.43490,103.79593), new google.maps.LatLng(1.42419,103.80615), new google.maps.LatLng(1.42593,103.81521), new google.maps.LatLng(1.42333,103.81908), new google.maps.LatLng(1.43583,103.80567), new google.maps.LatLng(1.43524,103.80473), new google.maps.LatLng(1.42656,103.79872), new google.maps.LatLng(1.43410,103.79982), new google.maps.LatLng(1.42197,103.80913), new google.maps.LatLng(1.44326,103.81126), new google.maps.LatLng(1.43322,103.79022), new google.maps.LatLng(1.42852,103.81886), new google.maps.LatLng(1.44091,103.79043), new google.maps.LatLng(1.43859,103.79697), new google.maps.LatLng(1.43264,103.78774), new google.maps.LatLng(1.43159,103.79148), new google.maps.LatLng(1.44197,103.80141), new google.maps.LatLng(1.43412,103.78809), new google.maps.LatLng(1.43415,103.81480), new google.maps.LatLng(1.43833,103.79835), new google.maps.LatLng(1.44159,103.79769), new google.maps.LatLng(1.43819,103.80004), new google.maps.LatLng(1.44266,103.80675), new google.maps.LatLng(1.44997,103.79964), new google.maps.LatLng(1.43982,103.79368), new google.maps.LatLng(1.43795,103.81780), new google.maps.LatLng(1.42655,103.81261), new google.maps.LatLng(1.43907,103.79890), new google.maps.LatLng(1.42940,103.81903), new google.maps.LatLng(1.44119,103.79778), new google.maps.LatLng(1.42513,103.79207), new google.maps.LatLng(1.41662,103.80351), new google.maps.LatLng(1.43797,103.80488), new google.maps.LatLng(1.42187,103.79651), new google.maps.LatLng(1.44863,103.80255), new google.maps.LatLng(1.45067,103.80462), new google.maps.LatLng(1.42440,103.79570), new google.maps.LatLng(1.42702,103.79317), new google.maps.LatLng(1.45068,103.80588), new google.maps.LatLng(1.44660,103.81084), new google.maps.LatLng(1.44658,103.81274), new google.maps.LatLng(1.42637,103.78867), new google.maps.LatLng(1.42595,103.79979), new google.maps.LatLng(1.41952,103.81278), new google.maps.LatLng(1.44290,103.81352), new google.maps.LatLng(1.42279,103.81751), new google.maps.LatLng(1.44333,103.81937), new google.maps.LatLng(1.43005,103.79349), new google.maps.LatLng(1.43299,103.78899), new google.maps.LatLng(1.43524,103.80625), new google.maps.LatLng(1.42795,103.81153), new google.maps.LatLng(1.43992,103.80219), new google.maps.LatLng(1.43492,103.79452), new google.maps.LatLng(1.43651,103.81365), new google.maps.LatLng(1.43549,103.78780), new google.maps.LatLng(1.44554,103.81683), new google.maps.LatLng(1.43748,103.78800), new google.maps.LatLng(1.44605,103.81568), new google.maps.LatLng(1.43984,103.79140)]
+    };
 
     // Heatmap data: 500 Points
     $scope.getSouthPoints = function() 
     {
         return [
-            new google.maps.LatLng(13.100841,77.594573),
 new google.maps.LatLng(13.100841,77.594573),
 new google.maps.LatLng(13.100841,77.594573),
 new google.maps.LatLng(13.100841,77.594573),
@@ -4863,7 +5769,7 @@ new google.maps.LatLng(13.100841,77.594573),
 new google.maps.LatLng(13.100841,77.594573),
 new google.maps.LatLng(13.100841,77.594573)
 ];
-}
+    };
 
           // Heatmap data: 500 Points
       $scope.getWestPoints = function() {

@@ -118,7 +118,7 @@
                                     <option value="" selected></option>
                                     <option ng-repeat="country in countries" value="{{country.name}}" >{{ country.name }} </option>
                             </select>
-                            </br>Select Category
+                            <br/>Select Category
                             <div ng-repeat="opt in categories">
                                 <label class="container">
                                   <input type="checkbox" ng-click="showCatergorisedLocations($event, $index);" ng-model="opt.checked">
@@ -168,7 +168,7 @@
                     </div>
                     <div id="collapse4" class="panel-collapse collapse">
                         <div class="panel-body">
-                                Select City : 
+                                Select Area : 
                                 <select ng-model="selectedCityForSales" ng-change = "cityChange(1);" >
                                         <option ng-repeat="city in cities" value="{{city.name}}" >{{ city.name }}</option>
                                 </select>
@@ -215,7 +215,7 @@
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse">
                         <div class="panel-body">
-                            Select City : 
+                            Select Area : 
                             <select ng-model="selectedCity" ng-change = "cityChange(0);" >
                                     <option ng-repeat="city in cities" value="{{city.name}}" >{{ city.name }}</option>
                             </select>

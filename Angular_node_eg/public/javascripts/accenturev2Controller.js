@@ -5026,7 +5026,7 @@ $scope.countryChange = function()
                                         //+ "<br>" + "Phone Number: " + place.formatted_phone_number);
         infowindowplacesmarker.open(map, this);
         infowindowsCollection.push(infowindowplacesmarker);
-        //showDirectionsForLocations(dirLatLng,placeLoc);
+        showDirectionsForLocations(dirLatLng,placeLoc);
         });
         stationMarkers.push(stationsMarker); 
     };
