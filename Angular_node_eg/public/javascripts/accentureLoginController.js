@@ -1,5 +1,7 @@
 
-var app = angular.module('angularjs_with_Nodejs').controller('accentureLoginController', function ($rootScope,$scope, $timeout, $filter, $http) {
+var angularjs_with_Nodejs = angular.module('angularjs_with_Nodejs');
+
+angularjs_with_Nodejs.controller('accentureLoginController', function ($rootScope,$scope, $timeout, $filter, $http) {
 
 
     $scope.SwitchtoDemoPage = function()
@@ -9,7 +11,7 @@ var app = angular.module('angularjs_with_Nodejs').controller('accentureLoginCont
         
         if( username == "alessandro.puccio@accenture.com" && password == "demo@123" )
         {
-            localStorage.setItem("token",'lzbPt76HhtGKhHRj');
+            sessionStorage.setItem("token",'lzbPt76HhtGKhHRj');
             window.location.href = '/AccentureBIPlatform';
         }
         else

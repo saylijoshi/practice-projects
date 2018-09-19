@@ -1,5 +1,5 @@
 
-angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', function ($rootScope,$scope, $timeout, $filter, $http) {
+angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', function ($templateCache,$window,$route,$rootScope,$scope, $timeout, $filter, $http) {
 
     var map,geocoder,radius_circle,places;;
     var infoWindow;
@@ -75,8 +75,23 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     $scope.showMarketing = false;
     $scope.showTrafficButton = true;
     $scope.loading = false;
+    //$scope.resetMap = true;
     var locationMarker;
     var restaurants = [];
+    $scope.poisFromMarkerSelection = false;
+
+    var slide1 = 0;
+    var slide2 = 0;
+
+    $scope.slider = {
+        minValue: 0,
+        maxValue: 5,
+        options: {
+            floor: 0,
+            ceil: 100,
+            step: 1
+        }
+    };
    
 
     $scope.countries =
@@ -283,16 +298,15 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
 
     setTimeout(function ()
     {
-      if( localStorage.getItem("token") == 'lzbPt76HhtGKhHRj' )
+      if( sessionStorage.getItem("token") == 'lzbPt76HhtGKhHRj' )
       {
         $scope.initMap();
-        localStorage.setItem("token",'');
+        //sessionStorage.setItem("token",'');
       }
       else
       {
         window.location.href = '/accenturedemo';
       }
-
       //$scope.initMap();
       
     }, 50);
@@ -312,7 +326,33 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
         $scope.showStores(); 
     }
 
-    
+
+    function getVals(){
+        // Get slider values
+        var parent = this.parentNode;
+        var slides = parent.getElementsByTagName("input");
+        slide1 = parseFloat( slides[0].value );
+        slide2 = parseFloat( slides[1].value );
+         console.log("---999slide1------:",slide1);
+         console.log("---999slide2------:",slide2);
+        // Neither slider will clip the other, so make sure we determine which is larger
+        if( slide1 > slide2 ){ var tmp = slide2; slide2 = slide1; slide1 = tmp; }
+        
+        var displayElement = parent.getElementsByClassName("rangeValues")[0];
+            displayElement.innerHTML = slide1 +" - " + slide2 ;
+
+        //  console.log("---$scope.selectedStor---: ",$scope.selectedStore);
+        //  //console.log("---$scope.selectedStor.hasOwnProperty---: ",!$scope.selectedStore["$$hashKey"] == 004);
+        // // console.log("---$scope.selectedStor.hasOwnProperty---: ",$scope.selectedStore.hasOwnProperty('$$hashKey'));
+        //  console.log("---$scope.selectedStor.hasOwnProperty---: ",!$scope.selectedStore.hasOwnProperty('$$hashKey'));
+
+        //empty array returns hashKey key , we checked it for the same.
+        if(!( $scope.selectedStore.hasOwnProperty('$$hashKey') ) )
+        {
+            $scope.getData(null,-1,0);
+        }
+      }
+      
 $scope.initialiseData = function()
 {
     var standardHierarchyNames = [];
@@ -324,12 +364,12 @@ $scope.initialiseData = function()
     trafficLayer = new google.maps.TrafficLayer();
 
     heatmap = new google.maps.visualization.HeatmapLayer({
-      data: $scope.getPoints(),
-      map: map
+    data: $scope.getPoints(),
+    map: map
     });
     heatmap.setMap(null);
 
-
+    
     for (var i = 0, length = newStores.length; i < length; i++) 
     {
         var storeData = newStores[i];
@@ -352,7 +392,36 @@ $scope.initialiseData = function()
     return false;
     });
 
-    $scope.$apply();
+    //Store Classification Alphabetic Order
+    $scope.standardHierarchy = $filter('orderBy')($scope.standardHierarchy, 'name');
+    //console.log("---$scope.standardHierarchy---: ",  $scope.standardHierarchy);
+    //POI's Alphabetic Order
+    $scope.placetypes = $filter('orderBy')($scope.placetypes, 'name');
+
+
+
+    window.onload = function()
+    {
+    // Initialize Sliders
+    var sliderSections = document.getElementsByClassName("range-slider");
+    
+        for( var x = 0; x < sliderSections.length; x++ ){
+            var sliders = sliderSections[x].getElementsByTagName("input");
+            
+            for( var y = 0; y < sliders.length; y++ ){
+            if( sliders[y].type ==="range" ){
+                sliders[y].oninput = getVals;
+                // Manually trigger event first time to display values
+                sliders[y].oninput();
+            }
+            }
+        }
+    }
+
+    //setTimeout(function(){ $scope.$apply(); },100);
+    if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+        $scope.$apply();
+    }
 };
 
 // $scope.CountryChanged = function (name)
@@ -427,6 +496,11 @@ $scope.showStores = function()
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
                 
+                    $scope.selectedStore = storeData;
+
+                    console.log("---storeData111---:",storeData);
+                   
+                    //console.log("---selectedStore---:",$scope.selectedStore);
                 //infoWindow.setContent('<h3>' + storeData.name + '</h3>'+ "<br/>" + storeData.address + "<br/>" + storeData.contact);
                 
                 infoWindow.setContent('<h3>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h3>'
@@ -438,8 +512,10 @@ $scope.showStores = function()
                 + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                 + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                 + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                + '<button onclick="getPOIs(\'' + storeData + '\');">POIs</button>');
 
+                //'<div>' + $scope.locations[i].Name + '<button class="btn btn-success" ng-click="addLoc(\'' + $scope.locations[i].Name + '\');">Add</button>' + '</div>'
                 infoWindow.open(map, marker);
                 //clearDirection();
                 //dirLatLng = { lat : storeData.latitude , lng : storeData.longitude};
@@ -455,12 +531,28 @@ $scope.showStores = function()
             AddressJSON.push(storeData.ADDRESS);
         }
     }
+
+    //$scope.storeNames = $filter('orderBy')($scope.storeNames, 'OUTLET_CODE');
+
   
     //console.log("---AddressJSON---:",AddressJSON.length);
     //$scope.theNext();
     
-    $scope.$apply();
+    //$scope.$apply();
+    setTimeout(function(){ $scope.$apply(); },100);
 };
+
+window.getPOIs = function(store)
+{
+    //var object = JSON.parse(angular.toJson(store));
+    //var object = JSON.stringify(store); 
+    //console.log("---in readmore store---:",object);
+    //$scope.selectedStore = store;
+    $scope.poisFromMarkerSelection = true;
+    $scope.getData(null,-1,0);       
+}
+
+
 
 $scope.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2,place1,place2) {
   var R = 6371; // Radius of the earth in km
@@ -632,7 +724,7 @@ $scope.filterRatings = function (name,event)
               });
         }
     }
-    $scope.getData(null,-1);
+    $scope.getData(null,-1,0);
 };
 
 $scope.toggleTrafficLayer = function () 
@@ -646,6 +738,41 @@ $scope.toggleTrafficLayer = function ()
         //traffic layer is enabled.. disable it
         trafficLayer.setMap(null);             
     }
+};
+
+$scope.resetMap = function()
+{
+    
+    var currentPageTemplate = $route.current.templateUrl;
+    $templateCache.remove(currentPageTemplate);
+    $window.location.reload();
+    // $scope.resetMap = false;
+    // $scope.clearAllPlacesMarkers();
+    // $scope.clearAllCategoryMarkers();
+    // $scope.clearMalaysiaMarkers();
+    // $scope.clearActiveMarker();
+    // $scope.clearInactiveMarker();
+    // //heatmap.setMap(null);
+    // //heatmap.getData().$scope.heatmapArray = [];
+    // $scope.storeNames = [];
+    // $scope.storeNames.length = 0; 
+    // $scope.showStorePlaceTypes = false;
+    // for (var i = 0, length = $scope.standardHierarchy.length; i < length; i++) 
+    // {
+    //     $scope.standardHierarchy[i].checked = false;
+    // }
+
+    // for (var i = 0, length = $scope.storeTypes.length; i < length; i++) 
+    // {
+    //     $scope.storeTypes[i].checked = false;
+    // }
+
+    // for (var i = 0, length = $scope.ratings.length; i < length; i++) 
+    // {
+    //     $scope.ratings[i].checked = false;
+    // }
+
+    // $scope.initMap();
 };
 
 
@@ -1931,15 +2058,6 @@ function geocodeLatLng(geocoder, map, infowindow) {
     });
 }
 
-$scope.initHeatMap = function()
-{
-    heatmap = new google.maps.visualization.HeatmapLayer({
-        data: $scope.getPoints(),
-        map: map
-        });
-        //<span ng-if="showStorePlaceTypes">
-}
-
 $scope.storeIPAddress = function()
 {
     $.getJSON('https://ipapi.co/json/', function(data) {
@@ -3048,41 +3166,48 @@ $scope.countryChange = function()
         });
     };
 
-    $scope.showHeatMap = function()
+    $scope.getData = function(event, index,fromDropDownSelection) 
     {
-        var latlng = new google.maps.LatLng(1.322532, 103.808953);
-        map = new google.maps.Map(document.getElementById('mymap'), {
-        center: latlng,
-        zoom: 11,
-        //mapTypeId: 'satellite'
-        });
+        //console.log("---getData index---:",index);
+        console.log("---getData $scope.selectedStore---:",$scope.selectedStore);
+        console.log("---$scope.poisFromMarkerSelection---:",$scope.poisFromMarkerSelection);
 
-        heatmap = new google.maps.visualization.HeatmapLayer({
-        data: $scope.getPoints(),
-        map: map
-        });
-    }
-
-
-    $scope.getData = function(event, index) 
-    {
-        var jsonObject = JSON.parse($scope.selectedStore);
-
-        $scope.clearAllPlacesMarkers();
-        $scope.clearAllCategoryMarkers();
-        $scope.clearMalaysiaMarkers();
-        if( markers != null )
+        if(fromDropDownSelection)
         {
-          for (var key in markers) 
-          {
-            //markers[key].setMap(null);
-            markers = [];
-          };
+            $scope.poisFromMarkerSelection = false;
+        }
+
+        if($scope.poisFromMarkerSelection)
+        {
+            var jsonObject = $scope.selectedStore;
+            //$scope.poisFromMarkerSelection = false;
+        }
+        else
+        {
+            var jsonObject = JSON.parse($scope.selectedStore);
+
+            $scope.clearAllPlacesMarkers();
+            $scope.clearAllCategoryMarkers();
+            $scope.clearMalaysiaMarkers();
+            if( markers != null )
+            {
+                for (var key in markers) 
+                {
+                    //markers[key].setMap(null);
+                    markers = [];
+                };
+            }
+            
+            //$scope.clearAllHeatMaps();
+            $scope.clearFusionLayer();
+            $scope.clearCityAndRegionMarker();
         }
         
-        //$scope.clearAllHeatMaps();
-        $scope.clearFusionLayer();
-        $scope.clearCityAndRegionMarker();
+        //var jsonObject = JSON.parse(angular.toJson($scope.selectedStore));
+        //var jsonObject = JSON.parse($scope.selectedStore);
+        //var jsonObject = $scope.selectedStore;
+       
+        
         
         if (jsonObject.CHANNEL_HIERARCHY == "Chinese Medical Hall - Small" ||
             jsonObject.CHANNEL_HIERARCHY == "Petrol Mart Station" ||
@@ -3159,7 +3284,8 @@ $scope.countryChange = function()
               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+              + '<button onclick="readmore()">POIs</button>');
 
             infoWindow.open(map, marker);
 
@@ -3168,9 +3294,12 @@ $scope.countryChange = function()
             cityAndRegionMarkers.push(marker);
 
             })(marker, jsonObject);
+            setTimeout(function(){ $scope.$apply(); },100);
         }
         
 
+        console.log("---jsonObject.latitude---:",jsonObject.latitude);
+        console.log("---jsonObject.longitude---:",jsonObject.longitude);
         var storeLatLng = { lat : jsonObject.latitude , lng : jsonObject.longitude};
 
         //checking and assiging values got from callback( index nad event )
@@ -3188,7 +3317,7 @@ $scope.countryChange = function()
                     service.nearbySearch({
                         location : storeLatLng,
                         radius : 2000,
-                        //componentRestrictions: {'country': 'SG'},
+                        componentRestrictions: {'country': 'MY'},
                         type : [ 'restaurant']
                     },$scope.restaurantCallback);
 
@@ -3208,28 +3337,35 @@ $scope.countryChange = function()
                       for (var i = 0; i < data.nearby_restaurants.length; i++) 
                       {
                         var place = data.nearby_restaurants[i].restaurant;
-                        if( selectedRatingFilterArray.length == 0 || selectedRatingFilterArray.length == 2 )
+                        if( slide1 != null && slide2 != null )
                         {
-                            $scope.createPlacesMarkerForZomatoRestaurant(place);
-                        }
-                        else if(selectedRatingFilterArray.length == 1 )
-                        {
-                            if( selectedRatingFilterArray[0] == 3 )
-                            {
-                                if( typeof place.user_rating.aggregate_rating == "undefined" || place.user_rating.aggregate_rating < 3 )
-                                {
-                                    $scope.createPlacesMarkerForZomatoRestaurant(place);
-                                }
-                            }
-                            else if( place.user_rating.aggregate_rating > 3 && selectedRatingFilterArray[0] == 5 )
+                            if( place.user_rating.aggregate_rating > slide1 && place.user_rating.aggregate_rating < slide2 )
                             {
                                 $scope.createPlacesMarkerForZomatoRestaurant(place);
                             }
                         }
+                        // if( selectedRatingFilterArray.length == 0 || selectedRatingFilterArray.length == 2 )
+                        // {
+                        //     $scope.createPlacesMarkerForZomatoRestaurant(place);
+                        // }
+                        // else if(selectedRatingFilterArray.length == 1 )
+                        // {
+                        //     if( selectedRatingFilterArray[0] == 3 )
+                        //     {
+                        //         if( typeof place.user_rating.aggregate_rating == "undefined" || place.user_rating.aggregate_rating < 3 )
+                        //         {
+                        //             $scope.createPlacesMarkerForZomatoRestaurant(place);
+                        //         }
+                        //     }
+                        //     else if( place.user_rating.aggregate_rating > 3 && selectedRatingFilterArray[0] == 5 )
+                        //     {
+                        //         $scope.createPlacesMarkerForZomatoRestaurant(place);
+                        //     }
+                        // }
                       }
                   
                     }).error(function(error) {
-                      console.log("---error---:",error);
+                      console.log("---Zomato error---:",error);
                     });
 
                     //&q=cafe
@@ -3251,58 +3387,68 @@ $scope.countryChange = function()
                           };
                           restaurants.push(object);
 
-                          if( selectedRatingFilterArray.length == 0 || selectedRatingFilterArray.length == 2 )
+                          if( slide1 != null && slide2 != null )
                           {
-                              $scope.createPlacesMarkerForFacebookRestaurant(place);
-                          }
-                          else if(selectedRatingFilterArray.length == 1 )
-                          {
-                              if( selectedRatingFilterArray[0] == 3 )
-                              {
-                                  if( typeof place.overall_star_rating == "undefined" || place.overall_star_rating < 3 )
-                                  {
-                                      $scope.createPlacesMarkerForFacebookRestaurant(place);
-                                  }
-                              }
-                              else if( place.overall_star_rating > 3 && selectedRatingFilterArray[0] == 5 )
+                              if( place.overall_star_rating > slide1 && place.overall_star_rating < slide2 )
                               {
                                   $scope.createPlacesMarkerForFacebookRestaurant(place);
                               }
                           }
+
+                        //   if( selectedRatingFilterArray.length == 0 || selectedRatingFilterArray.length == 2 )
+                        //   {
+                        //       $scope.createPlacesMarkerForFacebookRestaurant(place);
+                        //   }
+                        //   else if(selectedRatingFilterArray.length == 1 )
+                        //   {
+                        //       if( selectedRatingFilterArray[0] == 3 )
+                        //       {
+                        //           if( typeof place.overall_star_rating == "undefined" || place.overall_star_rating < 3 )
+                        //           {
+                        //               $scope.createPlacesMarkerForFacebookRestaurant(place);
+                        //           }
+                        //       }
+                        //       else if( place.overall_star_rating > 3 && selectedRatingFilterArray[0] == 5 )
+                        //       {
+                        //           $scope.createPlacesMarkerForFacebookRestaurant(place);
+                        //       }
+                        //   }
                         }
+
+
                         //console.log("---restaurantsFb---",restaurants);
 
-                        // Array to keep track of duplicates
-                        var duplicates = [];
-                        $scope.AllInOneRestaurants = restaurants.filter(function(element) {
-                        // If it is not a duplicate, return true
-                        if (duplicates.indexOf(element.Name) == -1) 
-                        {
-                          duplicates.push(element.Name);
-                            return true;
-                        }
-                        return false;
-                        });
+                        // // Array to keep track of duplicates
+                        // var duplicates = [];
+                        // $scope.AllInOneRestaurants = restaurants.filter(function(element) {
+                        // // If it is not a duplicate, return true
+                        // if (duplicates.indexOf(element.Name) == -1) 
+                        // {
+                        //   duplicates.push(element.Name);
+                        //     return true;
+                        // }
+                        // return false;
+                        // });
 
-                        console.log("---$scope.AllInOneRestaurants---",$scope.AllInOneRestaurants);
+                        // console.log("---$scope.AllInOneRestaurants---",$scope.AllInOneRestaurants);
 
 
-                        for (var i = 0; i < restaurants.length; i++) 
-                        {
-                            var latitude1 = restaurants[i].Latitude;
-                            var longitude1 = restaurants[i].Longitude;
-                            for(var j = 0; j < restaurants.length; j++)
-                            {
-                              var latitude2 = restaurants[j].Latitude;
-                              var longitude2 = restaurants[j].Longitude;
-                              $scope.getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2,restaurants[i],restaurants[j]);
+                        // for (var i = 0; i < restaurants.length; i++) 
+                        // {
+                        //     var latitude1 = restaurants[i].Latitude;
+                        //     var longitude1 = restaurants[i].Longitude;
+                        //     for(var j = 0; j < restaurants.length; j++)
+                        //     {
+                        //       var latitude2 = restaurants[j].Latitude;
+                        //       var longitude2 = restaurants[j].Longitude;
+                        //       $scope.getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2,restaurants[i],restaurants[j]);
                               
-                            }
-                        }
+                        //     }
+                        // }
                         
                       }).
                       error(function (data, status, headers, config) {
-                          console.log("---Error---:",status);
+                          console.log("---Facebook Error---:",status);
                   });
 
                   
@@ -3314,7 +3460,7 @@ $scope.countryChange = function()
                     service1.nearbySearch({
                         location : storeLatLng,
                         radius : 2000,
-                        //componentRestrictions: {'country': 'SG'},
+                        componentRestrictions: {'country': 'MY'},
                         type : [ 'train_station']
                     }, $scope.stationsCallback);   
                 }
@@ -3324,7 +3470,7 @@ $scope.countryChange = function()
                     service1.nearbySearch({
                         location : storeLatLng,
                         radius : 2000,
-                        //componentRestrictions: {'country': 'SG'},
+                        componentRestrictions: {'country': 'MY'},
                         type : [ 'airport']
                     }, $scope.airportCallback);   
                 }
@@ -3334,7 +3480,7 @@ $scope.countryChange = function()
                             service2.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'bar']
                             }, $scope.barCallback);   
                 }
@@ -3344,7 +3490,7 @@ $scope.countryChange = function()
                             service3.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'bus_station']
                             }, $scope.busStationCallback);
                 }
@@ -3354,7 +3500,7 @@ $scope.countryChange = function()
                             service4.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'cafe']
                             }, $scope.cafeCallback);
                 }
@@ -3364,7 +3510,7 @@ $scope.countryChange = function()
                             service5.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'casino']
                             }, $scope.casinoCallback);
                 }
@@ -3374,7 +3520,7 @@ $scope.countryChange = function()
                             service6.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'liquor_store']
                             }, $scope.liquorStoreCallback);
                 }
@@ -3384,7 +3530,7 @@ $scope.countryChange = function()
                             service9.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'night_club']
                             }, $scope.nightClubCallback);
                 }
@@ -3394,7 +3540,7 @@ $scope.countryChange = function()
                             service10.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'park']
                             }, $scope.parkCallback);
                 }
@@ -3404,7 +3550,7 @@ $scope.countryChange = function()
                             service11.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'supermarket']
                             }, $scope.supermarketCallback);
                 }
@@ -3414,7 +3560,7 @@ $scope.countryChange = function()
                             service12.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'subway_station']
                             }, $scope.subwayCallback);
                 }
@@ -3424,7 +3570,7 @@ $scope.countryChange = function()
                             service13.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'shopping_mall']
                             }, $scope.shoppingmallCallback);
                 }
@@ -3434,7 +3580,7 @@ $scope.countryChange = function()
                             service13.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'meal_takeway']
                             }, $scope.mealTakeawayCallback);
                 }
@@ -3444,7 +3590,7 @@ $scope.countryChange = function()
                             service13.nearbySearch({
                                 location : storeLatLng,
                                 radius : 2000,
-                                //componentRestrictions: {'country': 'SG'},
+                                componentRestrictions: {'country': 'MY'},
                                 type : [ 'movie_theater']
                             }, $scope.movieTheaterCallback);
                 }
@@ -3516,6 +3662,7 @@ $scope.countryChange = function()
                 }
             }
         }
+         
     };
 
     $scope.clearFusionLayer = function()
@@ -4142,6 +4289,8 @@ $scope.countryChange = function()
 
     $scope.restaurantCallback = function(results, status)
     {
+        console.log("--- slide1---", slide1);
+        console.log("--- slide2---", slide2);
        // var restaurantsCount = results.length;
         if (status === google.maps.places.PlacesServiceStatus.OK) 
         {
@@ -4160,58 +4309,67 @@ $scope.countryChange = function()
             restaurants.push(object);
 
 
-            if( selectedRatingFilterArray.length == 2 )
+            if( slide1 != null && slide2 != null )
             {
-                $scope.createPlacesMarkerForRestaurant(results[i]);
-            }
-            else if(selectedRatingFilterArray.length == 1 )
-            {
-                if( selectedRatingFilterArray[0] == 3 )
-                {
-                    if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                    {
-                        $scope.createPlacesMarkerForRestaurant(results[i]);
-                    }
-                }
-                else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
                 {
                     $scope.createPlacesMarkerForRestaurant(results[i]);
                 }
             }
-            else if(selectedRatingFilterArray.length == 0 )
-            {
-                $scope.createPlacesMarkerForRestaurant(results[i]);
-            }
+            
+
+            // if( selectedRatingFilterArray.length == 2 )
+            // {
+            //     $scope.createPlacesMarkerForRestaurant(results[i]);
+            // }
+            // else if(selectedRatingFilterArray.length == 1 )
+            // {
+            //     if( selectedRatingFilterArray[0] == 3 )
+            //     {
+            //         if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //         {
+            //             $scope.createPlacesMarkerForRestaurant(results[i]);
+            //         }
+            //     }
+            //     else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //     {
+            //         $scope.createPlacesMarkerForRestaurant(results[i]);
+            //     }
+            // }
+            // else if(selectedRatingFilterArray.length == 0 )
+            // {
+            //     $scope.createPlacesMarkerForRestaurant(results[i]);
+            // }
           }
-          console.log("--- Google Restaurants---", restaurants);
-          // Array to keep track of duplicates
-          var duplicates = [];
-          $scope.AllInOneRestaurants = restaurants.filter(function(element) {
-          // If it is not a duplicate, return true
-          if (duplicates.indexOf(element.Name) == -1) 
-          {
-            duplicates.push(element.Name);
-              return true;
-          }
-          return false;
-          });
-          console.log("---duplicates111---",duplicates);
-          console.log("---$scope.AllInOneRestaurants NAME---",$scope.AllInOneRestaurants);
 
+          //For removing duplicates and calculating distance from select stores to all pois
+        //   console.log("--- Google Restaurants---", restaurants);
+        //   // Array to keep track of duplicates
+        //   var duplicates = [];
+        //   $scope.AllInOneRestaurants = restaurants.filter(function(element) {
+        //   // If it is not a duplicate, return true
+        //   if (duplicates.indexOf(element.Name) == -1) 
+        //   {
+        //     duplicates.push(element.Name);
+        //       return true;
+        //   }
+        //   return false;
+        //   });
+        //   console.log("---duplicates111---",duplicates);
+        //   console.log("---$scope.AllInOneRestaurants NAME---",$scope.AllInOneRestaurants);
 
-
-          for (var i = 0; i < restaurants.length; i++) 
-          {
-              var latitude1 = restaurants[i].Latitude;
-              var longitude1 = restaurants[i].Longitude;
-              for(var j = 0; j < restaurants.length; j++)
-              {
-                var latitude2 = restaurants[j].Latitude;
-                var longitude2 = restaurants[j].Longitude;
-                $scope.getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2,restaurants[i],restaurants[j]);
+        //   for (var i = 0; i < restaurants.length; i++) 
+        //   {
+        //       var latitude1 = restaurants[i].Latitude;
+        //       var longitude1 = restaurants[i].Longitude;
+        //       for(var j = 0; j < restaurants.length; j++)
+        //       {
+        //         var latitude2 = restaurants[j].Latitude;
+        //         var longitude2 = restaurants[j].Longitude;
+        //         $scope.getDistanceFromLatLonInKm(latitude1,longitude1,latitude2,longitude2,restaurants[i],restaurants[j]);
                 
-              }
-          }
+        //       }
+        //   }
 
         }
        
@@ -4731,9 +4889,10 @@ $scope.countryChange = function()
     {
         $scope.clearInfoWindow();
         locationLatLng = new google.maps.LatLng(place.location.latitude, place.location.longitude); 
-        var image = 'images/green.png';
+        var image = 'images/zomatoicon.png';
         
-        infowindowplacesmarker = new google.maps.InfoWindow();
+        //infowindowplacesmarker = new google.maps.InfoWindow();
+        infowindowplacesmarker = new google.maps.InfoWindow({maxWidth:250});
         
         restaurantMarker = new google.maps.Marker({
         map : map,
@@ -4783,7 +4942,7 @@ $scope.countryChange = function()
                                             // //+ "<br>" + "Reviews    : " + place.reviews[0].text
                                         );
             }).error(function(error) {
-              console.log("---error---:",error);
+              console.log("---Zomato error 1---:",error);
             });
 
             infowindowplacesmarker.open(map, this);
@@ -4796,7 +4955,7 @@ $scope.countryChange = function()
     {
         $scope.clearInfoWindow();
         locationLatLng = new google.maps.LatLng(place.location.latitude, place.location.longitude); 
-        var image = 'images/blue.png';
+        var image = 'images/fbicon.png';
         
         infowindowplacesmarker = new google.maps.InfoWindow();
         

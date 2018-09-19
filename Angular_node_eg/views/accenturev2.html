@@ -3,6 +3,7 @@
 <head>
     <title>Accenture BI Platform</title>
 
+    
     <link type="text/css" rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/css/iziModal.min.css"/>
     <link type="text/css" rel="stylesheet"
@@ -18,10 +19,16 @@
          <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
     <meta charset="utf-8"/>
 
+<!-- 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.6.1/rzslider.css" type="text/javascript"></script> -->
+
+
     <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVR5iaxk4V2f3OqyyhwUrZdWvE7L7n8Uo&libraries=places,geometry,visualization"></script>
   <script src="/vendor/jquery-1.9.1.js"></script>
   <script src="/vendor/angular.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.6.1/rzslider.js" type="text/javascript"></script> -->
+
   <!--<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>-->
   <script type="text/javascript" src="vendor/select2/select2.js"></script>
   <!--<script type="text/javascript" src="bower_components/angular/angular.js"></script>-->
@@ -48,6 +55,12 @@
 
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
+
+
+
+
+
+
 
     
     <!--<script src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>-->
@@ -141,12 +154,35 @@
                     </div>
                     <div id="collapse2" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <div ng-repeat="opt in standardHierarchy">
+                            <div ng-repeat="opt in standardHierarchy|orderBy:'toString()'">
                                 <label class="container">
                                     <input type="checkbox" ng-click="showLocations(opt.name,$event, $index);" ng-model="opt.checked">
                                     <span class="checkmark"></span>{{opt.name}}
                                 </label>
                             </div> 
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="panel panel-default">
+                    <div data-toggle="collapse" data-parent="#accordion1" href="#collapse3" class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Points of Interest</a>
+                        </h4>
+                    </div>
+                    <div id="collapse3" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            Select Store :
+                            <select ng-model="selectedStore" ng-change = "getData(null, -1,1);" >
+                                    <option ng-repeat="store in storeNames" value="{{store}}" >{{store.OUTLET_CODE}}</option>
+                            </select>
+                            <span ng-if="showStorePlaceTypes">
+                                <div ng-repeat="opt in placetypes">
+                                    <label class="container">
+                                        <input type="checkbox" ng-click="getData($event, $index,0);" ng-model="opt.checked">
+                                        <span class="checkmark"></span>{{opt.name}}
+                                    </label>
+                                </div>  
                         </div>
                     </div>
                 </div>
@@ -157,38 +193,30 @@
                             </h4>
                         </div>
                         <div id="collapse4" class="panel-collapse collapse">
-                            <div ng-repeat="opt in ratings">
+                            <!-- <div ng-repeat="opt in ratings">
                                 <label class="container">
                                     <input type="checkbox"  ng-click="filterRatings(opt.name,$event);" ng-model="opt.checked">
                                     <span class="checkmark"></span>{{opt.name}}
                                 </label>
+                            </div>  -->
+                            <div class="panel-body">
+                                    <p> Rating Slider</p>
+                                    <section class="range-slider">
+                                    <span class="rangeValues"></span>
+                                    <input value="0" min="0" max="5" step="0.5" type="range">
+                                    <input value="5" min="0" max="5" step="0.5" type="range">
+                                    </section>
+                                </div>
+                            <div >         
+                            <!-- <rzslider rz-slider-model="slider.minValue"
+                            rz-slider-high="slider.maxValue"
+                            rz-slider-options="slider.options"></rzslider> -->
                             </div> 
                         </div>
-                    </div>
-                <div class="panel panel-default">
-                    <div data-toggle="collapse" data-parent="#accordion1" href="#collapse3" class="panel-heading">
-                        <h4 class="panel-title">
-                            <a >Points of Interest</a>
-                        </h4>
-                    </div>
-                    <div id="collapse3" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            Select Store :
-                            <select ng-model="selectedStore" ng-change = "getData(null, -1);" >
-                                    <option ng-repeat="store in storeNames" value="{{store}}" >{{store.OUTLET_CODE}}</option>
-                            </select>
-                            <span ng-if="showStorePlaceTypes">
-                                <div ng-repeat="opt in placetypes">
-                                    <label class="container">
-                                        <input type="checkbox" ng-click="getData($event, $index);" ng-model="opt.checked">
-                                        <span class="checkmark"></span>{{opt.name}}
-                                    </label>
-                                </div>  
-                        </div>
-                    </div>
                 </div>
                 
                 <button class="custom-button"  ng-click="toggleTrafficLayer()">Traffic Layer</button>
+                
 
                 
                  
@@ -202,6 +230,7 @@
     <div class="bs-example">
         <div class="panel-group" id="accordion">
            
+                <button class="custom-button"  ng-click="resetMap()">Reset</button>
                 <div class="panel panel-default">
                     <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="panel-heading">
                         <h4 class="panel-title">
