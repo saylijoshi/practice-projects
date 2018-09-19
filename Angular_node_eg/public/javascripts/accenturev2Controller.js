@@ -513,8 +513,9 @@ $scope.showStores = function()
                 + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                 + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
                 + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
-                + '<button onclick="getPOIs(\'' + storeData + '\');">POIs</button>');
+                + '<button onclick="getPOIs();">POIs</button>');
 
+                //'<button onclick="getPOIs(\'' + storeData + '\');">POIs</button>'
                 //'<div>' + $scope.locations[i].Name + '<button class="btn btn-success" ng-click="addLoc(\'' + $scope.locations[i].Name + '\');">Add</button>' + '</div>'
                 infoWindow.open(map, marker);
                 //clearDirection();
@@ -542,14 +543,26 @@ $scope.showStores = function()
     setTimeout(function(){ $scope.$apply(); },100);
 };
 
-window.getPOIs = function(store)
+window.getPOIs = function()
 {
-    //var object = JSON.parse(angular.toJson(store));
-    //var object = JSON.stringify(store); 
-    //console.log("---in readmore store---:",object);
-    //$scope.selectedStore = store;
     $scope.poisFromMarkerSelection = true;
+    
+    var resultObject = $scope.search($scope.selectedStore.OUTLET_CODE, $scope.storeNames);
+    console.log("---resultObject---: ",resultObject);
+
+    //var element = document.getElementById("dropdown");
+    //element.value = resultObject.OUTLET_CODE;
+
     $scope.getData(null,-1,0);       
+}
+
+$scope.search = function(nameKey, storeNames)
+{
+    for (var i=0; i < storeNames.length; i++) {
+        if (storeNames[i].OUTLET_CODE === nameKey) {
+            return storeNames[i];
+        }
+    }
 }
 
 

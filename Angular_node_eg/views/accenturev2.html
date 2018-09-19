@@ -173,7 +173,7 @@
                     <div id="collapse3" class="panel-collapse collapse">
                         <div class="panel-body">
                             Select Store :
-                            <select ng-model="selectedStore" ng-change = "getData(null, -1,1);" >
+                            <select id="dropdown" ng-model="selectedStore" ng-change = "getData(null, -1,1);" >
                                     <option ng-repeat="store in storeNames" value="{{store}}" >{{store.OUTLET_CODE}}</option>
                             </select>
                             <span ng-if="showStorePlaceTypes">
