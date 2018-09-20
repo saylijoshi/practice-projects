@@ -83,17 +83,6 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     var slide1 = 0;
     var slide2 = 0;
 
-    $scope.slider = {
-        minValue: 0,
-        maxValue: 5,
-        options: {
-            floor: 0,
-            ceil: 100,
-            step: 1
-        }
-    };
-   
-
     $scope.countries =
     [
         {"name":"Malaysia", "selected":false}
@@ -881,6 +870,9 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -890,7 +882,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
   
                   infoWindow.open(map, marker);
                   });
@@ -919,6 +912,8 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -928,7 +923,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
                   infoWindow.open(map, marker);
                   });
   
@@ -1068,6 +1064,8 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -1077,7 +1075,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
                   infoWindow.open(map, marker);
                   });
   
@@ -1105,6 +1104,8 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -1114,7 +1115,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
                   infoWindow.open(map, marker);
                   });
   
@@ -1142,6 +1144,8 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -1151,7 +1155,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
                   infoWindow.open(map, marker);
                   //$scope.clearDirection();
                   //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -1291,6 +1296,8 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -1300,7 +1307,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
                   infoWindow.open(map, marker);
                   //$scope.clearDirection();
                   //dirLatLng = { lat : cocacolaStoreData.latitude , lng : cocacolaStoreData.longitude};
@@ -1334,6 +1342,8 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -1343,7 +1353,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
   
                   infoWindow.open(map, marker);
                   });
@@ -1372,6 +1383,8 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -1381,7 +1394,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
                   infoWindow.open(map, marker);
                   });
   
@@ -1409,6 +1423,8 @@ $scope.showLocations = function (name,event, index)
   
                   // Attaching a click event to the current marker
                   google.maps.event.addListener(marker, "click", function(e) {
+                    $scope.selectedStore = storeData;
+                    
                     infoWindow.setContent('<h4>' + "Outlet Code         :" + storeData.OUTLET_CODE + '</h4>' 
                               + "<br/>" + "Postal Code                  :" +storeData.POSTAL_CODE
                               + "<br/>" + "Address                      :" +storeData.ADDRESS 
@@ -1418,7 +1434,8 @@ $scope.showLocations = function (name,event, index)
                               + "<br/>" + "Total Product Line           :" +storeData.TOTAL_PRODUCT_LINES
                               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
-                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE);
+                              + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
+                              + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
                   infoWindow.open(map, marker);
                   });
   
