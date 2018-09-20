@@ -355,6 +355,25 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
       
 $scope.initialiseData = function()
 {
+
+    // window.onload = function()
+    // {
+    // Initialize Sliders
+    var sliderSections = document.getElementsByClassName("range-slider");
+    
+        for( var x = 0; x < sliderSections.length; x++ ){
+            var sliders = sliderSections[x].getElementsByTagName("input");
+            
+            for( var y = 0; y < sliders.length; y++ ){
+            if( sliders[y].type ==="range" ){
+                sliders[y].oninput = getVals;
+                // Manually trigger event first time to display values
+                sliders[y].oninput();
+            }
+            }
+        }
+    // }
+
     var standardHierarchyNames = [];
     var tempArray = [];
     geocoder = new google.maps.Geocoder;
@@ -400,23 +419,7 @@ $scope.initialiseData = function()
 
 
 
-    window.onload = function()
-    {
-    // Initialize Sliders
-    var sliderSections = document.getElementsByClassName("range-slider");
     
-        for( var x = 0; x < sliderSections.length; x++ ){
-            var sliders = sliderSections[x].getElementsByTagName("input");
-            
-            for( var y = 0; y < sliders.length; y++ ){
-            if( sliders[y].type ==="range" ){
-                sliders[y].oninput = getVals;
-                // Manually trigger event first time to display values
-                sliders[y].oninput();
-            }
-            }
-        }
-    }
 
     //setTimeout(function(){ $scope.$apply(); },100);
     if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
@@ -490,15 +493,14 @@ $scope.showStores = function()
             mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
             });
 
-            infoWindow = new google.maps.InfoWindow({maxWidth:350});
+            infoWindow = new google.maps.InfoWindow({maxWidth:250});
             (function(marker, storeData) {
 
                 // Attaching a click event to the current marker
                 google.maps.event.addListener(marker, "click", function(e) {
                 
                     $scope.selectedStore = storeData;
-
-                    console.log("---storeData111---:",storeData);
+                    
                    
                     //console.log("---selectedStore---:",$scope.selectedStore);
                 //infoWindow.setContent('<h3>' + storeData.name + '</h3>'+ "<br/>" + storeData.address + "<br/>" + storeData.contact);
@@ -513,11 +515,13 @@ $scope.showStores = function()
                 + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
                 + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
                 + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
-                + '<button onclick="getPOIs();">POIs</button>');
+                + "<br/>" + '<button onclick="getPOIs();">POIs</button>');
 
                 //'<button onclick="getPOIs(\'' + storeData + '\');">POIs</button>'
                 //'<div>' + $scope.locations[i].Name + '<button class="btn btn-success" ng-click="addLoc(\'' + $scope.locations[i].Name + '\');">Add</button>' + '</div>'
                 infoWindow.open(map, marker);
+
+
                 //clearDirection();
                 //dirLatLng = { lat : storeData.latitude , lng : storeData.longitude};
                 //showDirections(myLatLng,dirLatLng,storeData );
@@ -550,10 +554,13 @@ window.getPOIs = function()
     var resultObject = $scope.search($scope.selectedStore.OUTLET_CODE, $scope.storeNames);
     console.log("---resultObject---: ",resultObject);
 
-    //var element = document.getElementById("dropdown");
-    //element.value = resultObject.OUTLET_CODE;
+    var index = $scope.searchIndex($scope.selectedStore.OUTLET_CODE, $scope.storeNames);
+    console.log("---index---: ",index);
 
-    $scope.getData(null,-1,0);       
+    document.getElementById('dropdown').selectedIndex = index + 1;
+    $('#dropdown').trigger('change');
+
+    $scope.getData(null,-1,0);   
 }
 
 $scope.search = function(nameKey, storeNames)
@@ -561,6 +568,15 @@ $scope.search = function(nameKey, storeNames)
     for (var i=0; i < storeNames.length; i++) {
         if (storeNames[i].OUTLET_CODE === nameKey) {
             return storeNames[i];
+        }
+    }
+}
+
+$scope.searchIndex = function(nameKey, storeNames)
+{
+    for (var i=0; i < storeNames.length; i++) {
+        if (storeNames[i].OUTLET_CODE === nameKey) {
+            return i;
         }
     }
 }
@@ -3298,7 +3314,7 @@ $scope.countryChange = function()
               + "<br/>" + "Average Purchase Per Month   :" +storeData.AVERAGE_PURCHASE_PER_MONTH 
               + "<br/>" + "Average Purchase Per Invoice :" +storeData.AVERAGE_PURCHASE_PER_INVOICE
               + "<br/>" + "Average Lines Per Invoice    :" +storeData.AVERAGE_LINES_PER_INVOICE
-              + '<button onclick="readmore()">POIs</button>');
+              + '<button onclick="getPOIs()">POIs</button>');
 
             infoWindow.open(map, marker);
 
