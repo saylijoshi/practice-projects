@@ -19,6 +19,9 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
     var shoppingMallMarkers = [];
     var MealTakeAwayMarkers = [];
     var movietheatermarkers = [];
+    var transitStationMarkers = [];
+    var lodgingMarkers = [];
+    var gymMarkers = [];
     var categorySmallProvisionStoresMarker = [];
     var chineseMedicalHallSmallMarker = [];
     var categoryHypermarketMarker = [];
@@ -148,8 +151,17 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
         {"name":"Subway", "checked":false},
         {"name":"Shopping Mall", "checked":false},
         {"name":"Meal Take Aways", "checked":false},
-        {"name":"Movie Theatres", "checked":false}
+        {"name":"Movie Theaters", "checked":false},
+        {"name":"Bus Station", "checked":false},
+        {"name":"Transit Station", "checked":false},
+        {"name":"Lodging", "checked":false},
+        {"name":"Gym", "checked":false}
     ]
+
+// Bus Station
+// Transit Station
+// Lodging
+// Gym
 
     $scope.categories = 
     [
@@ -309,6 +321,30 @@ angular.module('angularjs_with_Nodejs').controller('accenturev2Controller', func
         zoom: 6, //later on make it 5
         mapTypeId: google.maps.MapTypeId.ROADMAP
         });
+
+        map.data.loadGeoJson(
+            'https://www.jasonbase.com/things/27pn');
+
+        map.data.setStyle(function(feature) {
+            var NAME = feature.getProperty('NAME_2');
+            var scolor = "grey";
+            // if (NAME == "ANDAMAN AND NICOBAR ISLANDS") {
+            //     color = "green";
+            // }
+            // else if (NAME == "Andhra Pradesh") {
+            //     color = "blue";
+            // }
+            // else if (NAME == "Arunachal Pradesh") {
+            //     color = "violet";
+            //     }
+
+            return {
+                fillColor: "#d39e17", //#8ac601 , #adbfff , #d39e17
+                strokeWeight: 1,
+                strokeColor:scolor,
+            }
+            });
+
 
         $scope.storeIPAddress();
         $scope.initialiseData();
@@ -3640,6 +3676,36 @@ $scope.countryChange = function()
                                 type : [ 'movie_theater']
                             }, $scope.movieTheaterCallback);
                 }
+                else if(typeName == "Transit Station")
+                {
+                    var service13 = new google.maps.places.PlacesService(map);
+                            service13.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'MY'},
+                                type : [ 'transit_station']
+                            }, $scope.transitStationCallback);
+                }
+                else if(typeName == "Lodging")
+                {
+                    var service13 = new google.maps.places.PlacesService(map);
+                            service13.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'MY'},
+                                type : [ 'lodging']
+                            }, $scope.lodgingCallback);
+                }
+                else if(typeName == "Gym")
+                {
+                    var service13 = new google.maps.places.PlacesService(map);
+                            service13.nearbySearch({
+                                location : storeLatLng,
+                                radius : 2000,
+                                componentRestrictions: {'country': 'MY'},
+                                type : [ 'gym']
+                            }, $scope.gymCallback);
+                }
                 
             }
             else
@@ -3706,6 +3772,18 @@ $scope.countryChange = function()
                 {
                     $scope.clearMovieTheatersMarkers();
                 }
+                else if(typeName == "Transit Staion")
+                {
+                    $scope.clearTransitStaionMarkers();
+                }
+                else if(typeName == "Lodging")
+                {
+                    $scope.clearLodgingMarkers();
+                }
+                else if(typeName == "Gym")
+                {
+                    $scope.clearGymMarkers();
+                }
             }
         }
          
@@ -3748,6 +3826,9 @@ $scope.countryChange = function()
         $scope.clearMovieTheatersMarkers();
         $scope.clearMealTakewayMarkers();
         $scope.clearSuperMarketsMarker();
+        $scope.clearTransitStaionMarkers();
+        $scope.clearLodgingMarkers();
+        $scope.clearGymMarkers();
     };
 
     $scope.clearCityAndRegionMarker = function()
@@ -3907,6 +3988,36 @@ $scope.countryChange = function()
         for (var key in MealTakeAwayMarkers) 
         {
             MealTakeAwayMarkers[key].setMap(null);
+        };
+       // MealTakeAwayMarkers.length = 0;
+        //MealTakeAwayMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearTransitStaionMarkers = function()
+    {
+        for (var key in transitStationMarkers) 
+        {
+            transitStationMarkers[key].setMap(null);
+        };
+       // MealTakeAwayMarkers.length = 0;
+        //MealTakeAwayMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearLodgingMarkers = function()
+    {
+        for (var key in lodgingMarkers) 
+        {
+            lodgingMarkers[key].setMap(null);
+        };
+       // MealTakeAwayMarkers.length = 0;
+        //MealTakeAwayMarkersCluster.clearMarkers();
+    };
+
+    $scope.clearGymMarkers = function()
+    {
+        for (var key in gymMarkers) 
+        {
+            gymMarkers[key].setMap(null);
         };
        // MealTakeAwayMarkers.length = 0;
         //MealTakeAwayMarkersCluster.clearMarkers();
@@ -4429,6 +4540,8 @@ $scope.countryChange = function()
         if (status === google.maps.places.PlacesServiceStatus.OK) 
         {
           google.maps.places.type
+
+          
           for (var i = 0; i < results.length; i++) 
           {
             if( selectedRatingFilterArray.length == 2 )
@@ -4537,28 +4650,35 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForBusStop(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForBusStop(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForBusStop(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForBusStop(results[i]);
-              }
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForBusStop(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForBusStop(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForBusStop(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForBusStop(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForBusStop(results[i]);
+            //   }
           }
         }
         // busstationMarkersCluster = new MarkerClusterer(map, busstationMarkers,
@@ -4573,28 +4693,36 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForCafe(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForCafe(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForCafe(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForCafe(results[i]);
-              }
+
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForCafe(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForCafe(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForCafe(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForCafe(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForCafe(results[i]);
+            //   }
           }
         }
         // cafeMarkersCluster = new MarkerClusterer(map, cafeMarkers,
@@ -4609,28 +4737,35 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForCasino(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForCasino(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForCasino(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForCasino(results[i]);
-              }
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForCasino(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForCasino(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForCasino(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForCasino(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForCasino(results[i]);
+            //   }
           }
         }
         // casinoMarkersCluster = new MarkerClusterer(map, casinoMarkers,
@@ -4645,28 +4780,35 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForLiquor(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForLiquor(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForLiquor(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForLiquor(results[i]);
-              }
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForLiquor(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForLiquor(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForLiquor(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForLiquor(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForLiquor(results[i]);
+            //   }
           }
         }
         // liquorStoreMarkersCluster = new MarkerClusterer(map, liquorStoreMarkers,
@@ -4681,28 +4823,35 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForMealTakeAway(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForMealTakeAway(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForMealTakeAway(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForMealTakeAway(results[i]);
-              }
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForMealTakeAway(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForMealTakeAway(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForMealTakeAway(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForMealTakeAway(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForMealTakeAway(results[i]);
+            //   }
           }
         }
         // MealTakeAwayMarkersCluster = new MarkerClusterer(map, MealTakeAwayMarkers,
@@ -4717,28 +4866,35 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForMovieTheater(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForMovieTheater(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForMovieTheater(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForMovieTheater(results[i]);
-              }
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForMovieTheater(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForMovieTheater(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForMovieTheater(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForMovieTheater(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForMovieTheater(results[i]);
+            //   }
           }
         }
         
@@ -4754,29 +4910,36 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForNightClubs(results[i]);
+                }
+            }
               
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForNightClubs(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForNightClubs(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForNightClubs(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForNightClubs(results[i]);
-              }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForNightClubs(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForNightClubs(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForNightClubs(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForNightClubs(results[i]);
+            //   }
           }
         }
         // nightClubsMarkersCluster = new MarkerClusterer(map, nightClubsMarkers,
@@ -4791,29 +4954,36 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForPark(results[i]);
+                }
+            }
               
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForPark(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForPark(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForPark(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForPark(results[i]);
-              }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForPark(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForPark(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForPark(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForPark(results[i]);
+            //   }
           }
         }
         // parkMarkersCluster = new MarkerClusterer(map, parkMarkers,
@@ -4828,29 +4998,36 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForSuperMarket(results[i]);
+                }
+            }
               
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForSuperMarket(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForSuperMarket(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForSuperMarket(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForSuperMarket(results[i]);
-              }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForSuperMarket(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForSuperMarket(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForSuperMarket(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForSuperMarket(results[i]);
+            //   }
           }
         }
         // superMarketMarkersCluster = new MarkerClusterer(map, superMarketMarkers,
@@ -4865,29 +5042,36 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForSubway(results[i]);
+                }
+            }
               
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForSubway(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForSubway(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForSubway(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForSubway(results[i]);
-              }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForSubway(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForSubway(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForSubway(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForSubway(results[i]);
+            //   }
           }
         }
         // subwayMarkersCluster = new MarkerClusterer(map, subwayMarkers,
@@ -4902,32 +5086,171 @@ $scope.countryChange = function()
           google.maps.places.type
           for (var i = 0; i < results.length; i++) 
           {
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForShoppingMall(results[i]);
+                }
+            }
               
-              if( selectedRatingFilterArray.length == 2 )
-              {
-                  $scope.createPlacesMarkerForShoppingMall(results[i]);
-              }
-              else if(selectedRatingFilterArray.length == 1 )
-              {
-                  if( selectedRatingFilterArray[0] == 3 )
-                  {
-                      if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
-                      {
-                          $scope.createPlacesMarkerForShoppingMall(results[i]);
-                      }
-                  }
-                  else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
-                  {
-                      $scope.createPlacesMarkerForShoppingMall(results[i]);
-                  }
-              }
-              else if(selectedRatingFilterArray.length == 0 )
-              {
-                  $scope.createPlacesMarkerForShoppingMall(results[i]);
-              }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForShoppingMall(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForShoppingMall(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForShoppingMall(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForShoppingMall(results[i]);
+            //   }
           }
         }
         // shoppingMallMarkersCluster = new MarkerClusterer(map, shoppingMallMarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.transitStationCallback = function(results, status)
+    {
+        //var movieTheaterCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+          google.maps.places.type
+          for (var i = 0; i < results.length; i++) 
+          {
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForTransitStation(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForTransitStation(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForTransitStation(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForTransitStation(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForTransitStation(results[i]);
+            //   }
+          }
+        }
+        
+        // movietheatermarkersCluster = new MarkerClusterer(map, movietheatermarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.lodgingCallback = function(results, status)
+    {
+        //var movieTheaterCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+          google.maps.places.type
+          for (var i = 0; i < results.length; i++) 
+          {
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForLodging(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForLodging(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForLodging(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForLodging(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForLodging(results[i]);
+            //   }
+          }
+        }
+        
+        // movietheatermarkersCluster = new MarkerClusterer(map, movietheatermarkers,
+        // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    };
+
+    $scope.gymCallback = function(results, status)
+    {
+        //var movieTheaterCount = results.length;
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+          google.maps.places.type
+          for (var i = 0; i < results.length; i++) 
+          {
+            if( slide1 != null && slide2 != null )
+            {
+                if( results[i].rating > slide1 && results[i].rating < slide2 )
+                {
+                    $scope.createPlacesMarkerForGym(results[i]);
+                }
+            }
+            //   if( selectedRatingFilterArray.length == 2 )
+            //   {
+            //       $scope.createPlacesMarkerForGym(results[i]);
+            //   }
+            //   else if(selectedRatingFilterArray.length == 1 )
+            //   {
+            //       if( selectedRatingFilterArray[0] == 3 )
+            //       {
+            //           if( typeof results[i].rating == "undefined" || results[i].rating < 3 )
+            //           {
+            //               $scope.createPlacesMarkerForGym(results[i]);
+            //           }
+            //       }
+            //       else if( results[i].rating > 3 && selectedRatingFilterArray[0] == 5 )
+            //       {
+            //           $scope.createPlacesMarkerForGym(results[i]);
+            //       }
+            //   }
+            //   else if(selectedRatingFilterArray.length == 0 )
+            //   {
+            //       $scope.createPlacesMarkerForGym(results[i]);
+            //   }
+          }
+        }
+        
+        // movietheatermarkersCluster = new MarkerClusterer(map, movietheatermarkers,
         // {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
     };
 
@@ -5506,6 +5829,108 @@ $scope.countryChange = function()
         //showDirectionsForLocations(dirLatLng,placeLoc);
         });
         MealTakeAwayMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForTransitStation= function(place) {
+        $scope.clearInfoWindow();
+        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
+        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
+        var image = 'images/busstop.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+    
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                           // + "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        transitStationMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForLodging = function(place) {
+        $scope.clearInfoWindow();
+        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
+        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
+        var image = 'images/fastfood.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+    
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            //+ "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        lodgingMarkers.push(restaurantMarker); 
+    };
+
+    $scope.createPlacesMarkerForGym= function(place) {
+        $scope.clearInfoWindow();
+        //http://maps.google.com/mapfiles/ms/icons/" + color + ".png
+        //var image = 'http://maps.google.com/mapfiles/kml/pal2/icon19.png';
+        var image = 'images/fastfood.png';
+
+        infowindowplacesmarker = new google.maps.InfoWindow();
+        var placeLoc = place.geometry.location;
+        restaurantMarker = new google.maps.Marker({
+        map : map,
+        icon : image,
+        position : place.geometry.location
+        });
+
+    
+        google.maps.event.addListener(restaurantMarker, 'click', function() {
+            infowindowplacesmarker.setContent( "Name     : " + place.name
+                                            + "<br>" + "Ratings     : " + place.rating
+                                            + "<br>" + "Address     : " + place.formatted_address
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Vicinity    : " + place.vicinity
+                                            + "<br>" + "Website     : " + place.website
+                                            + "<br>" + "International Number: " + place.international_phone_number
+                                            + "<br>" + "Phone Number: " + place.formatted_phone_number
+                                            + "<br>" + "Place Id    : " + place.place_id
+                                            //+ "<br>" + "isOpen      : " + place.opening_hours.open
+                                        );
+        infowindowplacesmarker.open(map, this);
+        infowindowsCollection.push(infowindowplacesmarker);
+        //showDirectionsForLocations(dirLatLng,placeLoc);
+        });
+        gymMarkers.push(restaurantMarker); 
     };
 
     var newStores = [
