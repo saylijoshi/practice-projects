@@ -156,7 +156,7 @@
                         <div class="panel-body">
                             <div ng-repeat="opt in standardHierarchy|orderBy:'toString()'">
                                 <label class="container">
-                                    <input type="checkbox" ng-click="showLocations(opt.name,$event, $index);" ng-model="opt.checked">
+                                    <input type="checkbox" ng-click="filterStoreClassification(opt.name,$event, $index);" ng-model="opt.checked">
                                     <span class="checkmark"></span>{{opt.name}}
                                 </label>
                             </div> 
@@ -173,13 +173,13 @@
                     <div id="collapse3" class="panel-collapse collapse">
                         <div class="panel-body">
                             Select Store :
-                            <select id="dropdown" ng-model="selectedStore" ng-change = "getData(null, -1,1);" >
+                            <select id="dropdown" ng-model="selectedStore" ng-change = "getData(opt.name,null, -1,1);" >
                                     <option ng-repeat="store in storeNames" value="{{store}}" >{{store.OUTLET_CODE}}</option>
                             </select>
                             <span ng-if="showStorePlaceTypes">
                                 <div ng-repeat="opt in placetypes">
                                     <label class="container">
-                                        <input type="checkbox" ng-click="getData($event, $index,0);" ng-model="opt.checked">
+                                        <input type="checkbox" ng-click="getData(opt.name,$event, $index,0);" ng-model="opt.checked">
                                         <span class="checkmark"></span>{{opt.name}}
                                     </label>
                                 </div>  
@@ -239,12 +239,10 @@
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse">
                         <div class="panel-body">
-                            
-                            <div ng-repeat="opt in visitors">
-                                <label class="container">
-                                  <input type="checkbox" ng-click="showCatergorisedLocations($event, $index);" ng-model="opt.checked">
-                                  <span class="checkmark"></span>{{opt.name}}
-                                </label> 
+                            <div >
+                                <input type="text" ng-model="minValueSalesRevenue" placeholder="Enter Minimum Value" style="width:200px; margin:5px">
+                                <input type="text" ng-model="maxValueSalesRevenue" placeholder="Enter Maximum Value" style="width:200px; margin:5px">
+                                <button ng-click="searchForSalesRevenue();" style="width:200px; margin:5px">Apply Filter</button>
                             </div>   
                         </div>
                     </div>
@@ -257,12 +255,11 @@
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <div ng-repeat="opt in frequency">
-                                <label class="container">
-                                  <input type="checkbox" ng-model="opt.checked">
-                                  <span class="checkmark"></span>{{opt.name}}
-                                </label> 
-                            </div> 
+                                <div >
+                                    <input type="text" ng-model="minValueFrequency" placeholder="Enter Minimum Value" style="width:200px; margin:5px">
+                                    <input type="text" ng-model="maxValueFrequency" placeholder="Enter Maximum Value" style="width:200px; margin:5px">
+                                    <button ng-click="searchForFrequency();" style="width:200px; margin:5px">Apply Filter</button>
+                                </div> 
                         </div>
                     </div>
                 </div>
@@ -276,12 +273,11 @@
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <div ng-repeat="opt in orderquantity">
-                                <label class="container">
-                                  <input type="checkbox" ng-model="opt.checked">
-                                  <span class="checkmark"></span>{{opt.name}}
-                                </label> 
-                            </div> 
+                                <div >
+                                    <input type="text" ng-model="minValueOrderQuantity" placeholder="Enter Minimum Value" style="width:200px; margin:5px">
+                                    <input type="text" ng-model="maxValueOrderQuantity" placeholder="Enter Maximum Value" style="width:200px; margin:5px">
+                                    <button ng-click="searchForOrderQuantity();" style="width:200px; margin:5px">Apply Filter</button>
+                                </div> 
                         </div>
                     </div>
                 </div>
@@ -311,12 +307,11 @@
                 </div>
                 <div id="collapseFive" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <div ng-repeat="opt in categories">
-                            <label class="container">
-                              <input type="checkbox" ng-click="showCatergorisedLocations($event, $index);" ng-model="opt.checked">
-                              <span class="checkmark"></span>{{opt.name}}
-                            </label> 
-                        </div> 
+                            <div >
+                                <input type="text" ng-model="minValueProductVariety" placeholder="Enter Minimum Value" style="width:200px; margin:5px">
+                                <input type="text" ng-model="maxValueProductVariety" placeholder="Enter Maximum Value" style="width:200px; margin:5px">
+                                <button ng-click="searchForProductVariety();" style="width:200px; margin:5px">Apply Filter</button>
+                            </div> 
                     </div>
                 </div>
             </div>
