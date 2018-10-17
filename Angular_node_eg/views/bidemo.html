@@ -175,12 +175,26 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="panel panel-default">
+                        <div data-toggle="collapse" data-parent="#accordion1" href="#collapse5"  class="panel-heading">
+                            <h4 class="panel-title">
+                                <a >Places</a>
+                            </h4>
+                        </div>
+                        <div id="collapse5" class="panel-collapse collapse">
+                            <div >
+                                <input id="mylocation" type="text" ng-model="placesValue" placeholder="Enter area" style="width:230px; margin:15px">
+                            </div> 
+                        </div>
+                    </div>
+                <button class="custom-button"  ng-click="toggleTrafficLayer()">Traffic Layer</button>
             </div>
           </div>
           
 </div>
 <div   class="form-block2" ng-show="formblock" >
-    <button class="custom-button"  ng-click="toggleTrafficLayer()">Traffic Layer</button>
+   
     
     <div class="bs-example">
         <div class="panel-group" id="accordion">
@@ -191,20 +205,34 @@
                             <a >Points of Interest</a>
                         </h4>
                     </div>
-                    <div id="collapseOne" class="panel-collapse collapse in">
+                    <div id="collapseOne" class="panel-collapse collapse">
                         <div class="panel-body">
                             Select Store :
-                            <select ng-model="selectedStore" ng-change = "getData(null, -1);" >
+                            <select ng-model="selectedStore" ng-change = "getData(null,null, -1,1);" >
                                     <option ng-repeat="store in storeNames" value="{{store}}" >{{store.city +"-"+store.name}}</option>
                             </select>
                             <span ng-if="showStorePlaceTypes">
                             <div ng-repeat="opt in placetypes">
                                 <label class="container">
-                                    <input type="checkbox" ng-click="getData($event, $index);" ng-model="opt.checked">
+                                    <input type="checkbox" ng-click="getData(opt.name,$event, $index,0);" ng-model="opt.checked">
                                     <span class="checkmark"></span>{{opt.name}}
                                 </label>
                             </div>  
                         </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseFour" class="panel-heading">
+                        <h4 class="panel-title">
+                            <a >Sales Revenue</a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse">
+                        <div >
+                            <input type="text" ng-model="minValueSalesRevenue" placeholder="Enter Minimum Value" style="width:200px; margin:5px">
+                            <input type="text" ng-model="maxValueSalesRevenue" placeholder="Enter Maximum Value" style="width:200px; margin:5px">
+                            <button ng-click="searchForSalesRevenue();" style="width:200px; margin:5px">Apply Filter</button>
+                        </div>   
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -240,6 +268,10 @@
                     </div>
                 </div>
             </span>
+
+
+
+            <button class="custom-button"  ng-click="showLiveInventory()">Live Inventory</button>
 
         </div>
       </div>

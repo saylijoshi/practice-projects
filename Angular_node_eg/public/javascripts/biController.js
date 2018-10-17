@@ -1,9 +1,10 @@
 
-angular.module('angularjs_with_Nodejs').controller('biController', function ($rootScope,$scope, $timeout, $filter, $http) {
+angular.module('angularjs_with_Nodejs').controller('biController', function ($templateCache,$window,$rootScope,$scope,$route, $timeout, $filter, $http) {
 
     var map,geocoder,radius_circle,places;;
     var infoWindow;
     var markers = []; 
+    var placesMarkers = [];
     var restaurantsMarkers = [];
     var zomatoRestaurantsMarkers = [];
     var facebookRestaurantsMarkers = [];
@@ -51,6 +52,11 @@ angular.module('angularjs_with_Nodejs').controller('biController', function ($ro
     $scope.showMarketing = false;
     $scope.showTrafficButton = true;
     $scope.loading = false;
+
+    $scope.minValueSalesRevenue = null;
+    $scope.maxValueSalesRevenue = null; 
+    $scope.placesValue = null;
+    $scope.allStoresArray = [];
 
     $scope.countries =
     [
@@ -263,7 +269,7 @@ $scope.cities =
                 //     }
 
                 return {
-                    fillColor: "#d39e17", //#8ac601 , #adbfff , #d39e17
+                    fillColor: "#efd4f9", //#8ac601 , #adbfff , #d39e17
                     strokeWeight: 1.5,
                 strokeColor:scolor,
                 }
@@ -281,6 +287,161 @@ $scope.cities =
         //                 //componentRestrictions: {'country': 'SG'},
         //                 type : [ 'restaurant']
         //             },$scope.restaurantCallback);
+
+
+        // Create the autocomplete object and associate it with the UI input control.
+        // Restrict the search to the default country, and to place type "cities".
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */ (
+                document.getElementById('mylocation')), {
+            //types: ['address'],
+            //componentRestrictions: countryRestrict
+            });
+        places = new google.maps.places.PlacesService(map);
+        
+
+        autocomplete.addListener('place_changed', onPlaceChanged);
+    }
+
+    // When the user selects a city, get the place details for the city and
+    // zoom the map in on the city.
+    function onPlaceChanged() {
+        var place = autocomplete.getPlace();
+        if (place.geometry) {
+        map.panTo(place.geometry.location);
+        map.setZoom(15);
+        //search();
+        showNearbyLocations();
+        } else {
+        document.getElementById('mylocation').placeholder = 'Enter a location';
+        }
+    }
+
+    function clearRadius()
+    {
+        if (radius_circle) 
+        {
+            radius_circle.setMap(null);
+            radius_circle = null;
+        }
+    } 
+
+    function showNearbyLocations() 
+    {
+        $scope.clearIndiaMarkers();
+        if( placesMarkers != null )
+        {
+            for (var key in placesMarkers) 
+            {
+                placesMarkers[key].setMap(null);
+                //markers =[];
+            };
+        }
+
+        for (var key in placesMarkers) 
+        {
+            //markers[key].setMap(null);
+            placesMarkers =[];
+        };
+
+        clearRadius();
+
+        if($scope.allStoresArray != null )
+        {
+            //console.log("mylocation:"+ mylocation);
+            var mylocation = document.getElementById("mylocation").value;
+            console.log("mylocation:"+ mylocation);
+            var givenLatLng;
+            var mygeocoder = new google.maps.Geocoder();
+
+            mygeocoder.geocode( { 'address': mylocation}, function(results, status) 
+            {
+
+                    if (status == google.maps.GeocoderStatus.OK) 
+                    {
+                        var latitude = results[0].geometry.location.lat();
+                        var longitude = results[0].geometry.location.lng();
+                        //alert(latitude);
+                        givenLatLng = { lat : latitude , lng : longitude};
+
+                        if (mygeocoder) 
+                        {
+                            mygeocoder.geocode({'location': givenLatLng}, function (results, status) {
+                                if (status == google.maps.GeocoderStatus.OK) 
+                                {
+                                    if (status != google.maps.GeocoderStatus.ZERO_RESULTS) 
+                                    {
+                                        var current_lat_lng = results[0].geometry.location;
+                                        radius_circle = new google.maps.Circle({
+                                        center: current_lat_lng,
+                                        radius: 3 * 1000,
+                                        clickable: false,
+                                        map: map
+                                        });
+
+                                        radius_circle.setOptions({
+                                                    fillColor: '#ffcf70',
+                                                    strokeColor: '#ffac05'
+                                                });
+
+                                        if ( radius_circle )
+                                        {
+                                            map.fitBounds(radius_circle.getBounds());
+                                        } 
+
+                                        for (var i = 0, length = $scope.allStoresArray.length; i < length; i++) 
+                                        {
+                                            var storeData = $scope.allStoresArray[i];
+                                            var marker_lat_lng = new google.maps.LatLng($scope.allStoresArray[i].latitude, $scope.allStoresArray[i].longitude);
+                                            //distance in meters between your location and the marker
+                                            
+                                            var distance_from_location = google.maps.geometry.spherical.computeDistanceBetween(current_lat_lng, marker_lat_lng); 
+                                        
+                                            if (distance_from_location <= 3 * 1000) 
+                                            {
+                                                console.log("$scope.allStoresArray[i].name: "+ $scope.allStoresArray[i].name );
+                                                var new_marker = new google.maps.Marker({
+                                                position: marker_lat_lng,
+                                                map: map,
+                                                icon: 'images/purple.png',
+                                                title: $scope.allStoresArray[i].name
+                                                });      								
+                                                
+                                                var storeName = $scope.allStoresArray[i].name;
+
+                                                infoWindow = new google.maps.InfoWindow();
+                                                (function(new_marker, storeData) {
+
+                                                // Attaching a click event to the current marker
+                                                google.maps.event.addListener(new_marker, "click", function(e) {
+                                                infoWindow.setContent('<h3>' + storeData.name + '</h3>'+ "<br/>" + storeData.address + "<br/>" + storeData.contact);
+                                                infoWindow.open(map, new_marker);
+                                                });
+
+                                                placesMarkers.push(new_marker);
+
+                                                })(new_marker, storeData);
+                                            }
+                                        }
+                                    } 
+                                    else 
+                                    {
+                                        alert("No results found while geocoding!");
+                                    }
+                                } 
+                                else 
+                                {
+                                    alert("Geocode was not successful: " + status);
+                                }
+                            });
+                        }
+                    } 
+            });
+        }
+        else
+        {
+            alert("Please select country...");
+        }
     }
 
     $scope.initHeatMap = function()
@@ -1615,6 +1776,246 @@ $scope.moveTruck = function (map, markerTruck, markerIndex, latLngindex, countDo
     });
 };
 
+$scope.searchForSalesRevenue = function()
+{
+        if( markers != null )
+        {
+            for (var key in markers) 
+            {
+                markers[key].setMap(null);
+                //markers =[];
+            };
+        }
+
+        for (var key in markers) 
+        {
+            //markers[key].setMap(null);
+            markers =[];
+        };
+
+    $.getJSON('/getBIData', {}, function (data) {
+                                
+        //$scope.storeNames.length = 0;  commented to display , POS related data.
+        //$scope.storeNames.push(allOption);
+        //$scope.clearAllCategoryMarkers();add this later.
+        
+         $scope.clearIndiaMarkers();
+        // $scope.clearAllCategoryMarkers();
+        // $scope.clearAllSubcategoryMarkers();
+        // $scope.clearAllPlacesMarkers();
+        // $scope.clearAllHeatMaps();
+        // $scope.clearFusionLayer();
+        // $scope.clearCityAndRegionMarker();
+        
+
+        
+
+        console.log("---($scope.minValueSalesRevenue---: ",$scope.minValueSalesRevenue);
+        console.log("--- $scope.maxValueSalesRevenue---: ", $scope.maxValueSalesRevenue);
+        //console.log("---data.length---:",data.length);
+
+        for (var i = 0, length = data.length; i < length; i++) 
+        { 
+            var storeData = data[i];
+            
+            if( ($scope.minValueSalesRevenue == null || $scope.minValueSalesRevenue == "" ) 
+            && ( $scope.maxValueSalesRevenue == null || $scope.maxValueSalesRevenue == "" ) )
+            {
+                console.log("---Both Null---");
+                if( storeData.latitude != null && storeData.longitude != null  )
+                {
+                    // $scope.storeNames.push(storeData);
+                    // var heatmapPoint = new google.maps.LatLng(storeData.latitude, storeData.longitude);
+                    // $scope.heatmapArray.push(heatmapPoint);
+
+                    latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+                    
+                    map.setCenter({lat:1.328178,lng: 103.845055});
+                    map.setZoom(11);
+                    map.setMapTypeId('roadmap');
+            
+                    // Creating a marker and putting it on the map
+                    var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: storeData.name,
+                    icon: 'images/red1.png',
+                    mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                    });
+
+                    infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                    (function(marker, storeData) {
+
+                    // Attaching a click event to the current marker
+                    google.maps.event.addListener(marker, "click", function(e) {
+                        infoWindow.setContent("<div style='float:left'><img src='images/"+ storeData.imagename + "'>" 
+                        + '<h3>' + storeData.name + '</h3>'
+                        + "<br/>" + "Address: " + storeData.address 
+                        + "<br/>" + "Contact No: " + storeData.contact 
+                        + "<br/>" + "Operating Hours: " +storeData.timing
+                        + "<br/>" + "Average Sales per Month: " + storeData.averagesalespermonth
+                        + "<br/>" + "Available Products: " +storeData.productclassification);
+                    infoWindow.open(map, marker);
+
+                    });
+
+                    markers.push(marker);
+
+                    })(marker, storeData);
+                }
+            }
+            else if( ( $scope.minValueSalesRevenue == null || $scope.minValueSalesRevenue == "" ) && $scope.maxValueSalesRevenue != null )
+            {    
+                console.log("---Only Min Null---:");
+                if( storeData.averagesalespermonth < $scope.maxValueSalesRevenue )
+                {
+                    console.log("---storeData.averagesalespermonth---:",storeData.averagesalespermonth);
+                    if( storeData.latitude != null && storeData.longitude != null  )
+                    {
+                        // $scope.storeNames.push(storeData);
+                        // var heatmapPoint = new google.maps.LatLng(storeData.latitude, storeData.longitude);
+                        // $scope.heatmapArray.push(heatmapPoint);
+
+                        latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+                        
+                        map.setCenter({lat:1.328178,lng: 103.845055});
+                        map.setZoom(11);
+                        map.setMapTypeId('roadmap');
+                
+                        // Creating a marker and putting it on the map
+                        var marker = new google.maps.Marker({
+                        position: latLng,
+                        map: map,
+                        title: storeData.name,
+                        icon: 'images/red1.png',
+                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                        });
+
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                        (function(marker, storeData) {
+
+                        // Attaching a click event to the current marker
+                        google.maps.event.addListener(marker, "click", function(e) {
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ storeData.imagename + "'>" 
+                            + '<h3>' + storeData.name + '</h3>'
+                            + "<br/>" + "Address: " + storeData.address 
+                            + "<br/>" + "Contact No: " + storeData.contact 
+                            + "<br/>" + "Operating Hours: " +storeData.timing
+                            + "<br/>" + "Average Sales per Month: " + storeData.averagesalespermonth
+                            + "<br/>" + "Available Products: " +storeData.productclassification);
+                        infoWindow.open(map, marker);
+
+                        });
+
+                        markers.push(marker);
+
+                        })(marker, storeData);
+                    }
+                }
+            }
+            else if( ( $scope.maxValueSalesRevenue == null || $scope.maxValueSalesRevenue == "" ) && $scope.minValueSalesRevenue != null )
+            {
+                console.log("---Only Max Null---");
+                if(storeData.averagesalespermonth > $scope.minValueSalesRevenue)
+                {
+                    if( storeData.latitude != null && storeData.longitude != null  )
+                    {
+                        // $scope.storeNames.push(storeData);
+                        // var heatmapPoint = new google.maps.LatLng(storeData.latitude, storeData.longitude);
+                        // $scope.heatmapArray.push(heatmapPoint);
+
+                        latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+                        
+                        map.setCenter({lat:1.328178,lng: 103.845055});
+                        map.setZoom(11);
+                        map.setMapTypeId('roadmap');
+                
+                        // Creating a marker and putting it on the map
+                        var marker = new google.maps.Marker({
+                        position: latLng,
+                        map: map,
+                        title: storeData.name,
+                        icon: 'images/red1.png',
+                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                        });
+
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                        (function(marker, storeData) {
+
+                        // Attaching a click event to the current marker
+                        google.maps.event.addListener(marker, "click", function(e) {
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ storeData.imagename + "'>" 
+                            + '<h3>' + storeData.name + '</h3>'
+                            + "<br/>" + "Address: " + storeData.address 
+                            + "<br/>" + "Contact No: " + storeData.contact 
+                            + "<br/>" + "Operating Hours: " +storeData.timing
+                            + "<br/>" + "Average Sales per Month: " + storeData.averagesalespermonth
+                            + "<br/>" + "Available Products: " +storeData.productclassification);
+                        infoWindow.open(map, marker);
+
+                        });
+
+                        markers.push(marker);
+
+                        })(marker, storeData);
+                    }
+                }
+            }
+            else if( $scope.minValueSalesRevenue != null && $scope.maxValueSalesRevenue != null )
+            {
+                console.log("---Both Not Null---");
+                if(storeData.averagesalespermonth > $scope.minValueSalesRevenue && storeData.averagesalespermonth < $scope.maxValueSalesRevenue )
+                {
+                    if( storeData.latitude != null && storeData.longitude != null  )
+                    {
+                        // $scope.storeNames.push(storeData);
+                        // var heatmapPoint = new google.maps.LatLng(storeData.latitude, storeData.longitude);
+                        // $scope.heatmapArray.push(heatmapPoint);
+
+                        latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+                        
+                        map.setCenter({lat:1.328178,lng: 103.845055});
+                        map.setZoom(11);
+                        map.setMapTypeId('roadmap');
+                
+                        // Creating a marker and putting it on the map
+                        var marker = new google.maps.Marker({
+                        position: latLng,
+                        map: map,
+                        title: storeData.name,
+                        icon: 'images/red1.png',
+                        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                        });
+
+                        infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                        (function(marker, storeData) {
+
+                        // Attaching a click event to the current marker
+                        google.maps.event.addListener(marker, "click", function(e) {
+                            infoWindow.setContent("<div style='float:left'><img src='images/"+ storeData.imagename + "'>" 
+                            + '<h3>' + storeData.name + '</h3>'
+                            + "<br/>" + "Address: " + storeData.address 
+                            + "<br/>" + "Contact No: " + storeData.contact 
+                            + "<br/>" + "Operating Hours: " +storeData.timing
+                            + "<br/>" + "Average Sales per Month: " + storeData.averagesalespermonth
+                            + "<br/>" + "Available Products: " +storeData.productclassification);
+                        infoWindow.open(map, marker);
+
+                        });
+
+                        markers.push(marker);
+
+                        })(marker, storeData);
+                    }
+                }
+            }
+        }
+    //     countryMarkerCluster = new MarkerClusterer(map, markers,
+    //    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}); 
+        setTimeout(function(){ $scope.$apply(); },100);
+    });
+};
+
 $scope.showSubCatergorisedLocations = function (event,index) 
 {
     $.getJSON('/getBIData', {}, function (data) {
@@ -2217,6 +2618,8 @@ $scope.countryChange = function()
     $scope.showAllLocations = function () 
     {
         $.getJSON('/getBIData', {}, function (data) {
+
+            $scope.allStoresArray = data;
                                 
             //$scope.storeNames.length = 0;  commented to display , POS related data.
             //$scope.storeNames.push(allOption);
@@ -2326,6 +2729,7 @@ $scope.countryChange = function()
         });
     }
 
+    
     $scope.clearFusionLayer = function()
     {
         if( fusionLayer != null )
@@ -3033,7 +3437,7 @@ $scope.countryChange = function()
     {
         $scope.clearInfoWindow();
         locationLatLng = new google.maps.LatLng(place.location.latitude, place.location.longitude); 
-        var image = 'images/blue.png';
+        var image = 'images/fbicon.png';
         
         infowindowplacesmarker = new google.maps.InfoWindow();
         
@@ -3059,7 +3463,7 @@ $scope.countryChange = function()
     {
         $scope.clearInfoWindow();
         locationLatLng = new google.maps.LatLng(place.location.latitude, place.location.longitude); 
-        var image = 'images/green.png';
+        var image = 'images/zomatoicon.png';
         
         infowindowplacesmarker = new google.maps.InfoWindow();
         
@@ -3560,6 +3964,163 @@ $scope.countryChange = function()
             trafficLayer.setMap(null);             
         }
     };
+
+    $scope.showLiveInventory = function () 
+    {
+        $scope.clearAllCategoryMarkers();
+        $scope.clearAllSubcategoryMarkers();
+        $scope.clearAllPlacesMarkers();
+        $scope.clearCityAndRegionMarker();
+        if( placesMarkers != null )
+        {
+            for (var key in placesMarkers) 
+            {
+                placesMarkers[key].setMap(null);
+                //markers =[];
+            };
+        }
+
+        for (var key in placesMarkers) 
+        {
+            //markers[key].setMap(null);
+            placesMarkers =[];
+        };
+
+        clearRadius();
+        $scope.storeNames.length = 0; 
+        $scope.showStorePlaceTypes = false;
+        for (var i = 0, length = $scope.categories.length; i < length; i++) 
+        {
+            $scope.categories[i].checked = false;
+        }
+
+        for (var i = 0, length = $scope.subCategories.length; i < length; i++) 
+        {
+            $scope.subCategories[i].checked = false;
+        }
+
+
+        console.log("---$scope.SelectedCountry---:",$scope.SelectedCountry);
+        
+
+        if( $scope.SelectedCountry == "India" )
+        {
+            
+            $scope.clearIndiaMarkers();
+            $scope.showLiveInventoryLocations();
+        }
+        else if( $scope.SelectedCountry == "Singapore" )
+        {
+            $scope.clearIndiaMarkers();
+            $scope.showLiveInventoryLocations();
+            
+        }
+        else
+        {
+            $scope.clearIndiaMarkers();
+            map.setCenter({lat:23.492690,lng: 78.680398});
+            map.setZoom(5);
+        }
+
+    };
+
+    $scope.showLiveInventoryLocations = function () 
+    {
+        $.getJSON('/getBIData', {}, function (data) {
+                                
+            //$scope.storeNames.length = 0;  commented to display , POS related data.
+            //$scope.storeNames.push(allOption);
+            //$scope.clearAllCategoryMarkers();add this later.
+            $scope.clearAllHeatMaps();
+            $scope.clearFusionLayer();
+
+            console.log("---data.length---:",data.length);
+
+            for (var i = 0, length = data.length; i < length; i++) 
+            { 
+                var storeData = data[i];
+                
+                if ($scope.SelectedCountry == "India" && storeData.country == "India")
+                {       
+                    //$scope.storeNames.push(data[i]);
+                    latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+                    
+                    map.setCenter({lat:23.492690,lng: 78.680398});
+                    map.setZoom(5);
+                    map.setMapTypeId('roadmap');
+            
+                    // Creating a marker and putting it on the map
+                    var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: storeData.name,
+                    icon: 'images/red1.png',
+                    mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                    });
+
+                    infoWindow = new google.maps.InfoWindow({ maxWidth: 290 });
+                    (function(marker, storeData) {
+
+                    // Attaching a click event to the current marker
+                    google.maps.event.addListener(marker, "click", function(e) {
+                        infoWindow.setContent("<div style='float:left'><img src='images/"+ storeData.imagename + "'>" 
+                        + '<h3>' + storeData.name + '</h3>'
+                        + "<br/>" + "Address: " + storeData.address 
+                        + "<br/>" + "Contact No: " + storeData.contact 
+                        + "<br/>" + "Operating Hours: " +storeData.timing
+                        + "<br/>" + "Available Products: " +storeData.productclassification);
+                    infoWindow.open(map, marker);
+
+                    });
+
+                    markers.push(marker);
+
+                    })(marker, storeData);
+                } 
+                else if ($scope.SelectedCountry == "Singapore" && storeData.country == "Singapore")
+                {
+                    //$scope.storeNames.push(data[i]);
+                    latLng = new google.maps.LatLng(storeData.latitude, storeData.longitude); 
+                    
+                    map.setCenter({lat:1.328178,lng: 103.845055});
+                    map.setZoom(11);
+                    map.setMapTypeId('roadmap');
+            
+                    // Creating a marker and putting it on the map
+                    var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: storeData.name,
+                    icon: 'images/red1.png',
+                    mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+                    });
+
+                    infoWindow = new google.maps.InfoWindow();
+                    (function(marker, storeData) {
+
+                    // Attaching a click event to the current marker
+                    google.maps.event.addListener(marker, "click", function(e) {
+                        infoWindow.setContent("<div style='float:left'><img src='images/liveinventory.jpg'>" 
+                        + '<h3>' + storeData.name + '</h3>'
+                        + "<br/>" + "Address: " + storeData.address 
+                        + "<br/>" + "Contact No: " + storeData.contact 
+                        + "<br/>" + "Operating Hours: " +storeData.timing
+                        + "<br/>" + "Available Products: " +storeData.productclassification);
+                    infoWindow.open(map, marker);
+
+                    });
+
+                    markers.push(marker);
+
+                    })(marker, storeData);
+                }   
+            }
+            countryMarkerCluster = new MarkerClusterer(map, markers,
+           {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}); 
+            $scope.$apply();
+        });
+    };
+
 
     $scope.regionChange = function () {
  
@@ -4825,11 +5386,25 @@ $scope.countryChange = function()
         }
     };
 
-    $scope.getData = function(event, index) 
+    $scope.getData = function(placetype,event, index,isFromDropDownSelection) 
     {
         var jsonObject = JSON.parse($scope.selectedStore);
 
-        $scope.clearAllPlacesMarkers();
+        if(isFromDropDownSelection)
+        {
+            //$scope.poisFromMarkerSelection = false;
+            //clear previous pois selection on store change.
+            for (var i = 0, length = $scope.placetypes.length; i < length; i++) 
+            {
+                $scope.placetypes[i].checked = false;
+            }  
+
+            //clear POIs are on store change
+            //$scope.googlePOIsArray.length = 0;
+            $scope.clearAllPlacesMarkers();
+        }
+
+        //$scope.clearAllPlacesMarkers();
         $scope.clearAllCategoryMarkers();
         $scope.clearIndiaMarkers();
         $scope.clearAllHeatMaps();
@@ -5035,7 +5610,7 @@ $scope.countryChange = function()
             if($scope.placetypes[i].checked)
             {
                 var typeName = $scope.placetypes[i].name;
-                if( typeName == "Google - Restaurants" )
+                if( typeName == "Google - Restaurants" && placetype == "Google - Restaurants" )
                 {
                     var service = new google.maps.places.PlacesService(map);
                     service.nearbySearch({
@@ -5046,7 +5621,7 @@ $scope.countryChange = function()
                         type : [ 'restaurant']
                     },$scope.restaurantCallback);
                 }
-                if( typeName == "Facebook - Restaurants" )
+                if( typeName == "Facebook - Restaurants" && placetype == "Facebook - Restaurants" )
                 {
                     $http({ method: 'GET', url: 'https://graph.facebook.com/search?type=place&fields=name,checkins,hours,location,engagement,is_verified,link,overall_star_rating,payment_options,price_range,restaurant_specialties&q=restaurants&center='+ jsonObject.latitude + ',' +jsonObject.longitude +'&distance=2000&access_token=1837470493045321|SdcUiYX-RcYgghJWMtc07ph0O6I' }).
                     success(function (data, status, headers, config) {
@@ -5074,7 +5649,7 @@ $scope.countryChange = function()
                         console.log("---Error---:",status);
                 });
                 }
-                if( typeName == "Zomato - Restaurants" )
+                if( typeName == "Zomato - Restaurants" && placetype == "Zomato - Restaurants" )
                 {
                     $http({
                         method: 'GET',
@@ -5098,7 +5673,7 @@ $scope.countryChange = function()
                       console.log("---error---:",error);
                     });
                 }
-                else if(typeName == "Airport")
+                else if(typeName == "Airport" && placetype == "Airport")
                 {
                     var service1 = new google.maps.places.PlacesService(map);
                     service1.nearbySearch({
@@ -5108,7 +5683,7 @@ $scope.countryChange = function()
                         type : [ 'airport']
                     }, $scope.airportCallback);   
                 }
-                else if(typeName == "Bar")
+                else if(typeName == "Bar" && placetype == "Bar")
                 {
                     var service2 = new google.maps.places.PlacesService(map);
                             service2.nearbySearch({
@@ -5118,7 +5693,7 @@ $scope.countryChange = function()
                                 type : [ 'bar']
                             }, $scope.barCallback);   
                 }
-                else if(typeName == "Bus Station")
+                else if(typeName == "Bus Station" && placetype == "Bus Station")
                 {
                     var service3 = new google.maps.places.PlacesService(map);
                             service3.nearbySearch({
@@ -5128,7 +5703,7 @@ $scope.countryChange = function()
                                 type : [ 'bus_station']
                             }, $scope.busStationCallback);
                 }
-                else if(typeName == "Cafe")
+                else if(typeName == "Cafe" && placetype == "Cafe")
                 {
                     var service4 = new google.maps.places.PlacesService(map);
                             service4.nearbySearch({
@@ -5138,7 +5713,7 @@ $scope.countryChange = function()
                                 type : [ 'cafe']
                             }, $scope.cafeCallback);
                 }
-                else if(typeName == "Casino")
+                else if(typeName == "Casino" && placetype == "Casino")
                 {
                     var service5 = new google.maps.places.PlacesService(map);
                             service5.nearbySearch({
@@ -5148,7 +5723,7 @@ $scope.countryChange = function()
                                 type : [ 'casino']
                             }, $scope.casinoCallback);
                 }
-                else if(typeName == "Liquor Store")
+                else if(typeName == "Liquor Store" && placetype == "Liquor Store")
                 {
                     var service6 = new google.maps.places.PlacesService(map);
                             service6.nearbySearch({
@@ -5158,7 +5733,7 @@ $scope.countryChange = function()
                                 type : [ 'liquor_store']
                             }, $scope.liquorStoreCallback);
                 }
-                else if(typeName == "Night Clubs")
+                else if(typeName == "Night Clubs" && placetype == "Night Clubs")
                 {
                     var service9 = new google.maps.places.PlacesService(map);
                             service9.nearbySearch({
@@ -5168,7 +5743,7 @@ $scope.countryChange = function()
                                 type : [ 'night_club']
                             }, $scope.nightClubCallback);
                 }
-                else if(typeName == "Park")
+                else if(typeName == "Park" && placetype == "Park")
                 {
                     var service10 = new google.maps.places.PlacesService(map);
                             service10.nearbySearch({
@@ -5178,7 +5753,7 @@ $scope.countryChange = function()
                                 type : [ 'park']
                             }, $scope.parkCallback);
                 }
-                else if(typeName == "Super Market")
+                else if(typeName == "Super Market" && placetype == "Super Market")
                 {
                     var service11 = new google.maps.places.PlacesService(map);
                             service11.nearbySearch({
@@ -5188,7 +5763,7 @@ $scope.countryChange = function()
                                 type : [ 'supermarket']
                             }, $scope.supermarketCallback);
                 }
-                else if(typeName == "Subway")
+                else if(typeName == "Subway" && placetype == "Subway")
                 {   
                     var service12 = new google.maps.places.PlacesService(map);
                             service12.nearbySearch({
@@ -5198,7 +5773,7 @@ $scope.countryChange = function()
                                 type : [ 'subway_station']
                             }, $scope.subwayCallback);
                 }
-                else if(typeName == "Shopping Mall")
+                else if(typeName == "Shopping Mall" && placetype == "Shopping Mall")
                 {
                     var service13 = new google.maps.places.PlacesService(map);
                             service13.nearbySearch({
@@ -5208,7 +5783,7 @@ $scope.countryChange = function()
                                 type : [ 'shopping_mall']
                             }, $scope.shoppingmallCallback);
                 }
-                else if(typeName == "Meal Take Aways")
+                else if(typeName == "Meal Take Aways" && placetype == "Meal Take Aways")
                 {
                     var service13 = new google.maps.places.PlacesService(map);
                             service13.nearbySearch({
@@ -5218,7 +5793,7 @@ $scope.countryChange = function()
                                 type : [ 'meal_takeway']
                             }, $scope.mealTakeawayCallback);
                 }
-                else if(typeName == "Movie Theaters")
+                else if(typeName == "Movie Theaters" && placetype == "Movie Theaters")
                 {
                     var service13 = new google.maps.places.PlacesService(map);
                             service13.nearbySearch({
