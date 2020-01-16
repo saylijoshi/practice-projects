@@ -31,7 +31,7 @@
     "morgan": "~1.8.1",
     "ng": "0.0.0-rc6",
     "node-pre-gyp": "^0.10.0",
-    "npm": "^6.1.0",
+    "npm": "^6.13.4",
     "request": "^2.86.0",
     "request-ip": "^2.0.2",
     "serve-favicon": "~2.4.2",
