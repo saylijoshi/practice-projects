@@ -22,7 +22,7 @@
     "forever": "^0.15.3",
     "forever-monitor": "^1.7.1",
     "google-maps": "^3.3.0",
-    "handsontable": "^0.33.0",
+    "handsontable": "^10.0.0",
     "ipware": "^1.0.0",
     "jade": "~1.11.0",
     "mongodb": "^2.2.29",
